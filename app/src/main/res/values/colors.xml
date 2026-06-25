@@ -1,0 +1,4 @@
+<resources>
+    <color name="bloom_background">#FBF9F5</color>
+    <color name="bloom_surface">#FFFFFF</color>
+</resources>

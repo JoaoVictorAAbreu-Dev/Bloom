@@ -1,0 +1,52 @@
+package com.bloom.app.data.mapper
+
+import com.bloom.app.data.entity.HabitCompletionEntity
+import com.bloom.app.data.entity.HabitEntity
+import com.bloom.app.domain.model.Habit
+import com.bloom.app.domain.model.HabitCategory
+import com.bloom.app.domain.model.HabitFrequency
+
+fun HabitEntity.toDomain(streak: Int, completedToday: Boolean, completionCount: Int): Habit {
+    return Habit(
+        id = id,
+        name = name,
+        category = HabitCategory.valueOf(category),
+        frequency = HabitFrequency.valueOf(frequency),
+        reminderHour = reminderHour,
+        reminderMinute = reminderMinute,
+        colorArgb = colorArgb,
+        iconKey = iconKey,
+        createdAtMillis = createdAtMillis,
+        streak = streak,
+        completedToday = completedToday,
+        completionCount = completionCount,
+    )
+}
+
+fun Habit.toEntity(): HabitEntity {
+    return HabitEntity(
+        id = id,
+        name = name,
+        category = category.name,
+        frequency = frequency.name,
+        reminderHour = reminderHour,
+        reminderMinute = reminderMinute,
+        colorArgb = colorArgb,
+        iconKey = iconKey,
+        createdAtMillis = createdAtMillis,
+    )
+}
+
+fun HabitCompletionEntity.toDomain() = com.bloom.app.domain.model.HabitCompletion(
+    id = id,
+    habitId = habitId,
+    completedAtMillis = completedAtMillis,
+    dayStartMillis = dayStartMillis,
+)
+
+fun com.bloom.app.domain.model.HabitCompletion.toEntity() = HabitCompletionEntity(
+    id = id,
+    habitId = habitId,
+    completedAtMillis = completedAtMillis,
+    dayStartMillis = dayStartMillis,
+)
