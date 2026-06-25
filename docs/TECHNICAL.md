@@ -1,54 +1,123 @@
 # Bloom Technical Overview
 
-## Summary
+## Purpose
 
-Bloom is a local-first Android app for habits, routine planning, Pomodoro focus, statistics, garden rewards, and an AI coach powered by Groq when configured.
+Bloom is a local-first Android MVP for habits, routines, Pomodoro focus, growth tracking, and optional AI assistance.
+
+The current implementation is intentionally lightweight but structured so it can grow without rewriting the whole app.
 
 ## Architecture
 
-- Language: Kotlin
-- UI: Jetpack Compose + Material 3
-- Navigation: Navigation Compose
-- State: ViewModel + Flow + Coroutines
-- Persistence: Room + DataStore
-- Pattern: MVVM with `ui`, `domain`, and `data`
+| Layer | Responsibility |
+| --- | --- |
+| `ui` | Compose screens, reusable components, theme, navigation, and view state |
+| `domain` | Business models, repository contracts, and use cases |
+| `data` | Room, DataStore, repositories, mappers, and local persistence |
 
-## Data layer
+Main patterns:
 
-- Room stores habits, habit completions, and Pomodoro sessions.
-- DataStore stores user preferences, theme mode, onboarding state, and Pomodoro configuration.
-- The AI coach uses a repository boundary so the app can fall back to local guidance when Groq is not configured.
+- MVVM
+- Unidirectional state flow
+- Repository abstraction
+- Coroutines and Flow for async state
+- Navigation Compose for screen routing
+
+## Persistence
+
+### Room
+
+Room stores the app data that must survive restarts:
+
+- habits
+- habit completions
+- Pomodoro sessions
+
+### DataStore
+
+DataStore stores lightweight preferences:
+
+- theme mode
+- onboarding completion
+- Pomodoro defaults
+- user settings
 
 ## AI integration
 
-Bloom Coach builds a prompt from the current app context:
+Bloom Coach uses Groq through a repository boundary.
 
-- current habits
-- routine blocks
-- streaks
-- focus minutes today
-- unlocked rewards
-- recent sessions
+Behavior:
 
-If `groqApiKey` is present in `app/local.properties`, Bloom sends the request to Groq chat completions.
-If not, the app returns a local fallback response and keeps working.
+1. The app gathers context from habits, streaks, focus time, and recent sessions.
+2. If `groqApiKey` exists in `app/local.properties`, Bloom sends the prompt to Groq.
+3. If the key is absent, the app returns a local fallback response.
 
-Default model:
+Default configuration:
 
-- `groq/compound-mini`
+```properties
+groqApiKey=your_groq_api_key_here
+groqModel=groq/compound-mini
+groqBaseUrl=https://api.groq.com/openai/v1
+```
 
-Groq API base URL:
+`groq/compound-mini` is used as the default open model target.
 
-- `https://api.groq.com/openai/v1`
+## UI system
 
-## Install package
+The UI is built with:
 
-The install package is meant to be served over HTTP on a local network while testing on a phone.
-The QR code points to the install page, not directly to a source file path.
+- Material 3
+- custom Bloom theme
+- reusable cards, buttons, icons, and progress rings
+- calm spacing based on an 8 dp grid
+- rounded corners between 16 dp and 24 dp
 
-## Known constraints
+Pixel art is restricted to:
 
-- The project was prepared without Android Studio on this machine.
-- Final validation depends on the local Android SDK, emulator, and available Gradle wrapper.
-- If the QR install page is served from another machine, update the QR target URL before sharing it.
+- mascot
+- rewards
+- plants
+- empty states
 
+The functional UI remains clean and modern.
+
+## Main flows
+
+- Splash -> Onboarding -> Home
+- Home -> Habits / Focus / Routine / Garden / Settings
+- Habits -> Create and edit habit
+- Focus -> Pomodoro session history
+- Statistics -> growth and consistency overview
+
+## Repository layout
+
+```text
+app/src/main/java/com/bloom/app
+  data
+  domain
+  ui
+```
+
+## Build and install
+
+The delivery package in `outputs/bloom-install` contains:
+
+- `Bloom-debug.apk`
+- `index.html`
+- `install-qr.png`
+- user guide
+- technical guide
+
+The install page is designed to be opened from a phone on the same local network.
+
+## Current constraints
+
+- This workspace was prepared without Android Studio on the machine.
+- Final build validation still depends on the Android SDK and a working Gradle setup.
+- The current delivery is an MVP, not a complete production release.
+
+## Future improvements
+
+- Gradle wrapper should be added if the repo is meant to build from CLI everywhere.
+- Add UI tests for the main navigation flows.
+- Add more real screenshots to the gallery after device validation.
+- Expand the AI coach with better context summarization and offline caching.

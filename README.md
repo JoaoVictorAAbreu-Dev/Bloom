@@ -1,43 +1,38 @@
 # Bloom
 
-Bloom is a native Android productivity app built with Kotlin, Jetpack Compose, Material 3, Navigation Compose, Room, DataStore, Coroutines, and Flow.
+Bloom is a native Android app for habits, routine planning, Pomodoro focus, personal growth, and local AI coaching.
 
-It is designed around an "Organic Productivity" visual language: calm, minimal, premium, and soft, with pixel-art accents reserved for illustrations, rewards, and empty states.
+It follows an Organic Productivity design language: calm, premium, minimal, and warm, with pixel-art details reserved for illustrations, rewards, and empty states.
 
-## Features
+## What Bloom does
 
-- Splash screen with animated Bloom logo
-- 3-step onboarding
-- Home dashboard with progress, focus, garden, and routine sections
-- Habit CRUD with categories, reminders, streaks, and daily completion
-- Vertical routine timeline
-- Pomodoro timer with start, pause, resume, stop, and cycle switching
-- Local persistence with Room and DataStore
-- Statistics and growth overview
-- Garden and rewards screen
-- Profile and settings screen with theme controls and reset flow
-- Bloom Coach AI screen powered by Groq with local fallback suggestions
+- Helps users build daily habits
+- Organizes routines by time of day
+- Runs a functional Pomodoro timer
+- Stores data locally with Room and DataStore
+- Tracks streaks, sessions, and progress
+- Offers Bloom Coach, an AI assistant powered by Groq when configured
 
-## How to use
+## Visual Preview
 
-1. Install the APK.
-2. Open Bloom and complete onboarding.
-3. Add or complete habits on the Home and Habits screens.
-4. Use Focus for Pomodoro sessions.
-5. Open Bloom Coach for planning help or quick guidance.
-6. Review progress in Statistics and Garden.
+The images below are side by side so the brand mark and the app hero can be reviewed together.
 
-## Installation
+<table>
+  <tr>
+    <td align="center">
+      <img src="docs/assets/bloom-logo.png" alt="Bloom logo" width="320" />
+      <br />
+      <strong>Brand mark</strong>
+    </td>
+    <td align="center">
+      <img src="docs/assets/bloom-splash-hero.png" alt="Bloom splash screen" width="320" />
+      <br />
+      <strong>Splash hero</strong>
+    </td>
+  </tr>
+</table>
 
-- Open the install page from the QR code.
-- Download the APK.
-- Allow installs from unknown sources when Android asks.
-- Launch the app after installation.
-
-## Documentation
-
-- Technical overview: `docs/TECHNICAL.md`
-- User guide: `docs/USER_GUIDE.md`
+See the full gallery in [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md).
 
 ## Stack
 
@@ -51,9 +46,23 @@ It is designed around an "Organic Productivity" visual language: calm, minimal, 
 - DataStore
 - MVVM with `ui`, `domain`, and `data`
 
-## Groq AI setup
+## Main screens
 
-Bloom Coach reads its Groq configuration from `app/local.properties` through Gradle build config fields:
+- Splash
+- Onboarding
+- Home dashboard
+- Habits
+- Create and edit habit
+- Routine timeline
+- Pomodoro focus
+- Statistics
+- Garden and rewards
+- Profile and settings
+- Bloom Coach AI
+
+## Local AI setup
+
+Bloom Coach uses Groq when the API key is configured in `app/local.properties`.
 
 ```properties
 groqApiKey=your_groq_api_key_here
@@ -61,16 +70,33 @@ groqModel=groq/compound-mini
 groqBaseUrl=https://api.groq.com/openai/v1
 ```
 
-`groq/compound-mini` is the default model because Groq's model list currently shows no per-token price for it. If the key is missing, Bloom Coach stays usable through the local fallback coach logic.
+If the key is missing, the app keeps working with local fallback guidance.
 
-## Project Structure
+## Documentation
 
-- `app/src/main/java/com/bloom/app/data`
-- `app/src/main/java/com/bloom/app/domain`
-- `app/src/main/java/com/bloom/app/ui`
+- Technical guide: [docs/TECHNICAL.md](docs/TECHNICAL.md)
+- User guide: [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
+- Screenshot gallery: [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md)
+
+## Project structure
+
+```text
+app/src/main/java/com/bloom/app
+  data
+  domain
+  ui
+```
+
+## Installation and test
+
+1. Open the install page from `outputs/bloom-install/index.html`.
+2. Scan the QR code shown on the page.
+3. Download `Bloom-debug.apk`.
+4. Allow installs from unknown sources if Android asks.
+5. Open Bloom and complete onboarding.
 
 ## Notes
 
-- The project is structured to compile in Android Studio with the Android SDK installed.
-- If your local SDK path differs, Android Studio should resolve it automatically from your environment.
-- Demo seed data is included so the MVP is visually useful on first launch.
+- The project is structured as a local-first MVP.
+- No backend login is implemented yet.
+- The APK and install page are provided in `outputs/bloom-install`.

@@ -67,7 +67,7 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    BloomLogoMark(modifier = Modifier)
+                    BloomLogoMark()
                     Column(modifier = Modifier.padding(start = BloomSpacing.sm)) {
                         Text(
                             text = "Bloom",

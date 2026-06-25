@@ -1,46 +1,89 @@
 # Bloom User Guide
 
-## What Bloom does
+## What Bloom is for
 
-Bloom helps you:
+Bloom helps you keep a daily rhythm with:
 
-- build habits
-- follow a daily routine
-- focus with Pomodoro
-- review growth and streaks
-- use Bloom Coach for planning and motivation
+- habits
+- routines
+- Pomodoro focus sessions
+- growth statistics
+- Bloom Coach for planning support
 
-## First launch
+## First use
 
-1. Open the app.
-2. Wait for the splash screen.
-3. Complete the onboarding.
-4. Go to Home and review the current progress.
+1. Install the APK from the Bloom install page.
+2. Open the app.
+3. Wait for the splash screen.
+4. Finish onboarding.
+5. Review your Home dashboard.
 
-## Using Bloom Coach
+## Daily workflow
 
-1. Open the Bloom Coach screen.
-2. Type a question or choose a quick action.
-3. Ask for:
-   - a plan for the day
-   - help starting focus
-   - a habit reminder
-   - a short end-of-day review
+### Habits
 
-If Groq is not configured, Bloom Coach will still answer locally.
+Use the Habits screen to:
 
-## Installing from QR
+- create a new habit
+- edit an existing habit
+- delete a habit
+- mark a habit as complete for the day
+- review streaks
 
-1. Open the QR code from the install page.
-2. Scan it with a phone.
-3. Open the install page in the browser.
-4. Download the APK.
-5. Allow installation from unknown sources if Android asks.
-6. Open the app after installation.
+### Routine
 
-## If something looks wrong
+Use the Routine screen to see your day by period:
 
-- If text looks corrupted, update the app build and reinstall.
-- If the coach says Groq is not configured, add `groqApiKey` to `app/local.properties`.
-- If the install page does not open on the phone, verify the phone is on the same network as the PC.
+- Morning
+- Afternoon
+- Evening
+- Night
 
+### Focus
+
+Use Focus to run Pomodoro sessions:
+
+- Start
+- Pause
+- Resume
+- Stop
+
+### Statistics
+
+Use Statistics to review:
+
+- focus time
+- habits completed
+- longest streak
+- garden growth
+
+### Garden
+
+Use Garden to unlock plants and rewards based on consistency.
+
+## Bloom Coach
+
+Bloom Coach is the AI assistant inside the app.
+
+You can ask for:
+
+- a plan for the day
+- help starting a focus session
+- a habit reminder
+- a short review at the end of the day
+
+If Groq is not configured, the app still replies with local fallback guidance.
+
+## Installing with the QR code
+
+1. Open the install page on your phone.
+2. Scan the QR code.
+3. Download `Bloom-debug.apk`.
+4. Allow installs from unknown sources if Android asks.
+5. Open Bloom after installation.
+
+## Troubleshooting
+
+- If the app does not install, verify the phone is on the same network as the PC.
+- If Bloom Coach says the API is not configured, add `groqApiKey` to `app/local.properties`.
+- If the visual preview looks outdated, regenerate the screenshots after the next UI update.
