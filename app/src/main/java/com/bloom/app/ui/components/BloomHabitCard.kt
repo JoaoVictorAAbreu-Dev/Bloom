@@ -1,5 +1,8 @@
 package com.bloom.app.ui.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,10 +24,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bloom.app.domain.model.Habit
@@ -38,9 +45,28 @@ fun BloomHabitCard(
     onClick: (() -> Unit)? = null,
     onToggle: () -> Unit,
 ) {
+    val hapticFeedback = LocalHapticFeedback.current
+    val cardScale by animateFloatAsState(
+        targetValue = if (habit.completedToday) 1.015f else 1f,
+        animationSpec = spring(dampingRatio = 0.58f, stiffness = 420f),
+        label = "habit-card-scale",
+    )
+    val actionContainerColor by animateColorAsState(
+        targetValue = if (habit.completedToday) Color(habit.colorArgb) else MaterialTheme.colorScheme.surfaceVariant,
+        label = "habit-action-color",
+    )
+    val actionContentColor by animateColorAsState(
+        targetValue = if (habit.completedToday) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+        label = "habit-action-content-color",
+    )
+
     BloomCard(
         modifier = modifier
             .fillMaxWidth()
+            .graphicsLayer {
+                scaleX = cardScale
+                scaleY = cardScale
+            }
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(BloomSpacing.md),
     ) {
@@ -92,10 +118,13 @@ fun BloomHabitCard(
             }
             Spacer(modifier = Modifier.width(BloomSpacing.sm))
             BloomIconButton(
-                onClick = onToggle,
+                onClick = {
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                    onToggle()
+                },
                 modifier = Modifier.size(56.dp),
-                containerColor = if (habit.completedToday) Color(habit.colorArgb) else MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = if (habit.completedToday) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                containerColor = actionContainerColor,
+                contentColor = actionContentColor,
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Check,

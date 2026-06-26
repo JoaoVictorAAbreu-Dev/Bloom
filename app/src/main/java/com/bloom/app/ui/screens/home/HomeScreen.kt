@@ -101,7 +101,7 @@ fun HomeScreen(
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
                     Text(
-                        text = "Today’s Progress",
+                        text = "Today's Progress",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
@@ -313,7 +313,7 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Today’s Routine",
+                    text = "Today's Routine",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground,
                 )
