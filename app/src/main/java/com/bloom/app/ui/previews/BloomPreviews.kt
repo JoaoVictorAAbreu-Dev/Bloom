@@ -222,6 +222,8 @@ private fun SettingsScreenPreview() {
             onLongBreakMinutesChange = {},
             onNotificationsToggle = {},
             onAutoStartToggle = {},
+            onExportData = {},
+            onClearExport = {},
             onResetData = {},
             onOpenCoach = {},
             onNotificationsClick = {},

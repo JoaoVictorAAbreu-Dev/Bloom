@@ -41,6 +41,8 @@ fun SettingsScreen(
     onLongBreakMinutesChange: (Int) -> Unit,
     onNotificationsToggle: (Boolean) -> Unit,
     onAutoStartToggle: (Boolean) -> Unit,
+    onExportData: () -> Unit,
+    onClearExport: () -> Unit,
     onResetData: () -> Unit,
     onOpenCoach: () -> Unit,
     onNotificationsClick: () -> Unit,
@@ -195,8 +197,38 @@ fun SettingsScreen(
             )
             StaticSettingRow(
                 title = "Export",
-                description = "CSV, JSON, and PDF exports can be added from local data.",
-                value = "Planned",
+                description = "Generate a local JSON snapshot from current data.",
+                value = if (uiState.exportSnapshot.isBlank()) "Ready" else "Generated",
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
+                BloomButton(
+                    modifier = Modifier.weight(1f),
+                    text = "Export JSON",
+                    onClick = onExportData,
+                )
+                BloomOutlinedButton(
+                    modifier = Modifier.weight(1f),
+                    text = "Clear",
+                    enabled = uiState.exportSnapshot.isNotBlank(),
+                    onClick = onClearExport,
+                )
+            }
+            if (uiState.exportSnapshot.isNotBlank()) {
+                BloomCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = androidx.compose.foundation.layout.PaddingValues(BloomSpacing.sm),
+                ) {
+                    Text(
+                        text = uiState.exportSnapshot,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            StaticSettingRow(
+                title = "Restore",
+                description = "Import from JSON will be added after file-picker validation.",
+                value = "Next",
             )
             BloomOutlinedButton(
                 modifier = Modifier.fillMaxWidth(),

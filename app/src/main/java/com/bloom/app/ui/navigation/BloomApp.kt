@@ -230,6 +230,8 @@ private fun BloomNavigation(
                     onLongBreakMinutesChange = viewModel::updateLongBreakMinutes,
                     onNotificationsToggle = viewModel::toggleNotifications,
                     onAutoStartToggle = viewModel::toggleAutoStart,
+                    onExportData = viewModel::exportData,
+                    onClearExport = viewModel::clearExport,
                     onResetData = viewModel::resetData,
                     onOpenCoach = { navController.navigate(BloomDestination.COACH) },
                     onNotificationsClick = { },
