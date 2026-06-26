@@ -3,6 +3,7 @@ package com.bloom.app.ui.navigation
 object BloomDestination {
     const val SPLASH = "splash"
     const val ONBOARDING = "onboarding"
+    const val AUTH = "auth"
     const val HOME = "home"
     const val HABITS = "habits"
     const val FOCUS = "focus"

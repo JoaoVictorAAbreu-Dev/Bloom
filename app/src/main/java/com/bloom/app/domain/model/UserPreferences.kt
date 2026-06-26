@@ -2,6 +2,7 @@ package com.bloom.app.domain.model
 
 data class UserPreferences(
     val userName: String,
+    val userEmail: String,
     val themeMode: ThemeMode,
     val focusMinutes: Int,
     val shortBreakMinutes: Int,
@@ -9,5 +10,6 @@ data class UserPreferences(
     val autoStartNextSession: Boolean,
     val notificationsEnabled: Boolean,
     val onboardingCompleted: Boolean,
+    val authCompleted: Boolean,
     val seedDataCreated: Boolean,
 )

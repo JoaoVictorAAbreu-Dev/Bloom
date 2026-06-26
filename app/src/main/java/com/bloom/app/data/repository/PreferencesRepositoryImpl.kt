@@ -53,6 +53,7 @@ class PreferencesRepositoryImpl(
     private fun Preferences.toDomain(): UserPreferences {
         return UserPreferences(
             userName = this[Keys.userName] ?: "Alex",
+            userEmail = this[Keys.userEmail] ?: "",
             themeMode = (this[Keys.themeMode] ?: ThemeMode.SYSTEM.name).toThemeModeOrDefault(),
             focusMinutes = this[Keys.focusMinutes] ?: 25,
             shortBreakMinutes = this[Keys.shortBreakMinutes] ?: 5,
@@ -60,12 +61,14 @@ class PreferencesRepositoryImpl(
             autoStartNextSession = this[Keys.autoStartNextSession] ?: true,
             notificationsEnabled = this[Keys.notificationsEnabled] ?: true,
             onboardingCompleted = this[Keys.onboardingCompleted] ?: false,
+            authCompleted = this[Keys.authCompleted] ?: false,
             seedDataCreated = this[Keys.seedDataCreated] ?: false,
         )
     }
 
     private fun androidx.datastore.preferences.core.MutablePreferences.merge(updated: UserPreferences) {
         this[Keys.userName] = updated.userName
+        this[Keys.userEmail] = updated.userEmail
         this[Keys.themeMode] = updated.themeMode.name
         this[Keys.focusMinutes] = updated.focusMinutes
         this[Keys.shortBreakMinutes] = updated.shortBreakMinutes
@@ -73,11 +76,13 @@ class PreferencesRepositoryImpl(
         this[Keys.autoStartNextSession] = updated.autoStartNextSession
         this[Keys.notificationsEnabled] = updated.notificationsEnabled
         this[Keys.onboardingCompleted] = updated.onboardingCompleted
+        this[Keys.authCompleted] = updated.authCompleted
         this[Keys.seedDataCreated] = updated.seedDataCreated
     }
 
     private object Keys {
         val userName = stringPreferencesKey("user_name")
+        val userEmail = stringPreferencesKey("user_email")
         val themeMode = stringPreferencesKey("theme_mode")
         val focusMinutes = intPreferencesKey("focus_minutes")
         val shortBreakMinutes = intPreferencesKey("short_break_minutes")
@@ -85,6 +90,7 @@ class PreferencesRepositoryImpl(
         val autoStartNextSession = booleanPreferencesKey("auto_start_next_session")
         val notificationsEnabled = booleanPreferencesKey("notifications_enabled")
         val onboardingCompleted = booleanPreferencesKey("onboarding_completed")
+        val authCompleted = booleanPreferencesKey("auth_completed")
         val seedDataCreated = booleanPreferencesKey("seed_data_created")
     }
 }

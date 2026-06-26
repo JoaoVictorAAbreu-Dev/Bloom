@@ -31,6 +31,18 @@ class RootViewModel(
         }
     }
 
+    fun completeAuth(userName: String, email: String = "") {
+        viewModelScope.launch {
+            container.updatePreferencesUseCase { current ->
+                current.copy(
+                    userName = userName.ifBlank { current.userName },
+                    userEmail = email,
+                    authCompleted = true,
+                )
+            }
+        }
+    }
+
     fun updateThemeMode(mode: com.bloom.app.domain.model.ThemeMode) {
         viewModelScope.launch {
             container.updateThemeModeUseCase(mode)

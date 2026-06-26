@@ -189,6 +189,7 @@ private fun SettingsScreenPreview() {
             uiState = SettingsUiState(
                 preferences = UserPreferences(
                     userName = "Alex",
+                    userEmail = "alex@local",
                     themeMode = ThemeMode.SYSTEM,
                     focusMinutes = 25,
                     shortBreakMinutes = 5,
@@ -196,6 +197,7 @@ private fun SettingsScreenPreview() {
                     autoStartNextSession = true,
                     notificationsEnabled = true,
                     onboardingCompleted = true,
+                    authCompleted = true,
                     seedDataCreated = true,
                 ),
                 resetInProgress = false,

@@ -20,6 +20,7 @@ import com.bloom.app.BloomAppContainer
 import com.bloom.app.domain.model.ThemeMode
 import com.bloom.app.ui.components.BloomBottomBar
 import com.bloom.app.ui.components.bloomBottomBarItems
+import com.bloom.app.ui.screens.auth.AuthScreen
 import com.bloom.app.ui.screens.coach.CoachScreen
 import com.bloom.app.ui.screens.focus.FocusScreen
 import com.bloom.app.ui.screens.garden.GardenScreen
@@ -110,10 +111,11 @@ private fun BloomNavigation(
             composable(BloomDestination.SPLASH) {
                 SplashScreen(
                     onFinished = {
-                        val destination = if (rootViewModel.uiState.value.preferences.onboardingCompleted) {
-                            BloomDestination.HOME
-                        } else {
-                            BloomDestination.ONBOARDING
+                        val preferences = rootViewModel.uiState.value.preferences
+                        val destination = when {
+                            !preferences.onboardingCompleted -> BloomDestination.ONBOARDING
+                            !preferences.authCompleted -> BloomDestination.AUTH
+                            else -> BloomDestination.HOME
                         }
                         navController.navigate(destination) {
                             popUpTo(BloomDestination.SPLASH) { inclusive = true }
@@ -125,8 +127,20 @@ private fun BloomNavigation(
                 OnboardingScreen(
                     onStart = {
                         rootViewModel.completeOnboarding()
-                        navController.navigate(BloomDestination.HOME) {
+                        navController.navigate(BloomDestination.AUTH) {
                             popUpTo(BloomDestination.ONBOARDING) { inclusive = true }
+                        }
+                    },
+                )
+            }
+            composable(BloomDestination.AUTH) {
+                val preferences = rootViewModel.uiState.value.preferences
+                AuthScreen(
+                    defaultName = preferences.userName,
+                    onAuthenticated = { name, email ->
+                        rootViewModel.completeAuth(name, email)
+                        navController.navigate(BloomDestination.HOME) {
+                            popUpTo(BloomDestination.AUTH) { inclusive = true }
                         }
                     },
                 )

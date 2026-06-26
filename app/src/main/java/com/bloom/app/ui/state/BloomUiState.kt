@@ -13,6 +13,7 @@ import com.bloom.app.domain.model.UserPreferences
 
 fun defaultUserPreferences() = UserPreferences(
     userName = "Alex",
+    userEmail = "",
     themeMode = ThemeMode.SYSTEM,
     focusMinutes = 25,
     shortBreakMinutes = 5,
@@ -20,6 +21,7 @@ fun defaultUserPreferences() = UserPreferences(
     autoStartNextSession = true,
     notificationsEnabled = true,
     onboardingCompleted = false,
+    authCompleted = false,
     seedDataCreated = false,
 )
 
