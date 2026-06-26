@@ -74,7 +74,7 @@ fun StatisticsScreen(
             )
 
             ConsistencyHeatmapCard(
-                values = uiState.statistics.weeklyHabitCompletions,
+                values = uiState.statistics.monthlyHabitCompletions,
             )
 
             Row(
@@ -121,6 +121,16 @@ fun StatisticsScreen(
                 uiState = uiState,
             )
 
+            MonthlyFocusCard(
+                values = uiState.statistics.monthlyFocusMinutes,
+            )
+
+            PatternsCard(
+                averageFocusMinutes = uiState.statistics.averageFocusMinutes,
+                mostProductiveHour = uiState.statistics.mostProductiveHourLabel,
+                topHabitName = uiState.statistics.topHabitName,
+            )
+
             BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
                 Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
                     Text(
@@ -151,9 +161,10 @@ fun StatisticsScreen(
 private fun ConsistencyHeatmapCard(
     values: List<Int>,
 ) {
-    val weekValues = (0 until 7).map { index -> values.getOrNull(index) ?: 0 }
-    val heatmapValues = List(21) { 0 } + weekValues
-    val activeDays = weekValues.count { it > 0 }
+    val heatmapValues = values.takeLast(28).let { recent ->
+        List((28 - recent.size).coerceAtLeast(0)) { 0 } + recent
+    }
+    val activeDays = heatmapValues.count { it > 0 }
 
     BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
         Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
@@ -165,7 +176,7 @@ private fun ConsistencyHeatmapCard(
                 Column {
                     Text(text = "Consistency Heatmap", style = MaterialTheme.typography.titleLarge)
                     Text(
-                        text = "$activeDays active days this week",
+                        text = "$activeDays active days in the last 28 days",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -279,6 +290,68 @@ private fun WeeklyChartCard(
 }
 
 @Composable
+private fun MonthlyFocusCard(
+    values: List<Int>,
+) {
+    BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
+        Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
+            Text(text = "Monthly Focus", style = MaterialTheme.typography.titleLarge)
+            SimpleBars(
+                values = values,
+                labels = listOf("W1", "W2", "W3", "W4"),
+                labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun PatternsCard(
+    averageFocusMinutes: Int,
+    mostProductiveHour: String,
+    topHabitName: String,
+) {
+    BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
+        Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
+            Text(text = "Productivity Patterns", style = MaterialTheme.typography.titleLarge)
+            Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
+                BloomStatCard(
+                    title = "Avg Focus",
+                    value = "${averageFocusMinutes}m",
+                    caption = "Per session",
+                    modifier = Modifier.weight(1f),
+                    accentColor = Color(0xFFC6E9E9),
+                )
+                BloomStatCard(
+                    title = "Best Hour",
+                    value = mostProductiveHour,
+                    caption = "Most focused",
+                    modifier = Modifier.weight(1f),
+                    accentColor = Color(0xFFD9A441),
+                )
+            }
+            BloomCard(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = androidx.compose.foundation.layout.PaddingValues(BloomSpacing.md),
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.xxs)) {
+                    Text(
+                        text = "Most completed habit",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        text = topHabitName,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun WeeklyBars(
     values: List<Int>,
     labelColor: Color,
@@ -309,6 +382,42 @@ private fun WeeklyBars(
                     )
                 }
                 Text(text = days[index], color = labelColor, style = MaterialTheme.typography.labelLarge)
+            }
+        }
+    }
+}
+
+@Composable
+private fun SimpleBars(
+    values: List<Int>,
+    labels: List<String>,
+    labelColor: Color,
+) {
+    val max = (values.maxOrNull() ?: 1).coerceAtLeast(1)
+    val activeBarColor = MaterialTheme.colorScheme.primary
+    val inactiveBarColor = MaterialTheme.colorScheme.surfaceVariant
+    Row(
+        modifier = Modifier.fillMaxWidth().height(160.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom,
+    ) {
+        labels.indices.forEach { index ->
+            val value = values.getOrNull(index) ?: 0
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom,
+            ) {
+                Canvas(modifier = Modifier.height(104.dp).fillMaxWidth()) {
+                    val barHeight = (size.height * (value / max.toFloat())).coerceAtLeast(if (value > 0) 10f else 4f)
+                    drawRoundRect(
+                        color = if (value > 0) activeBarColor else inactiveBarColor,
+                        topLeft = Offset(size.width * 0.25f, size.height - barHeight),
+                        size = androidx.compose.ui.geometry.Size(size.width * 0.5f, barHeight),
+                        cornerRadius = androidx.compose.ui.geometry.CornerRadius(12f, 12f),
+                    )
+                }
+                Text(text = labels[index], color = labelColor, style = MaterialTheme.typography.labelLarge)
             }
         }
     }

@@ -47,6 +47,11 @@ data class HomeUiState(
         weeklyConsistency = 0,
         weeklyFocusMinutes = emptyList(),
         weeklyHabitCompletions = emptyList(),
+        monthlyFocusMinutes = emptyList(),
+        monthlyHabitCompletions = emptyList(),
+        averageFocusMinutes = 0,
+        mostProductiveHourLabel = "No focus yet",
+        topHabitName = "No habit yet",
         gardenGrowth = 0,
     ),
 )

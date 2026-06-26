@@ -8,5 +8,10 @@ data class BloomStatistics(
     val weeklyConsistency: Int,
     val weeklyFocusMinutes: List<Int>,
     val weeklyHabitCompletions: List<Int>,
+    val monthlyFocusMinutes: List<Int>,
+    val monthlyHabitCompletions: List<Int>,
+    val averageFocusMinutes: Int,
+    val mostProductiveHourLabel: String,
+    val topHabitName: String,
     val gardenGrowth: Int,
 )

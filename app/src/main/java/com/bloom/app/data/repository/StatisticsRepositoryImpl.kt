@@ -10,7 +10,7 @@ import com.bloom.app.domain.repository.PomodoroRepository
 import com.bloom.app.domain.repository.StatisticsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
@@ -39,6 +39,36 @@ class StatisticsRepositoryImpl(
             val weeklyHabitCompletions = lastSevenDays(zoneId).map { day ->
                 completions.count { it.dayStartMillis == day.startOfDayMillis(zoneId) }
             }
+            val last28Days = lastDays(days = 28, zoneId = zoneId)
+            val monthlyHabitCompletions = last28Days.map { day ->
+                completions.count { it.dayStartMillis == day.startOfDayMillis(zoneId) }
+            }
+            val monthlyFocusMinutes = last28Days.chunked(7).map { week ->
+                val weekStarts = week.map { it.startOfDayMillis(zoneId) }.toSet()
+                sessions
+                    .filter { it.completed && it.mode == PomodoroMode.FOCUS && it.finishedAtMillis.startOfDayMillis(zoneId) in weekStarts }
+                    .sumOf { it.durationMinutes }
+            }
+            val completedFocusSessions = sessions.filter { it.completed && it.mode == PomodoroMode.FOCUS }
+            val averageFocusMinutes = completedFocusSessions
+                .takeIf { it.isNotEmpty() }
+                ?.map { it.durationMinutes }
+                ?.average()
+                ?.toInt()
+                ?: 0
+            val mostProductiveHourLabel = completedFocusSessions
+                .groupBy { session -> Instant.ofEpochMilli(session.startedAtMillis).atZone(zoneId).hour }
+                .maxByOrNull { entry -> entry.value.sumOf { it.durationMinutes } }
+                ?.key
+                ?.let { hour -> "${hour.toString().padStart(2, '0')}:00" }
+                ?: "No focus yet"
+            val topHabitName = completions
+                .groupingBy { it.habitId }
+                .eachCount()
+                .maxByOrNull { it.value }
+                ?.key
+                ?.let { habitId -> habits.firstOrNull { it.id == habitId }?.name }
+                ?: "No habit yet"
             val weeklyConsistency = ((weeklyHabitCompletions.count { it > 0 } / 7f) * 100).toInt()
             val gardenGrowth = (habits.size * 8) + (longestStreak * 4) + (focusMinutesToday / 5) + todayHabitCompletions
 
@@ -50,6 +80,11 @@ class StatisticsRepositoryImpl(
                 weeklyConsistency = weeklyConsistency,
                 weeklyFocusMinutes = weeklyFocusMinutes,
                 weeklyHabitCompletions = weeklyHabitCompletions,
+                monthlyFocusMinutes = monthlyFocusMinutes,
+                monthlyHabitCompletions = monthlyHabitCompletions,
+                averageFocusMinutes = averageFocusMinutes,
+                mostProductiveHourLabel = mostProductiveHourLabel,
+                topHabitName = topHabitName,
                 gardenGrowth = gardenGrowth.coerceAtLeast(0),
             )
         }
@@ -58,5 +93,10 @@ class StatisticsRepositoryImpl(
     private fun lastSevenDays(zoneId: ZoneId): List<LocalDate> {
         val today = LocalDate.now(zoneId)
         return (6 downTo 0).map { daysAgo -> today.minusDays(daysAgo.toLong()) }
+    }
+
+    private fun lastDays(days: Int, zoneId: ZoneId): List<LocalDate> {
+        val today = LocalDate.now(zoneId)
+        return ((days - 1) downTo 0).map { daysAgo -> today.minusDays(daysAgo.toLong()) }
     }
 }
