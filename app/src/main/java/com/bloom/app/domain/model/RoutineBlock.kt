@@ -9,4 +9,5 @@ data class RoutineBlock(
     val active: Boolean,
     val colorArgb: Int,
     val iconKey: String,
+    val activities: List<String> = emptyList(),
 )

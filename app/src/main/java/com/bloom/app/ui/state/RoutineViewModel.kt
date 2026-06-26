@@ -44,6 +44,7 @@ class RoutineViewModel(
                 active = now.hour in 5..11,
                 colorArgb = 0xFFB4D2C0.toInt(),
                 iconKey = "sun",
+                activities = routineActivities(grouped["Morning"], "Add a morning habit"),
             ),
             RoutineBlock(
                 id = "afternoon",
@@ -54,6 +55,7 @@ class RoutineViewModel(
                 active = now.hour in 12..16,
                 colorArgb = 0xFFC6E9E9.toInt(),
                 iconKey = "cloud",
+                activities = routineActivities(grouped["Afternoon"], "Add an afternoon habit"),
             ),
             RoutineBlock(
                 id = "evening",
@@ -64,6 +66,7 @@ class RoutineViewModel(
                 active = now.hour in 17..20,
                 colorArgb = 0xFFAE98D6.toInt(),
                 iconKey = "moon",
+                activities = routineActivities(grouped["Evening"], "Add an evening habit"),
             ),
             RoutineBlock(
                 id = "night",
@@ -74,6 +77,7 @@ class RoutineViewModel(
                 active = now.hour !in 5..20,
                 colorArgb = 0xFFD9A441.toInt(),
                 iconKey = "star",
+                activities = routineActivities(grouped["Night"], "Add a night habit"),
             ),
         )
     }
@@ -85,5 +89,10 @@ class RoutineViewModel(
             list.size == 1 -> list.first().name
             else -> "${list.first().name} + ${list.size - 1} more"
         }
+    }
+
+    private fun routineActivities(habits: List<Habit>?, emptyLabel: String): List<String> {
+        val names = habits.orEmpty().map { it.name }
+        return names.take(4).ifEmpty { listOf(emptyLabel) }
     }
 }
