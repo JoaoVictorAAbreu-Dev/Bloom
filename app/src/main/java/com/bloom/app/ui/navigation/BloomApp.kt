@@ -180,6 +180,7 @@ private fun BloomNavigation(
                     onPause = viewModel::pause,
                     onResume = viewModel::resume,
                     onStop = viewModel::stop,
+                    onDeepFocusToggle = viewModel::toggleDeepFocus,
                     onNotificationsClick = { },
                 )
             }

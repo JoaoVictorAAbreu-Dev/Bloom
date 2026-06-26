@@ -110,6 +110,10 @@ class FocusViewModel(
         resetToFocus()
     }
 
+    fun toggleDeepFocus(enabled: Boolean) {
+        mutableState.update { it.copy(deepFocusEnabled = enabled) }
+    }
+
     private fun startTicker() {
         cancelTicker()
         timerJob = viewModelScope.launch {

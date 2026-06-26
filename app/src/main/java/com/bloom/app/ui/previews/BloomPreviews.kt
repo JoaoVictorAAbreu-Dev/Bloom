@@ -151,11 +151,13 @@ private fun FocusScreenPreview() {
                 shortBreakMinutes = 5,
                 longBreakMinutes = 15,
                 autoStartNextSession = true,
+                deepFocusEnabled = true,
             ),
             onStart = {},
             onPause = {},
             onResume = {},
             onStop = {},
+            onDeepFocusToggle = {},
             onNotificationsClick = {},
         )
     }

@@ -43,18 +43,29 @@ fun FocusScreen(
     onPause: () -> Unit,
     onResume: () -> Unit,
     onStop: () -> Unit,
+    onDeepFocusToggle: (Boolean) -> Unit,
     onNotificationsClick: () -> Unit,
 ) {
+    val backgroundColors = if (uiState.deepFocusEnabled) {
+        listOf(
+            Color(0xFFE6EDE2),
+            Color(0xFFD3E0D0),
+            Color(0xFFBDCFBB),
+        )
+    } else {
+        listOf(
+            Color(0xFFF1F3E8),
+            Color(0xFFE1E9DC),
+            Color(0xFFD4DED2),
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFFF1F3E8),
-                        Color(0xFFE1E9DC),
-                        Color(0xFFD4DED2),
-                    ),
+                    colors = backgroundColors,
                 ),
             ),
     ) {
@@ -88,10 +99,32 @@ fun FocusScreen(
                 verticalArrangement = Arrangement.spacedBy(BloomSpacing.xs),
             ) {
                 Text(
-                    text = "\"Focus on the now. Your garden is growing.\"",
+                    text = if (uiState.deepFocusEnabled) {
+                        "\"Deep Focus is on. Keep the session clean.\""
+                    } else {
+                        "\"Focus on the now. Your garden is growing.\""
+                    },
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
+                Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.xs)) {
+                    AssistChip(
+                        onClick = { onDeepFocusToggle(!uiState.deepFocusEnabled) },
+                        label = { Text(if (uiState.deepFocusEnabled) "Deep Focus On" else "Deep Focus Off") },
+                        colors = AssistChipDefaults.assistChipColors(
+                            containerColor = if (uiState.deepFocusEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
+                            labelColor = if (uiState.deepFocusEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        ),
+                    )
+                    AssistChip(
+                        onClick = { },
+                        label = { Text("Offline-first") },
+                        colors = AssistChipDefaults.assistChipColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        ),
+                    )
+                }
             }
 
             Box(

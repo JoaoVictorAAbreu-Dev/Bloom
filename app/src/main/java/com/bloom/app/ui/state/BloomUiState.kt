@@ -94,6 +94,7 @@ data class FocusUiState(
     val shortBreakMinutes: Int = 5,
     val longBreakMinutes: Int = 15,
     val autoStartNextSession: Boolean = true,
+    val deepFocusEnabled: Boolean = false,
 )
 
 data class StatisticsUiState(
