@@ -1,5 +1,7 @@
 # Bloom
 
+![Bloom banner](docs/assets/bloom-banner.png)
+
 Bloom is a native Android app for habits, routine planning, Pomodoro focus, personal growth, and local AI coaching.
 
 It follows an Organic Productivity design language: calm, premium, minimal, and warm, with pixel-art details reserved for illustrations, rewards, and empty states.
@@ -12,27 +14,6 @@ It follows an Organic Productivity design language: calm, premium, minimal, and 
 - Stores data locally with Room and DataStore
 - Tracks streaks, sessions, and progress
 - Offers Bloom Coach, an AI assistant powered by Groq when configured
-
-## Visual Preview
-
-The images below are side by side so the brand mark and the app hero can be reviewed together.
-
-<table>
-  <tr>
-    <td align="center">
-      <img src="docs/assets/bloom-logo.png" alt="Bloom logo" width="320" />
-      <br />
-      <strong>Brand mark</strong>
-    </td>
-    <td align="center">
-      <img src="docs/assets/bloom-splash-hero.png" alt="Bloom splash screen" width="320" />
-      <br />
-      <strong>Splash hero</strong>
-    </td>
-  </tr>
-</table>
-
-See the full gallery in [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md).
 
 ## Stack
 
@@ -76,7 +57,6 @@ If the key is missing, the app keeps working with local fallback guidance.
 
 - Technical guide: [docs/TECHNICAL.md](docs/TECHNICAL.md)
 - User guide: [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
-- Screenshot gallery: [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md)
 
 ## Project structure
 
