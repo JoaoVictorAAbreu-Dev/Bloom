@@ -45,6 +45,11 @@ class HabitEditorViewModel(
     }
     fun updateColor(value: Int) = mutableState.update { it.copy(colorArgb = value) }
     fun updateIcon(value: String) = mutableState.update { it.copy(iconKey = value) }
+    fun updatePriority(value: String) = mutableState.update { it.copy(priority = value) }
+    fun updateEmoji(value: String) = mutableState.update { it.copy(emoji = value.take(4)) }
+    fun updateDailyGoal(value: Int) = mutableState.update { it.copy(dailyGoal = value.coerceIn(1, 12)) }
+    fun updateWeeklyGoal(value: Int) = mutableState.update { it.copy(weeklyGoal = value.coerceIn(1, 21)) }
+    fun updateCustomRepeat(value: String) = mutableState.update { it.copy(customRepeat = value.take(40)) }
 
     fun save(onSaved: () -> Unit) {
         val current = mutableState.value
@@ -60,6 +65,11 @@ class HabitEditorViewModel(
                     reminderMinute = current.reminderMinute,
                     colorArgb = current.colorArgb,
                     iconKey = current.iconKey,
+                    priority = current.priority,
+                    emoji = current.emoji,
+                    dailyGoal = current.dailyGoal,
+                    weeklyGoal = current.weeklyGoal,
+                    customRepeat = current.customRepeat,
                     createdAtMillis = current.createdAtMillis,
                     streak = 0,
                     completedToday = false,
@@ -90,6 +100,11 @@ class HabitEditorViewModel(
                 reminderMinute = habit.reminderMinute ?: 0,
                 colorArgb = habit.colorArgb,
                 iconKey = habit.iconKey,
+                priority = habit.priority,
+                emoji = habit.emoji,
+                dailyGoal = habit.dailyGoal,
+                weeklyGoal = habit.weeklyGoal,
+                customRepeat = habit.customRepeat,
                 createdAtMillis = habit.createdAtMillis,
                 loading = false,
             )

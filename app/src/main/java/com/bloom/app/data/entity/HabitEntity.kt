@@ -13,5 +13,10 @@ data class HabitEntity(
     val reminderMinute: Int?,
     val colorArgb: Int,
     val iconKey: String,
-    val createdAtMillis: Long,
+    val priority: String = "Medium",
+    val emoji: String = "",
+    val dailyGoal: Int = 1,
+    val weeklyGoal: Int = 5,
+    val customRepeat: String = "",
+    val createdAtMillis: Long = System.currentTimeMillis(),
 )

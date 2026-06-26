@@ -16,6 +16,11 @@ fun HabitEntity.toDomain(streak: Int, completedToday: Boolean, completionCount: 
         reminderMinute = reminderMinute,
         colorArgb = colorArgb,
         iconKey = iconKey,
+        priority = priority,
+        emoji = emoji,
+        dailyGoal = dailyGoal,
+        weeklyGoal = weeklyGoal,
+        customRepeat = customRepeat,
         createdAtMillis = createdAtMillis,
         streak = streak,
         completedToday = completedToday,
@@ -33,6 +38,11 @@ fun Habit.toEntity(): HabitEntity {
         reminderMinute = reminderMinute,
         colorArgb = colorArgb,
         iconKey = iconKey,
+        priority = priority,
+        emoji = emoji,
+        dailyGoal = dailyGoal,
+        weeklyGoal = weeklyGoal,
+        customRepeat = customRepeat,
         createdAtMillis = createdAtMillis,
     )
 }

@@ -29,7 +29,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bloom.app.domain.model.Habit
 import com.bloom.app.ui.theme.BloomColors
-import com.bloom.app.ui.theme.BloomRadius
 import com.bloom.app.ui.theme.BloomSpacing
 
 @Composable
@@ -54,7 +53,7 @@ fun BloomHabitCard(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = habit.iconEmoji(),
+                    text = habit.iconLabel(),
                     style = MaterialTheme.typography.titleLarge,
                 )
             }
@@ -67,28 +66,28 @@ fun BloomHabitCard(
                 )
                 Spacer(modifier = Modifier.height(BloomSpacing.xxs))
                 Text(
-                    text = "${habit.category.label}  •  ${habit.frequency.label}",
+                    text = "${habit.category.label} - ${habit.frequency.label}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(modifier = Modifier.height(BloomSpacing.xs))
                 Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.xs)) {
-                    AssistChip(
-                        onClick = { },
-                        label = { Text("${habit.streak} day streak") },
-                        colors = AssistChipDefaults.assistChipColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        ),
+                    HabitChip(text = "${habit.streak} day streak")
+                    HabitChip(
+                        text = if (habit.completedToday) "Done today" else "Pending",
+                        containerColor = if (habit.completedToday) Color(habit.colorArgb).copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceVariant,
+                        labelColor = if (habit.completedToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    AssistChip(
-                        onClick = { },
-                        label = { Text(if (habit.completedToday) "Done today" else "Pending") },
-                        colors = AssistChipDefaults.assistChipColors(
-                            containerColor = if (habit.completedToday) Color(habit.colorArgb).copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceVariant,
-                            labelColor = if (habit.completedToday) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        ),
+                }
+                Spacer(modifier = Modifier.height(BloomSpacing.xs))
+                Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.xs)) {
+                    HabitChip(
+                        text = habit.priority,
+                        containerColor = priorityColor(habit.priority).copy(alpha = 0.16f),
+                        labelColor = priorityColor(habit.priority),
                     )
+                    HabitChip(text = "Daily ${habit.dailyGoal}")
+                    HabitChip(text = "Weekly ${habit.weeklyGoal}")
                 }
             }
             Spacer(modifier = Modifier.width(BloomSpacing.sm))
@@ -107,11 +106,35 @@ fun BloomHabitCard(
     }
 }
 
-private fun Habit.iconEmoji(): String = when (iconKey) {
-    "watering_can" -> "🌱"
-    "journal" -> "📓"
-    "focus" -> "⏱"
-    "shoe" -> "👟"
-    "leaf" -> "🍃"
-    else -> "✿"
+@Composable
+private fun HabitChip(
+    text: String,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
+    labelColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+) {
+    AssistChip(
+        onClick = { },
+        label = { Text(text) },
+        colors = AssistChipDefaults.assistChipColors(
+            containerColor = containerColor,
+            labelColor = labelColor,
+        ),
+    )
+}
+
+private fun Habit.iconLabel(): String = emoji.ifBlank {
+    when (iconKey) {
+        "watering_can" -> "Pl"
+        "journal" -> "Jn"
+        "focus" -> "Fo"
+        "shoe" -> "Mv"
+        "leaf" -> "Lf"
+        else -> "Bl"
+    }
+}
+
+private fun priorityColor(priority: String): Color = when (priority) {
+    "High" -> BloomColors.Warning
+    "Low" -> BloomColors.PrimaryDark
+    else -> BloomColors.Primary
 }

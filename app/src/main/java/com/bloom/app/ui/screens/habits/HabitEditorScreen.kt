@@ -46,6 +46,11 @@ fun HabitEditorScreen(
     onReminderMinuteChange: (Int) -> Unit,
     onColorChange: (Int) -> Unit,
     onIconChange: (String) -> Unit,
+    onPriorityChange: (String) -> Unit,
+    onEmojiChange: (String) -> Unit,
+    onDailyGoalChange: (Int) -> Unit,
+    onWeeklyGoalChange: (Int) -> Unit,
+    onCustomRepeatChange: (String) -> Unit,
     onSave: () -> Unit,
     onDelete: () -> Unit,
 ) {
@@ -109,6 +114,8 @@ fun HabitEditorScreen(
                 CategoryRow(selected = uiState.category, onSelected = onCategoryChange)
                 Text("Frequency", style = androidx.compose.material3.MaterialTheme.typography.labelLarge)
                 FrequencyRow(selected = uiState.frequency, onSelected = onFrequencyChange)
+                Text("Priority", style = androidx.compose.material3.MaterialTheme.typography.labelLarge)
+                PriorityRow(selected = uiState.priority, onSelected = onPriorityChange)
             }
         }
 
@@ -144,6 +151,41 @@ fun HabitEditorScreen(
                 ColorRow(selectedColor = uiState.colorArgb, onSelected = onColorChange)
                 Text("Icon", style = androidx.compose.material3.MaterialTheme.typography.titleMedium)
                 IconRow(selectedIcon = uiState.iconKey, onSelected = onIconChange)
+                OutlinedTextField(
+                    value = uiState.emoji,
+                    onValueChange = onEmojiChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Emoji or short symbol") },
+                    singleLine = true,
+                )
+            }
+        }
+
+        BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
+            Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
+                Text("Goals", style = androidx.compose.material3.MaterialTheme.typography.titleMedium)
+                Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
+                    GoalField(
+                        label = "Daily goal",
+                        value = uiState.dailyGoal,
+                        onValueChange = onDailyGoalChange,
+                        modifier = Modifier.weight(1f),
+                    )
+                    GoalField(
+                        label = "Weekly goal",
+                        value = uiState.weeklyGoal,
+                        onValueChange = onWeeklyGoalChange,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                OutlinedTextField(
+                    value = uiState.customRepeat,
+                    onValueChange = onCustomRepeatChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Custom repetition") },
+                    placeholder = { Text("Mon, Wed, Fri or every 2 days") },
+                    singleLine = true,
+                )
             }
         }
 
@@ -156,6 +198,44 @@ fun HabitEditorScreen(
             onClick = onSave,
         )
     }
+}
+
+@Composable
+private fun PriorityRow(
+    selected: String,
+    onSelected: (String) -> Unit,
+) {
+    val options = listOf("Low", "Medium", "High")
+    Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.xs)) {
+        options.forEach { priority ->
+            AssistChip(
+                onClick = { onSelected(priority) },
+                label = { Text(priority) },
+                colors = AssistChipDefaults.assistChipColors(
+                    containerColor = if (selected == priority) androidx.compose.material3.MaterialTheme.colorScheme.primary else androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant,
+                    labelColor = if (selected == priority) androidx.compose.material3.MaterialTheme.colorScheme.onPrimary else androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
+                ),
+            )
+        }
+    }
+}
+
+@Composable
+private fun GoalField(
+    label: String,
+    value: Int,
+    onValueChange: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    OutlinedTextField(
+        value = value.toString(),
+        onValueChange = { text ->
+            text.filter(Char::isDigit).takeIf { it.isNotBlank() }?.toIntOrNull()?.let(onValueChange)
+        },
+        label = { Text(label) },
+        modifier = modifier,
+        singleLine = true,
+    )
 }
 
 @Composable

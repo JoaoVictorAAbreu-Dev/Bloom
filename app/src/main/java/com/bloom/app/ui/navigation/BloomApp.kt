@@ -261,6 +261,11 @@ private fun BloomNavigation(
                     onReminderMinuteChange = { viewModel.updateReminder(uiState.reminderHour, it) },
                     onColorChange = viewModel::updateColor,
                     onIconChange = viewModel::updateIcon,
+                    onPriorityChange = viewModel::updatePriority,
+                    onEmojiChange = viewModel::updateEmoji,
+                    onDailyGoalChange = viewModel::updateDailyGoal,
+                    onWeeklyGoalChange = viewModel::updateWeeklyGoal,
+                    onCustomRepeatChange = viewModel::updateCustomRepeat,
                     onSave = {
                         viewModel.save { navController.popBackStack() }
                     },
@@ -286,6 +291,11 @@ private fun BloomNavigation(
                     onReminderMinuteChange = { viewModel.updateReminder(uiState.reminderHour, it) },
                     onColorChange = viewModel::updateColor,
                     onIconChange = viewModel::updateIcon,
+                    onPriorityChange = viewModel::updatePriority,
+                    onEmojiChange = viewModel::updateEmoji,
+                    onDailyGoalChange = viewModel::updateDailyGoal,
+                    onWeeklyGoalChange = viewModel::updateWeeklyGoal,
+                    onCustomRepeatChange = viewModel::updateCustomRepeat,
                     onSave = {
                         viewModel.save { navController.popBackStack() }
                     },
