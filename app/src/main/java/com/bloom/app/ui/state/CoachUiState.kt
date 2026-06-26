@@ -24,10 +24,13 @@ data class CoachIntegrationUiState(
 data class CoachUiState(
     val integration: CoachIntegrationUiState = CoachIntegrationUiState(),
     val contextSummary: List<String> = emptyList(),
+    val weeklySummary: String = "",
+    val monthlySummary: String = "",
+    val nextBestAction: String = "",
+    val recommendations: List<String> = emptyList(),
     val quickActions: List<AiCoachQuickAction> = emptyList(),
     val messages: List<CoachMessageUi> = emptyList(),
     val input: String = "",
     val sending: Boolean = false,
     val errorMessage: String? = null,
 )
-

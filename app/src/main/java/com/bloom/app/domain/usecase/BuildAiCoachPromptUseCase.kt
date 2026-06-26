@@ -10,7 +10,7 @@ class BuildAiCoachPromptUseCase {
     ): AiCoachPrompt {
         val systemPrompt = """
             You are Bloom Coach, a calm, premium productivity assistant for the Bloom app.
-            Reply in Brazilian Portuguese.
+            Reply in the same language as the user. Default to Brazilian Portuguese when unclear.
             Keep the response concise, warm, and actionable.
             Use at most 3 short bullet points unless the user asks for more detail.
             Focus on habits, routine planning, Pomodoro timing, weekly review, and gentle accountability.
@@ -24,6 +24,11 @@ class BuildAiCoachPromptUseCase {
             appendLine("Longest streak: ${context.statistics.longestStreak}")
             appendLine("Weekly consistency: ${context.statistics.weeklyConsistency}%")
             appendLine("Focus minutes today: ${context.statistics.focusMinutesToday}")
+            appendLine("Average focus session: ${context.statistics.averageFocusMinutes} minutes")
+            appendLine("Most productive hour: ${context.statistics.mostProductiveHourLabel}")
+            appendLine("Top completed habit: ${context.statistics.topHabitName}")
+            appendLine("Monthly focus minutes by week: ${context.statistics.monthlyFocusMinutes.joinToString()}")
+            appendLine("Monthly habit completions by day: ${context.statistics.monthlyHabitCompletions.joinToString()}")
             appendLine("Garden growth: ${context.statistics.gardenGrowth}")
             appendLine("Unlocked rewards: ${context.rewardsUnlocked}")
             appendLine("Active habits:")
@@ -49,4 +54,3 @@ class BuildAiCoachPromptUseCase {
         )
     }
 }
-

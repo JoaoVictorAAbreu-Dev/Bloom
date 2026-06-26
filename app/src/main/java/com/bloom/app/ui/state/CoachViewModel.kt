@@ -14,8 +14,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.UUID
 import java.time.LocalTime
+import java.util.UUID
 
 class CoachViewModel(
     private val container: BloomAppContainer,
@@ -78,6 +78,10 @@ class CoachViewModel(
                 baseUrl = container.aiCoachRepository.baseUrl,
             ),
             contextSummary = buildContextSummary(context),
+            weeklySummary = buildWeeklySummary(context),
+            monthlySummary = buildMonthlySummary(context),
+            nextBestAction = buildNextBestAction(context),
+            recommendations = buildRecommendations(context),
             quickActions = container.aiCoachRepository.buildQuickActions(context),
             messages = visibleMessages,
             input = currentInput,
@@ -115,7 +119,7 @@ class CoachViewModel(
             val result = try {
                 container.generateAiCoachReplyUseCase(context, userPrompt)
             } catch (_: Throwable) {
-                lastError.value = "Não foi possível consultar o Groq agora. Usando orientação local."
+                lastError.value = "Could not reach Groq now. Using local guidance."
                 AiCoachReply(
                     text = localFallback(context, userPrompt),
                     source = AiCoachSource.LOCAL,
@@ -143,42 +147,86 @@ class CoachViewModel(
     private fun welcomeText(context: AiCoachContext): String {
         val openHabits = context.habits.count { !it.completedToday }
         return buildString {
-            append("Olá, ${context.userName}. ")
-            append("Posso planejar seu dia, revisar hábitos, montar um Pomodoro ou fechar a semana. ")
-            append("Hoje você tem $openHabits hábito(s) pendente(s) e ${context.statistics.focusMinutesToday} min de foco concluídos.")
+            append("Hi, ${context.userName}. ")
+            append("I can plan your day, review habits, shape a Pomodoro block, or close the week. ")
+            append("Today you have $openHabits pending habit(s) and ${context.statistics.focusMinutesToday} focus minutes completed.")
         }
     }
 
     private fun buildContextSummary(context: AiCoachContext): List<String> {
         return listOf(
-            "${context.statistics.habitsDoneToday}/${context.statistics.totalHabits} hábitos concluídos hoje",
-            "${context.statistics.focusMinutesToday} min de foco hoje",
-            "Maior streak: ${context.statistics.longestStreak} dias",
-            "Consistência semanal: ${context.statistics.weeklyConsistency}%",
-            "Jardim: ${context.rewardsUnlocked} recompensas desbloqueadas",
+            "${context.statistics.habitsDoneToday}/${context.statistics.totalHabits} habits completed today",
+            "${context.statistics.focusMinutesToday} focus minutes today",
+            "Longest streak: ${context.statistics.longestStreak} days",
+            "Weekly consistency: ${context.statistics.weeklyConsistency}%",
+            "Garden: ${context.rewardsUnlocked} rewards unlocked",
         )
+    }
+
+    private fun buildWeeklySummary(context: AiCoachContext): String {
+        val activeDays = context.statistics.weeklyHabitCompletions.count { it > 0 }
+        val focusMinutes = context.statistics.weeklyFocusMinutes.sum()
+        return "$activeDays active days, $focusMinutes focus minutes, ${context.statistics.weeklyConsistency}% consistency."
+    }
+
+    private fun buildMonthlySummary(context: AiCoachContext): String {
+        val activeDays = context.statistics.monthlyHabitCompletions.count { it > 0 }
+        val focusMinutes = context.statistics.monthlyFocusMinutes.sum()
+        return "$activeDays active days in 28 days, $focusMinutes focus minutes, top habit: ${context.statistics.topHabitName}."
+    }
+
+    private fun buildNextBestAction(context: AiCoachContext): String {
+        val pendingHabit = context.habits.firstOrNull { !it.completedToday }
+        return when {
+            pendingHabit != null -> "Complete '${pendingHabit.name}' next to protect today's rhythm."
+            context.statistics.focusMinutesToday < context.preferences.focusMinutes -> "Start one ${context.preferences.focusMinutes}-minute focus round."
+            else -> "Review tomorrow and keep the streak light."
+        }
+    }
+
+    private fun buildRecommendations(context: AiCoachContext): List<String> {
+        val recommendations = mutableListOf<String>()
+        if (context.statistics.weeklyConsistency < 50 && context.habits.isNotEmpty()) {
+            recommendations += "Reduce one low-priority habit or move it to a better time window."
+        }
+        if (context.statistics.mostProductiveHourLabel != "No focus yet") {
+            recommendations += "Schedule deep work near ${context.statistics.mostProductiveHourLabel}, your strongest focus window."
+        }
+        if (context.statistics.habitsDoneToday + 1 == context.statistics.totalHabits && context.statistics.totalHabits > 0) {
+            recommendations += "Finish one more habit to complete today's garden progress."
+        }
+        if (context.statistics.averageFocusMinutes > 0 && context.statistics.averageFocusMinutes < context.preferences.focusMinutes) {
+            recommendations += "Use a shorter warm-up round before the full Pomodoro."
+        }
+        if (recommendations.isEmpty()) {
+            recommendations += "Keep today's plan simple: one habit, one focus block, one short review."
+        }
+        return recommendations.take(4)
     }
 
     private fun localFallback(context: AiCoachContext, userPrompt: String): String {
         val nextHabit = context.habits.firstOrNull { !it.completedToday }?.name
             ?: context.habits.firstOrNull()?.name
-            ?: "um hábito leve"
+            ?: "a light habit"
         val activeRoutine = context.routineBlocks.firstOrNull { it.active } ?: context.routineBlocks.firstOrNull()
 
         return buildString {
-            appendLine("Posso te ajudar com um passo simples:")
-            appendLine("• Faça ${context.preferences.focusMinutes} min de foco em $nextHabit.")
+            appendLine("Here is a simple next step:")
+            appendLine("- Do ${context.preferences.focusMinutes} minutes of focus on $nextHabit.")
             if (context.statistics.habitsDoneToday < context.statistics.totalHabits) {
-                appendLine("• Complete mais um hábito para manter o ritmo.")
+                appendLine("- Complete one more habit to keep the rhythm.")
             }
             if (context.statistics.focusMinutesToday == 0) {
-                appendLine("• Comece com 5 min de aquecimento antes do foco principal.")
+                appendLine("- Start with 5 minutes of warm-up before the main focus block.")
             }
             if (activeRoutine != null) {
-                appendLine("• A próxima rotina natural é ${activeRoutine.slot}: ${activeRoutine.title}.")
+                appendLine("- The natural next routine is ${activeRoutine.slot}: ${activeRoutine.title}.")
+            }
+            buildRecommendations(context).forEach { recommendation ->
+                appendLine("- $recommendation")
             }
             if (userPrompt.isNotBlank()) {
-                appendLine("• Pedido: ${userPrompt.take(120)}")
+                appendLine("- Request: ${userPrompt.take(120)}")
             }
         }.trim()
     }
@@ -189,7 +237,7 @@ class CoachViewModel(
             RoutineBlock(
                 id = "morning",
                 title = "Morning",
-                subtitle = habits.firstOrNull()?.name ?: "Comece leve",
+                subtitle = habits.firstOrNull()?.name ?: "Start light",
                 slot = "Morning",
                 durationMinutes = 30,
                 active = now.hour in 5..11,
@@ -199,7 +247,7 @@ class CoachViewModel(
             RoutineBlock(
                 id = "afternoon",
                 title = "Afternoon",
-                subtitle = habits.getOrNull(1)?.name ?: "Retome o foco",
+                subtitle = habits.getOrNull(1)?.name ?: "Return to focus",
                 slot = "Afternoon",
                 durationMinutes = 30,
                 active = now.hour in 12..16,
@@ -209,7 +257,7 @@ class CoachViewModel(
             RoutineBlock(
                 id = "evening",
                 title = "Evening",
-                subtitle = habits.getOrNull(2)?.name ?: "Desacelere com intenção",
+                subtitle = habits.getOrNull(2)?.name ?: "Slow down with intention",
                 slot = "Evening",
                 durationMinutes = 25,
                 active = now.hour in 17..20,
@@ -219,7 +267,7 @@ class CoachViewModel(
             RoutineBlock(
                 id = "night",
                 title = "Night",
-                subtitle = "Prepare amanhã",
+                subtitle = "Prepare tomorrow",
                 slot = "Night",
                 durationMinutes = 20,
                 active = now.hour !in 5..20,

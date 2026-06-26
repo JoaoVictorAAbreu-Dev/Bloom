@@ -40,28 +40,29 @@ class AiCoachRepositoryImpl(
     }
 
     override fun buildQuickActions(context: AiCoachContext): List<AiCoachQuickAction> {
-        val remainingHabits = context.habits.filterNot { it.completedToday }.take(2)
-        val nextHabit = remainingHabits.firstOrNull()?.name ?: context.habits.firstOrNull()?.name ?: "um hábito leve"
+        val nextHabit = context.habits.firstOrNull { !it.completedToday }?.name
+            ?: context.habits.firstOrNull()?.name
+            ?: "a light habit"
         val focusMinutes = context.preferences.focusMinutes
         val totalHabits = context.statistics.totalHabits
         val doneHabits = context.statistics.habitsDoneToday
 
         return listOf(
             AiCoachQuickAction(
-                label = "Planejar meu dia",
-                prompt = "Me ajude a planejar meu dia com foco em ${nextHabit} e um Pomodoro de ${focusMinutes} minutos.",
+                label = "Plan my day",
+                prompt = "Help me plan today around $nextHabit and one $focusMinutes-minute Pomodoro.",
             ),
             AiCoachQuickAction(
-                label = "Revisar hábitos",
-                prompt = "Analise meus hábitos de hoje. Tenho $doneHabits de $totalHabits concluídos e diga qual é o próximo passo mais inteligente.",
+                label = "Review habits",
+                prompt = "Analyze my habits today. I completed $doneHabits of $totalHabits. What is the smartest next step?",
             ),
             AiCoachQuickAction(
-                label = "Preparar foco",
-                prompt = "Quero entrar em foco agora. Sugira como começar a sessão e manter um ritmo calmo por ${focusMinutes} minutos.",
+                label = "Prepare focus",
+                prompt = "I want to focus now. Suggest how to start and keep a calm rhythm for $focusMinutes minutes.",
             ),
             AiCoachQuickAction(
-                label = "Fechar o dia",
-                prompt = "Faça uma revisão curta do meu dia, com 3 pontos: progresso, ajuste e incentivo para amanhã.",
+                label = "Weekly summary",
+                prompt = "Give me a short weekly summary with progress, adjustment, and one next goal.",
             ),
         )
     }
@@ -69,23 +70,26 @@ class AiCoachRepositoryImpl(
     private fun offlineReply(context: AiCoachContext, userPrompt: String): AiCoachReply {
         val nextHabit = context.habits.firstOrNull { !it.completedToday }?.name
             ?: context.habits.firstOrNull()?.name
-            ?: "um hábito leve"
+            ?: "a light habit"
         val topRoutine = context.routineBlocks.firstOrNull { it.active } ?: context.routineBlocks.firstOrNull()
 
         val reply = buildString {
-            appendLine("Posso te ajudar com um próximo passo simples:")
-            appendLine("• Foque em $nextHabit por ${context.preferences.focusMinutes} min.")
+            appendLine("Here is a simple next step:")
+            appendLine("- Focus on $nextHabit for ${context.preferences.focusMinutes} minutes.")
             if (context.statistics.habitsDoneToday < context.statistics.totalHabits) {
-                appendLine("• Conclua mais um hábito para manter o jardim crescendo.")
+                appendLine("- Complete one more habit to keep the garden growing.")
             }
             if (context.statistics.focusMinutesToday == 0) {
-                appendLine("• Comece com 5 min de aquecimento para entrar no ritmo.")
+                appendLine("- Start with a 5-minute warm-up to enter the rhythm.")
+            }
+            if (context.statistics.mostProductiveHourLabel != "No focus yet") {
+                appendLine("- Your strongest focus window appears near ${context.statistics.mostProductiveHourLabel}.")
             }
             if (topRoutine != null) {
-                appendLine("• A próxima janela natural parece ser ${topRoutine.slot.lowercase()}: ${topRoutine.title}.")
+                appendLine("- The next natural routine window is ${topRoutine.slot.lowercase()}: ${topRoutine.title}.")
             }
             if (userPrompt.isNotBlank()) {
-                appendLine("• Pedido recebido: ${userPrompt.take(120)}")
+                appendLine("- Request received: ${userPrompt.take(120)}")
             }
         }.trim()
 
@@ -96,4 +100,3 @@ class AiCoachRepositoryImpl(
         )
     }
 }
-
