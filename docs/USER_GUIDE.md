@@ -15,8 +15,9 @@ Bloom helps you keep a daily rhythm with:
 1. Install the APK from the Bloom install page.
 2. Open the app.
 3. Wait for the splash screen.
-4. Finish onboarding.
-5. Review your Home dashboard.
+4. Finish onboarding by choosing your goal, starter habits, notification preference, and Pomodoro setup.
+5. Continue with local auth or without a real online account.
+6. Review your Home dashboard.
 
 ## Daily workflow
 
@@ -29,6 +30,7 @@ Use the Habits screen to:
 - delete a habit
 - mark a habit as complete for the day
 - review streaks
+- set priority, emoji, color, icon, goals, and custom repetition
 
 ### Routine
 
@@ -47,6 +49,7 @@ Use Focus to run Pomodoro sessions:
 - Pause
 - Resume
 - Stop
+- Deep Focus toggle
 
 ### Statistics
 
@@ -56,10 +59,26 @@ Use Statistics to review:
 - habits completed
 - longest streak
 - garden growth
+- consistency heatmap
+- monthly focus
+- best focus hour
+- most completed habit
 
 ### Garden
 
 Use Garden to unlock plants and rewards based on consistency.
+
+### Settings
+
+Use Settings to:
+
+- change display name
+- change theme
+- tune Pomodoro durations
+- configure notification and auto-start preferences
+- open Bloom Coach
+- generate a local JSON export snapshot
+- reset local data
 
 ## Bloom Coach
 
@@ -71,8 +90,17 @@ You can ask for:
 - help starting a focus session
 - a habit reminder
 - a short review at the end of the day
+- weekly and monthly analysis
+- next-best-action recommendations
 
 If Groq is not configured, the app still replies with local fallback guidance.
+
+## Current limitations
+
+- Account screens are offline-first and do not sync to a backend yet.
+- Deep Focus is an in-app mode and does not block Android notifications yet.
+- JSON export is shown inside Settings; file save/share is a later Android integration.
+- Google Drive backup, widgets, Wear OS, and music integrations are not part of the current MVP.
 
 ## Installing with the QR code
 

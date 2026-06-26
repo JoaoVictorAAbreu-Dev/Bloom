@@ -9,11 +9,15 @@ It follows an Organic Productivity design language: calm, premium, minimal, and 
 ## What Bloom does
 
 - Helps users build daily habits
+- Creates starter habits from onboarding choices
 - Organizes routines by time of day
 - Runs a functional Pomodoro timer
 - Stores data locally with Room and DataStore
 - Tracks streaks, sessions, and progress
+- Shows 28-day consistency, monthly focus, best focus hour, and top habit
+- Grows a rewards garden from local progress
 - Offers Bloom Coach, an AI assistant powered by Groq when configured
+- Exports a local JSON data snapshot from Settings
 
 ## Stack
 
@@ -30,7 +34,8 @@ It follows an Organic Productivity design language: calm, premium, minimal, and 
 ## Main screens
 
 - Splash
-- Onboarding
+- Onboarding with goal, starter habits, notifications, and Pomodoro setup
+- Offline-first auth entry
 - Home dashboard
 - Habits
 - Create and edit habit
@@ -40,6 +45,28 @@ It follows an Organic Productivity design language: calm, premium, minimal, and 
 - Garden and rewards
 - Profile and settings
 - Bloom Coach AI
+
+## V2 status
+
+Implemented in the local MVP:
+
+- Full onboarding flow with persisted setup choices
+- Offline-first auth screens without backend dependency
+- Advanced habit fields: priority, emoji, goals, custom repetition, color, icon
+- Pomodoro Deep Focus toggle and local session persistence
+- Advanced statistics and heatmap
+- Full garden/rewards screen
+- Profile metrics and categorized Settings
+- Bloom Coach with Groq integration plus local analytic fallback
+- Local JSON export snapshot
+
+Deferred because they require external platform integrations:
+
+- Google Drive backup/sync
+- Android widgets
+- Wear OS companion
+- Spotify/YouTube Music integration
+- Real notification blocking through Android DND policies
 
 ## Local AI setup
 
@@ -79,4 +106,6 @@ app/src/main/java/com/bloom/app
 
 - The project is structured as a local-first MVP.
 - No backend login is implemented yet.
+- Login and cadastro screens are local-only placeholders for future sync.
+- Backup/restore import is intentionally deferred until file-picker and cloud sync are validated.
 - The APK and install page are provided in `outputs/bloom-install`.

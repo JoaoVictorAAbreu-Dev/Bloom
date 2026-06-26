@@ -38,6 +38,8 @@ DataStore stores lightweight preferences:
 
 - theme mode
 - onboarding completion
+- offline auth completion
+- primary goal
 - Pomodoro defaults
 - user settings
 
@@ -47,9 +49,9 @@ Bloom Coach uses Groq through a repository boundary.
 
 Behavior:
 
-1. The app gathers context from habits, streaks, focus time, and recent sessions.
+1. The app gathers context from habits, streaks, focus time, statistics, rewards, and recent sessions.
 2. If `groqApiKey` exists in `app/local.properties`, Bloom sends the prompt to Groq.
-3. If the key is absent, the app returns a local fallback response.
+3. If the key is absent or the request fails, the app returns a local analytic fallback response.
 
 Default configuration:
 
@@ -83,10 +85,20 @@ The functional UI remains clean and modern.
 ## Main flows
 
 - Splash -> Onboarding -> Home
+- Splash -> Onboarding -> Local auth -> Home on first run
 - Home -> Habits / Focus / Routine / Garden / Settings
 - Habits -> Create and edit habit
 - Focus -> Pomodoro session history
-- Statistics -> growth and consistency overview
+- Statistics -> weekly, monthly, heatmap, and productivity-pattern overview
+- Settings -> local JSON export snapshot
+
+## V2 implementation notes
+
+- Onboarding persists the user's primary goal, notification preference, Pomodoro setup, and selected starter habits.
+- Habit persistence uses Room version 2 with a migration for priority, emoji, daily goal, weekly goal, and custom repetition.
+- Bloom Coach receives richer prompt context: average focus, best focus hour, top habit, monthly focus, and 28-day habit activity.
+- Deep Focus is currently an in-app mode. It changes the focus experience and copy, but it does not request Android DND access yet.
+- Local export is rendered in Settings as a JSON snapshot for inspection/copying. File save/share can be added after Android file-picker validation.
 
 ## Repository layout
 
@@ -113,11 +125,14 @@ The install page is designed to be opened from a phone on the same local network
 
 - This workspace was prepared without Android Studio on the machine.
 - Final build validation still depends on the Android SDK and a working Gradle setup.
+- This repo currently does not include `gradlew.bat`, and `gradle` is not available on this machine.
 - The current delivery is an MVP, not a complete production release.
 
 ## Future improvements
 
 - Gradle wrapper should be added if the repo is meant to build from CLI everywhere.
 - Add UI tests for the main navigation flows.
-- Add more real screenshots to the gallery after device validation.
-- Expand the AI coach with better context summarization and offline caching.
+- Add Android widgets for Pomodoro, next habit, progress, and garden.
+- Add Wear OS companion support.
+- Add Google Drive backup and restore.
+- Add real DND integration for Deep Focus after permission flow design.
