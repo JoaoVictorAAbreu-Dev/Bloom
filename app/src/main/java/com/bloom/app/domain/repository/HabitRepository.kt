@@ -12,6 +12,7 @@ interface HabitRepository {
     suspend fun upsertHabit(habit: Habit)
     suspend fun deleteHabit(habitId: String)
     suspend fun toggleHabitCompletion(habitId: String, completedAtMillis: Long = System.currentTimeMillis())
+    suspend fun ensureLocalFieldsEncrypted()
     suspend fun reset()
     suspend fun seedDefaults()
 }

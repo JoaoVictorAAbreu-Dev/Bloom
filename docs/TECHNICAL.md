@@ -51,10 +51,17 @@ Security details are documented in [SECURITY.md](SECURITY.md).
 Behavior:
 
 1. The app gathers context from habits, streaks, focus time, statistics, rewards, and recent sessions.
-2. If `groqApiKey` exists in root `local.properties` for a debug build, Bloom sends the prompt to Groq.
-3. If the key is absent or the request fails, the app returns a local analytic fallback response.
+2. If `aiBackendBaseUrl` starts with `https://`, Bloom sends the prompt to the production backend proxy.
+3. If no backend URL is configured, debug builds can send the prompt directly to Groq using `groqApiKey` from root `local.properties`.
+4. If the key is absent or the request fails, the app returns a local analytic fallback response.
 
-Default configuration:
+Production configuration:
+
+```properties
+aiBackendBaseUrl=https://your-bloom-ai-proxy.example.com
+```
+
+Debug-only direct provider configuration:
 
 ```properties
 groqApiKey=your_groq_api_key_here
@@ -63,6 +70,8 @@ groqBaseUrl=https://api.groq.com/openai/v1
 ```
 
 `groq/compound-mini` is used as the default open model target.
+
+The backend proxy lives in `backend/ai-proxy` and keeps `GROQ_API_KEY` server-side.
 
 ## UI system
 
@@ -97,6 +106,8 @@ The functional UI remains clean and modern.
 
 - Onboarding persists the user's primary goal, notification preference, Pomodoro setup, and selected starter habits.
 - Habit persistence uses Room version 2 with a migration for priority, emoji, daily goal, weekly goal, and custom repetition.
+- Habit free-text fields and sensitive preference strings are encrypted with Android Keystore before persistence.
+- Existing plaintext habit/preference values are re-encrypted lazily during app startup.
 - Bloom Coach receives richer prompt context: average focus, best focus hour, top habit, monthly focus, and 28-day habit activity.
 - Deep Focus is currently an in-app mode. It changes the focus experience and copy, but it does not request Android DND access yet.
 - Local export is rendered in Settings as a JSON snapshot for inspection/copying. File save/share can be added after Android file-picker validation.

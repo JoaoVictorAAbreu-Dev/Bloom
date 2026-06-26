@@ -7,6 +7,7 @@ import com.bloom.app.data.local.startOfDayMillis
 import com.bloom.app.data.entity.HabitEntity
 import com.bloom.app.data.mapper.toDomain
 import com.bloom.app.data.mapper.toEntity
+import com.bloom.app.data.security.FieldCipher
 import com.bloom.app.domain.model.BloomStatistics
 import com.bloom.app.domain.model.Habit
 import com.bloom.app.domain.model.HabitCategory
@@ -24,6 +25,7 @@ class HabitRepositoryImpl(
     private val habitDao: HabitDao,
     private val habitCompletionDao: HabitCompletionDao,
     private val calculateHabitStreakUseCase: CalculateHabitStreakUseCase,
+    private val fieldCipher: FieldCipher,
 ) : HabitRepository {
 
     override fun observeHabits(): Flow<List<Habit>> {
@@ -48,7 +50,7 @@ class HabitRepositoryImpl(
     }
 
     override suspend fun upsertHabit(habit: Habit) {
-        habitDao.upsert(habit.toEntity())
+        habitDao.upsert(habit.toEntity(fieldCipher))
     }
 
     override suspend fun deleteHabit(habitId: String) {
@@ -72,6 +74,22 @@ class HabitRepositoryImpl(
         } else {
             habitCompletionDao.deleteForDay(habitId, dayStart)
         }
+    }
+
+    override suspend fun ensureLocalFieldsEncrypted() {
+        habitDao.getHabits()
+            .filter { habit ->
+                !fieldCipher.isEncrypted(habit.name) ||
+                    (habit.customRepeat.isNotBlank() && !fieldCipher.isEncrypted(habit.customRepeat))
+            }
+            .forEach { habit ->
+                habitDao.upsert(
+                    habit.copy(
+                        name = habit.name.encryptIfNeeded(),
+                        customRepeat = habit.customRepeat.encryptIfNeeded(),
+                    ),
+                )
+            }
     }
 
     override suspend fun reset() {
@@ -146,7 +164,7 @@ class HabitRepositoryImpl(
             ),
         )
 
-        habits.forEach { habitDao.upsert(it.toEntity()) }
+        habits.forEach { habitDao.upsert(it.toEntity(fieldCipher)) }
 
         val seededCompletions = listOf(
             HabitCompletion(
@@ -192,6 +210,11 @@ class HabitRepositoryImpl(
             streak = streak,
             completedToday = completedToday,
             completionCount = habitCompletions.size,
+            fieldCipher = fieldCipher,
         )
+    }
+
+    private fun String.encryptIfNeeded(): String {
+        return if (isBlank() || fieldCipher.isEncrypted(this)) this else fieldCipher.encrypt(this)
     }
 }

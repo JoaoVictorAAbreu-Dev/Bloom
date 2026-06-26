@@ -35,7 +35,7 @@ class AiCoachRepositoryImpl(
             val text = aiGateway.generateReply(prompt)
             AiCoachReply(
                 text = text,
-                source = AiCoachSource.GROQ,
+                source = if (aiGateway.modelId == BACKEND_MANAGED_MODEL) AiCoachSource.REMOTE else AiCoachSource.GROQ,
                 modelId = modelId,
             )
         }.getOrElse { error ->
@@ -106,5 +106,9 @@ class AiCoachRepositoryImpl(
             source = AiCoachSource.LOCAL,
             modelId = modelId,
         )
+    }
+
+    private companion object {
+        const val BACKEND_MANAGED_MODEL = "backend-managed"
     }
 }

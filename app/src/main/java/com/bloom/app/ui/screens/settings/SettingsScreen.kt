@@ -173,7 +173,7 @@ fun SettingsScreen(
                         } else if (uiState.aiIntegration.configured) {
                             "Groq ready with ${uiState.aiIntegration.modelId}."
                         } else {
-                            "Local fallback active. Add groqApiKey in local.properties to connect Groq."
+                            "Local fallback active. Configure a secure AI backend for production or a debug Groq key locally."
                         },
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,

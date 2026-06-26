@@ -12,6 +12,8 @@ This QA pass covers the local-first Bloom V2 implementation:
 - garden and rewards
 - profile and settings
 - Bloom Coach with Groq fallback
+- production AI proxy
+- encrypted local free-text fields and sensitive preferences
 - local JSON export snapshot
 - documentation accuracy
 
@@ -30,6 +32,8 @@ This QA pass covers the local-first Bloom V2 implementation:
 | Statistics | Implemented | Weekly chart, 28-day heatmap, monthly focus, average focus, best hour, top habit. |
 | Garden | Implemented | Full garden screen with visual unlock progression and rewards. |
 | Bloom Coach | Implemented | Dedicated chat, quick actions, summaries, local recommendations, Groq integration. |
+| AI proxy | Implemented | Spring Boot proxy keeps Groq key server-side for production. |
+| Local encryption | Implemented | Habit free text and sensitive preferences use Android Keystore with lazy plaintext re-encryption. |
 | Export | Partial | In-app JSON snapshot exists. File save/share/import is deferred. |
 | Widgets/Wear/music | Deferred | Requires platform or third-party integrations outside this MVP pass. |
 
@@ -45,6 +49,7 @@ This QA pass covers the local-first Bloom V2 implementation:
 - Searched runtime source folders for common mojibake patterns after rewriting Bloom Coach and Home copy.
 - Verified working tree was clean between commits.
 - Verified recent commit history contains separate implementation commits.
+- Added backend unit tests for sanitizer and controller behavior.
 
 ## Build Validation
 
@@ -85,4 +90,5 @@ Risks:
 5. Test habit CRUD, completion animation, and Room migration from version 1 to 2.
 6. Test Pomodoro completion persistence and interrupted session persistence.
 7. Test Bloom Coach with no Groq key and with a valid Groq key.
-8. Generate a new QR install page only after the fresh APK is verified.
+8. Test Bloom Coach through `backend/ai-proxy` over HTTPS.
+9. Generate a new QR install page only after the fresh APK is verified.

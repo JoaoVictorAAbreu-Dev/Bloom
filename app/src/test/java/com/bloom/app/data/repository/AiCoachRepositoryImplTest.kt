@@ -2,6 +2,8 @@ package com.bloom.app.data.repository
 
 import com.bloom.app.data.remote.GroqAiGateway
 import com.bloom.app.data.remote.GroqAiService
+import com.bloom.app.data.remote.AiGateway
+import com.bloom.app.domain.model.AiCoachPrompt
 import com.bloom.app.domain.model.AiCoachContext
 import com.bloom.app.domain.model.AiCoachSource
 import com.bloom.app.domain.model.BloomStatistics
@@ -40,6 +42,27 @@ class AiCoachRepositoryImplTest {
 
         assertEquals(4, actions.size)
         assertTrue(actions.first().prompt.contains("25"))
+    }
+
+    @Test
+    fun `marks backend proxy replies as remote`() = runTest {
+        val remoteRepository = AiCoachRepositoryImpl(
+            aiGateway = object : AiGateway {
+                override val modelId: String = "backend-managed"
+                override val baseUrl: String = "https://bloom-ai.example.com"
+                override val isConfigured: Boolean = true
+
+                override suspend fun generateReply(prompt: AiCoachPrompt): String {
+                    return "Remote coaching reply"
+                }
+            },
+            buildAiCoachPromptUseCase = BuildAiCoachPromptUseCase(),
+        )
+
+        val reply = remoteRepository.generateReply(sampleContext(), "Review my week")
+
+        assertEquals(AiCoachSource.REMOTE, reply.source)
+        assertEquals("Remote coaching reply", reply.text)
     }
 
     private fun sampleContext() = AiCoachContext(

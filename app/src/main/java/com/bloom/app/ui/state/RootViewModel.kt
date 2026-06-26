@@ -23,6 +23,8 @@ class RootViewModel(
 
     init {
         viewModelScope.launch {
+            container.habitRepository.ensureLocalFieldsEncrypted()
+            container.preferencesRepository.ensureSensitiveFieldsEncrypted()
             val preferences = container.preferencesRepository.preferences.first()
             if (preferences.onboardingCompleted && !preferences.seedDataCreated) {
                 container.seedDemoContentUseCase()

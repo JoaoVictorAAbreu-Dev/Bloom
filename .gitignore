@@ -6,6 +6,8 @@ build/
 local.properties
 .env
 .env.*
+!.env.example
+!**/.env.example
 *.keystore
 *.jks
 *.apk

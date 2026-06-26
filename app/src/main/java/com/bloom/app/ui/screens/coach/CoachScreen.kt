@@ -93,7 +93,7 @@ fun CoachScreen(
                     )
                     if (message.source != null) {
                         Text(
-                            text = if (message.source == AiCoachSource.GROQ) "Reply via Groq" else "Local reply",
+                            text = message.source.label(),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.primary,
                         )
@@ -109,6 +109,14 @@ fun CoachScreen(
                 onSend = onSend,
             )
         }
+    }
+}
+
+private fun AiCoachSource.label(): String {
+    return when (this) {
+        AiCoachSource.REMOTE -> "Reply via secure backend"
+        AiCoachSource.GROQ -> "Reply via Groq"
+        AiCoachSource.LOCAL -> "Local reply"
     }
 }
 
@@ -132,7 +140,7 @@ private fun CoachStatusCard(uiState: CoachUiState) {
                     text = if (uiState.integration.configured) {
                         "Groq connected. Model ${uiState.integration.modelId}."
                     } else {
-                        "Local mode active. Add groqApiKey in local.properties to use Groq."
+                        "Local mode active. Configure a secure AI backend or a debug Groq key to use remote coaching."
                     },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

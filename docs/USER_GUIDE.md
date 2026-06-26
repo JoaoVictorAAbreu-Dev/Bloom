@@ -121,5 +121,5 @@ Recommended flow:
 ## Troubleshooting
 
 - If the app does not install, verify the phone is on the same network as the PC.
-- If Bloom Coach says the API is not configured, add `groqApiKey` to root `local.properties` for a debug build.
+- If Bloom Coach says the API is not configured, use `aiBackendBaseUrl` for production or `groqApiKey` only for a debug build.
 - If the visual preview looks outdated, regenerate the screenshots after the next UI update.

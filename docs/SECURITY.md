@@ -28,7 +28,8 @@ Main risks:
 - Debug builds can read `groqApiKey` from `local.properties`.
 - Release builds intentionally set `GROQ_API_KEY` to an empty string.
 - A Groq key inside an APK must be considered extractable.
-- Production should use a backend proxy that stores the Groq key server-side.
+- Production should use `backend/ai-proxy`, which stores the Groq key server-side.
+- Release builds can point to the proxy through non-secret `aiBackendBaseUrl`.
 
 ## AI Privacy Policy
 
@@ -68,14 +69,15 @@ Current state:
 
 - Room stores habits, completions, and Pomodoro sessions.
 - DataStore stores lightweight app preferences.
-- Android auto-backup is disabled while local data is not fully encrypted.
-- `CryptoManager` uses Android Keystore with AES/GCM/NoPadding and is ready for field-level encryption.
-- `KeystoreSecurePreferencesRepository` is available for future sensitive preference values.
+- Android auto-backup is disabled.
+- `CryptoManager` uses Android Keystore with AES/GCM/NoPadding.
+- Habit free-text fields are encrypted before being persisted.
+- Sensitive preference strings are encrypted before being persisted.
+- Legacy plaintext habit and preference values are re-encrypted during app startup.
 
 MVP limitation:
 
-- Existing Room fields are not fully encrypted yet.
-- A future migration should encrypt free-text habit fields before Play Store production release.
+- Pomodoro session timestamps, completion timestamps, categories, goals, and aggregate metrics remain queryable plaintext because the app needs local analytics without server access.
 
 ## Logging Policy
 
@@ -108,8 +110,7 @@ No extra permissions should be added without a product reason.
 
 - Add or restore Gradle Wrapper and run a clean release build.
 - Verify no secrets are present in Git history or APK artifacts.
-- Move Groq usage behind a backend proxy.
-- Encrypt Room free-text fields or use a database encryption strategy.
+- Deploy `backend/ai-proxy` and point release builds to it with `aiBackendBaseUrl`.
 - Add file-save/share flow for exports with explicit user action.
 - Add privacy policy copy for AI and local storage.
 - Run mobile security testing aligned with OWASP MASVS.

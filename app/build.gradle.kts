@@ -15,6 +15,10 @@ val localProperties = Properties().apply {
 
 fun String.toBuildConfigValue(): String = replace("\\", "\\\\").replace("\"", "\\\"")
 
+fun secretProperty(name: String, envName: String, defaultValue: String = ""): String {
+    return localProperties.getProperty(name) ?: System.getenv(envName) ?: defaultValue
+}
+
 android {
     namespace = "com.bloom.app"
     compileSdk = 36
@@ -33,17 +37,22 @@ android {
             buildConfigField(
                 "String",
                 "GROQ_API_KEY",
-                "\"${localProperties.getProperty("groqApiKey", "").toBuildConfigValue()}\"",
+                "\"${secretProperty("groqApiKey", "GROQ_API_KEY").toBuildConfigValue()}\"",
             )
             buildConfigField(
                 "String",
                 "GROQ_MODEL",
-                "\"${localProperties.getProperty("groqModel", "groq/compound-mini").toBuildConfigValue()}\"",
+                "\"${secretProperty("groqModel", "GROQ_MODEL", "groq/compound-mini").toBuildConfigValue()}\"",
             )
             buildConfigField(
                 "String",
                 "GROQ_BASE_URL",
-                "\"${localProperties.getProperty("groqBaseUrl", "https://api.groq.com/openai/v1").toBuildConfigValue()}\"",
+                "\"${secretProperty("groqBaseUrl", "GROQ_BASE_URL", "https://api.groq.com/openai/v1").toBuildConfigValue()}\"",
+            )
+            buildConfigField(
+                "String",
+                "AI_BACKEND_BASE_URL",
+                "\"${secretProperty("aiBackendBaseUrl", "AI_BACKEND_BASE_URL").toBuildConfigValue()}\"",
             )
         }
         release {
@@ -53,6 +62,11 @@ android {
             buildConfigField("String", "GROQ_API_KEY", "\"\"")
             buildConfigField("String", "GROQ_MODEL", "\"groq/compound-mini\"")
             buildConfigField("String", "GROQ_BASE_URL", "\"https://api.groq.com/openai/v1\"")
+            buildConfigField(
+                "String",
+                "AI_BACKEND_BASE_URL",
+                "\"${secretProperty("aiBackendBaseUrl", "AI_BACKEND_BASE_URL").toBuildConfigValue()}\"",
+            )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",

@@ -2,14 +2,20 @@ package com.bloom.app.data.mapper
 
 import com.bloom.app.data.entity.HabitCompletionEntity
 import com.bloom.app.data.entity.HabitEntity
+import com.bloom.app.data.security.FieldCipher
 import com.bloom.app.domain.model.Habit
 import com.bloom.app.domain.model.HabitCategory
 import com.bloom.app.domain.model.HabitFrequency
 
-fun HabitEntity.toDomain(streak: Int, completedToday: Boolean, completionCount: Int): Habit {
+fun HabitEntity.toDomain(
+    streak: Int,
+    completedToday: Boolean,
+    completionCount: Int,
+    fieldCipher: FieldCipher,
+): Habit {
     return Habit(
         id = id,
-        name = name,
+        name = fieldCipher.decrypt(name),
         category = HabitCategory.valueOf(category),
         frequency = HabitFrequency.valueOf(frequency),
         reminderHour = reminderHour,
@@ -20,7 +26,7 @@ fun HabitEntity.toDomain(streak: Int, completedToday: Boolean, completionCount: 
         emoji = emoji,
         dailyGoal = dailyGoal,
         weeklyGoal = weeklyGoal,
-        customRepeat = customRepeat,
+        customRepeat = fieldCipher.decrypt(customRepeat),
         createdAtMillis = createdAtMillis,
         streak = streak,
         completedToday = completedToday,
@@ -28,10 +34,10 @@ fun HabitEntity.toDomain(streak: Int, completedToday: Boolean, completionCount: 
     )
 }
 
-fun Habit.toEntity(): HabitEntity {
+fun Habit.toEntity(fieldCipher: FieldCipher): HabitEntity {
     return HabitEntity(
         id = id,
-        name = name,
+        name = fieldCipher.encrypt(name),
         category = category.name,
         frequency = frequency.name,
         reminderHour = reminderHour,
@@ -42,7 +48,7 @@ fun Habit.toEntity(): HabitEntity {
         emoji = emoji,
         dailyGoal = dailyGoal,
         weeklyGoal = weeklyGoal,
-        customRepeat = customRepeat,
+        customRepeat = fieldCipher.encrypt(customRepeat),
         createdAtMillis = createdAtMillis,
     )
 }

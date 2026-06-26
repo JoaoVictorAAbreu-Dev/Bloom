@@ -16,7 +16,7 @@ It follows an Organic Productivity design language: calm, premium, minimal, and 
 - Tracks streaks, sessions, and progress
 - Shows 28-day consistency, monthly focus, best focus hour, and top habit
 - Grows a rewards garden from local progress
-- Offers Bloom Coach, an AI assistant powered by Groq when configured
+- Offers Bloom Coach, an AI assistant powered by a production backend proxy or debug Groq fallback
 - Exports a local JSON data snapshot from Settings
 
 ## Stack
@@ -70,7 +70,15 @@ Deferred because they require external platform integrations:
 
 ## Local AI setup
 
-Bloom Coach uses Groq in debug builds when the API key is configured in root `local.properties`.
+For production, Bloom Coach should use the backend proxy in `backend/ai-proxy` so the Groq key never ships inside the APK.
+
+```properties
+aiBackendBaseUrl=https://your-bloom-ai-proxy.example.com
+```
+
+CI builds can use `AI_BACKEND_BASE_URL` instead of `local.properties`.
+
+Debug builds can still call Groq directly when the API key is configured in root `local.properties`.
 
 ```properties
 groqApiKey=your_groq_api_key_here
@@ -83,9 +91,11 @@ If the key is missing, the app keeps working with local fallback guidance.
 ## Documentation
 
 - Technical guide: [docs/TECHNICAL.md](docs/TECHNICAL.md)
+- Production readiness: [docs/PRODUCTION.md](docs/PRODUCTION.md)
 - User guide: [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
 - QA report: [docs/QA_V2.md](docs/QA_V2.md)
 - Security guide: [docs/SECURITY.md](docs/SECURITY.md)
+- AI proxy: [backend/ai-proxy/README.md](backend/ai-proxy/README.md)
 
 ## Project structure
 
@@ -94,6 +104,10 @@ app/src/main/java/com/bloom/app
   data
   domain
   ui
+
+backend/ai-proxy
+  src/main/kotlin/com/bloom/aiproxy
+  src/test/kotlin/com/bloom/aiproxy
 ```
 
 ## Installation and test

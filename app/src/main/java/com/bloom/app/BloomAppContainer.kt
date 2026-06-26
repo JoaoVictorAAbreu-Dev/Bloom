@@ -4,6 +4,7 @@ import android.content.Context
 import com.bloom.app.data.local.BloomDatabase
 import com.bloom.app.data.remote.GroqAiGateway
 import com.bloom.app.data.remote.GroqAiService
+import com.bloom.app.data.remote.RemoteBackendAiGateway
 import com.bloom.app.data.repository.AiCoachRepositoryImpl
 import com.bloom.app.data.repository.HabitRepositoryImpl
 import com.bloom.app.data.repository.KeystoreSecurePreferencesRepository
@@ -11,6 +12,7 @@ import com.bloom.app.data.repository.PomodoroRepositoryImpl
 import com.bloom.app.data.repository.PreferencesRepositoryImpl
 import com.bloom.app.data.repository.RewardRepositoryImpl
 import com.bloom.app.data.repository.StatisticsRepositoryImpl
+import com.bloom.app.data.security.KeystoreFieldCipher
 import com.bloom.app.domain.repository.AiCoachRepository
 import com.bloom.app.domain.repository.HabitRepository
 import com.bloom.app.domain.repository.PomodoroRepository
@@ -46,6 +48,7 @@ class BloomAppContainer(context: Context) {
         habitDao = database.habitDao(),
         habitCompletionDao = database.habitCompletionDao(),
         calculateHabitStreakUseCase = calculateHabitStreakUseCase,
+        fieldCipher = KeystoreFieldCipher(),
     )
     val pomodoroRepository: PomodoroRepository = PomodoroRepositoryImpl(database.pomodoroSessionDao())
     val preferencesRepository: PreferencesRepository = PreferencesRepositoryImpl(context)
@@ -57,7 +60,11 @@ class BloomAppContainer(context: Context) {
     )
     val rewardRepository: RewardRepository = RewardRepositoryImpl()
     val aiCoachRepository: AiCoachRepository = AiCoachRepositoryImpl(
-        aiGateway = GroqAiGateway(GroqAiService()),
+        aiGateway = if (BuildConfig.AI_BACKEND_BASE_URL.trim().startsWith("https://")) {
+            RemoteBackendAiGateway(BuildConfig.AI_BACKEND_BASE_URL.trim())
+        } else {
+            GroqAiGateway(GroqAiService())
+        },
         buildAiCoachPromptUseCase = BuildAiCoachPromptUseCase(),
     )
 

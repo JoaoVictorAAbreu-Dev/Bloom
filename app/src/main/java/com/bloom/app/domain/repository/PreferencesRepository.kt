@@ -8,6 +8,7 @@ interface PreferencesRepository {
     val preferences: Flow<UserPreferences>
     suspend fun updateThemeMode(themeMode: ThemeMode)
     suspend fun updatePreferences(transform: (UserPreferences) -> UserPreferences)
+    suspend fun ensureSensitiveFieldsEncrypted()
     suspend fun setSeeded()
     suspend fun reset()
 }
