@@ -84,6 +84,7 @@ If the key is missing, the app keeps working with local fallback guidance.
 
 - Technical guide: [docs/TECHNICAL.md](docs/TECHNICAL.md)
 - User guide: [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
+- QA report: [docs/QA_V2.md](docs/QA_V2.md)
 
 ## Project structure
 
@@ -96,9 +97,13 @@ app/src/main/java/com/bloom/app
 
 ## Installation and test
 
-1. Open the install page from `outputs/bloom-install/index.html`.
-2. Scan the QR code shown on the page.
-3. Download `Bloom-debug.apk`.
+The repository currently needs a working Android SDK plus Gradle/Gradle Wrapper to generate a fresh APK.
+
+After the build environment is available:
+
+1. Build a new debug APK.
+2. Generate a QR install page pointing to the fresh APK.
+3. Scan the QR code from the Android device.
 4. Allow installs from unknown sources if Android asks.
 5. Open Bloom and complete onboarding.
 
@@ -108,4 +113,4 @@ app/src/main/java/com/bloom/app
 - No backend login is implemented yet.
 - Login and cadastro screens are local-only placeholders for future sync.
 - Backup/restore import is intentionally deferred until file-picker and cloud sync are validated.
-- The APK and install page are provided in `outputs/bloom-install`.
+- Any ignored APK under `app/build/outputs` may be stale and should not be treated as the final V2 build.

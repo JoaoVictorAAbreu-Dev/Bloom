@@ -104,11 +104,17 @@ If Groq is not configured, the app still replies with local fallback guidance.
 
 ## Installing with the QR code
 
-1. Open the install page on your phone.
-2. Scan the QR code.
-3. Download `Bloom-debug.apk`.
-4. Allow installs from unknown sources if Android asks.
-5. Open Bloom after installation.
+The QR install page must be generated from a fresh APK after the Android build environment is available.
+
+Recommended flow:
+
+1. Build a new debug APK.
+2. Generate the QR install page from that APK.
+3. Open the install page on your phone.
+4. Scan the QR code.
+5. Download the APK.
+6. Allow installs from unknown sources if Android asks.
+7. Open Bloom after installation.
 
 ## Troubleshooting
 

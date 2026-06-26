@@ -111,15 +111,16 @@ app/src/main/java/com/bloom/app
 
 ## Build and install
 
-The delivery package in `outputs/bloom-install` contains:
+The repository currently does not include a versioned install package.
 
-- `Bloom-debug.apk`
-- `index.html`
-- `install-qr.png`
-- user guide
-- technical guide
+To generate a fresh install artifact:
 
-The install page is designed to be opened from a phone on the same local network.
+1. Add or restore the Gradle Wrapper, or install Gradle locally.
+2. Build a debug APK with the Android SDK.
+3. Generate a QR install page that points to the new APK.
+4. Verify the APK on a real Android device.
+
+Ignored files under `app/build/outputs` can exist locally, but they may be stale and are not treated as validated V2 artifacts.
 
 ## Current constraints
 
