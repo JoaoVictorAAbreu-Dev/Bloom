@@ -41,6 +41,8 @@ fun SettingsScreen(
     onLongBreakMinutesChange: (Int) -> Unit,
     onNotificationsToggle: (Boolean) -> Unit,
     onAutoStartToggle: (Boolean) -> Unit,
+    onBloomCoachToggle: (Boolean) -> Unit,
+    onHabitContextForAiToggle: (Boolean) -> Unit,
     onExportData: () -> Unit,
     onClearExport: () -> Unit,
     onResetData: () -> Unit,
@@ -166,7 +168,9 @@ fun SettingsScreen(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(text = "Bloom Coach", style = MaterialTheme.typography.titleLarge)
                     Text(
-                        text = if (uiState.aiIntegration.configured) {
+                        text = if (!uiState.preferences.bloomCoachEnabled) {
+                            "Disabled by privacy settings. Enable it below to use AI suggestions."
+                        } else if (uiState.aiIntegration.configured) {
                             "Groq ready with ${uiState.aiIntegration.modelId}."
                         } else {
                             "Local fallback active. Add groqApiKey in local.properties to connect Groq."
@@ -180,12 +184,37 @@ fun SettingsScreen(
             StaticSettingRow(
                 title = "API",
                 description = uiState.aiIntegration.baseUrl,
-                value = if (uiState.aiIntegration.configured) "Online" else "Local",
+                value = when {
+                    !uiState.preferences.bloomCoachEnabled -> "Disabled"
+                    uiState.aiIntegration.configured -> "Online"
+                    else -> "Local"
+                },
             )
             StaticSettingRow(
                 title = "History",
                 description = "Weekly and monthly summaries will use this space.",
                 value = "Planned",
+            )
+        }
+
+        SettingsSection(title = "Privacy and AI", subtitle = "Control what can leave the device.") {
+            Text(
+                text = "Bloom works offline. If enabled, Bloom Coach may send a minimized and sanitized prompt to the configured AI provider. Habit context is never sent unless you allow it.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            SettingRow(
+                title = "Enable Bloom Coach",
+                description = "Allow AI replies when Groq is configured. Local guidance still works without a key.",
+                checked = uiState.preferences.bloomCoachEnabled,
+                onCheckedChange = onBloomCoachToggle,
+            )
+            SettingRow(
+                title = "Allow habit context",
+                description = "Share sanitized habit names and routine labels for better suggestions.",
+                checked = uiState.preferences.allowHabitContextForAi,
+                enabled = uiState.preferences.bloomCoachEnabled,
+                onCheckedChange = onHabitContextForAiToggle,
             )
         }
 
@@ -313,6 +342,7 @@ private fun SettingRow(
     title: String,
     description: String,
     checked: Boolean,
+    enabled: Boolean = true,
     onCheckedChange: (Boolean) -> Unit,
 ) {
     Row(
@@ -328,7 +358,7 @@ private fun SettingRow(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Switch(checked = checked, enabled = enabled, onCheckedChange = onCheckedChange)
     }
 }
 

@@ -37,7 +37,7 @@ class HabitEditorViewModel(
         }
     }
 
-    fun updateName(value: String) = mutableState.update { it.copy(name = value) }
+    fun updateName(value: String) = mutableState.update { it.copy(name = value.sanitizedHabitName()) }
     fun updateCategory(value: HabitCategory) = mutableState.update { it.copy(category = value) }
     fun updateFrequency(value: HabitFrequency) = mutableState.update { it.copy(frequency = value) }
     fun updateReminder(hour: Int, minute: Int) = mutableState.update {
@@ -58,7 +58,7 @@ class HabitEditorViewModel(
             container.upsertHabitUseCase(
                 Habit(
                     id = current.habitId ?: UUID.randomUUID().toString(),
-                    name = current.name.trim(),
+                    name = current.name.trim().sanitizedHabitName(),
                     category = current.category,
                     frequency = current.frequency,
                     reminderHour = current.reminderHour,
@@ -109,5 +109,9 @@ class HabitEditorViewModel(
                 loading = false,
             )
         }
+    }
+
+    private fun String.sanitizedHabitName(): String {
+        return filterNot { it.isISOControl() }.take(80)
     }
 }

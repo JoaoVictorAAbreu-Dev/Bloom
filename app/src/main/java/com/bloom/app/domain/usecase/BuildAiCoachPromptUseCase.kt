@@ -2,8 +2,11 @@ package com.bloom.app.domain.usecase
 
 import com.bloom.app.domain.model.AiCoachContext
 import com.bloom.app.domain.model.AiCoachPrompt
+import com.bloom.app.security.PrivacySanitizer
 
-class BuildAiCoachPromptUseCase {
+class BuildAiCoachPromptUseCase(
+    private val privacySanitizer: PrivacySanitizer = PrivacySanitizer(),
+) {
     operator fun invoke(
         context: AiCoachContext,
         userPrompt: String,
@@ -18,7 +21,7 @@ class BuildAiCoachPromptUseCase {
         """.trimIndent()
 
         val userContext = buildString {
-            appendLine("User: ${context.userName}")
+            appendLine("Profile: [local]")
             appendLine("Focus plan: ${context.preferences.focusMinutes} min focus, ${context.preferences.shortBreakMinutes} min short break, ${context.preferences.longBreakMinutes} min long break")
             appendLine("Habits today: ${context.statistics.habitsDoneToday}/${context.statistics.totalHabits}")
             appendLine("Longest streak: ${context.statistics.longestStreak}")
@@ -31,22 +34,26 @@ class BuildAiCoachPromptUseCase {
             appendLine("Monthly habit completions by day: ${context.statistics.monthlyHabitCompletions.joinToString()}")
             appendLine("Garden growth: ${context.statistics.gardenGrowth}")
             appendLine("Unlocked rewards: ${context.rewardsUnlocked}")
-            appendLine("Active habits:")
-            context.habits.take(6).forEach { habit ->
-                appendLine("- ${habit.name} (${habit.category.name.lowercase()}) streak ${habit.streak}${if (habit.completedToday) ", completed today" else ""}")
-            }
-            if (context.habits.isEmpty()) {
-                appendLine("- No habits yet")
-            }
-            appendLine("Routine blocks:")
-            context.routineBlocks.forEach { block ->
-                appendLine("- ${block.slot}: ${block.title} - ${block.subtitle}${if (block.active) " [active]" else ""}")
+            if (context.preferences.allowHabitContextForAi) {
+                appendLine("Active habits:")
+                context.habits.take(4).forEach { habit ->
+                    appendLine("- ${privacySanitizer.sanitize(habit.name)} (${habit.category.name.lowercase()}) streak ${habit.streak}${if (habit.completedToday) ", completed today" else ""}")
+                }
+                if (context.habits.isEmpty()) {
+                    appendLine("- No habits yet")
+                }
+                appendLine("Routine blocks:")
+                context.routineBlocks.take(4).forEach { block ->
+                    appendLine("- ${block.slot}: ${privacySanitizer.sanitize(block.title)} - ${privacySanitizer.sanitize(block.subtitle)}${if (block.active) " [active]" else ""}")
+                }
+            } else {
+                appendLine("Habit context sharing: disabled by user")
             }
             appendLine("Recent sessions: ${context.recentSessions.size}")
             if (userPrompt.isNotBlank()) {
-                appendLine("User request: $userPrompt")
+                appendLine("User request: ${privacySanitizer.sanitize(userPrompt)}")
             }
-        }.trim()
+        }.trim().let(privacySanitizer::sanitize)
 
         return AiCoachPrompt(
             systemPrompt = systemPrompt,

@@ -73,7 +73,7 @@ class CoachViewModel(
 
         CoachUiState(
             integration = CoachIntegrationUiState(
-                configured = container.aiCoachRepository.isConfigured,
+                configured = context.preferences.bloomCoachEnabled && container.aiCoachRepository.isConfigured,
                 modelId = container.aiCoachRepository.modelId,
                 baseUrl = container.aiCoachRepository.baseUrl,
             ),
@@ -95,12 +95,12 @@ class CoachViewModel(
     )
 
     fun updateInput(value: String) {
-        input.value = value
+        input.value = value.filterNot { it.isISOControl() && it != '\n' }.take(MAX_INPUT_LENGTH)
     }
 
     fun send(prompt: String? = null) {
         viewModelScope.launch {
-            val userPrompt = (prompt ?: input.value).trim()
+            val userPrompt = (prompt ?: input.value).filterNot { it.isISOControl() && it != '\n' }.take(MAX_INPUT_LENGTH).trim()
             if (userPrompt.isBlank() || sending.value) return@launch
 
             input.value = ""
@@ -275,5 +275,9 @@ class CoachViewModel(
                 iconKey = "star",
             ),
         )
+    }
+
+    private companion object {
+        const val MAX_INPUT_LENGTH = 1_000
     }
 }

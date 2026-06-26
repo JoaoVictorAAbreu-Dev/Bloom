@@ -4,7 +4,11 @@ build/
 .idea/
 *.iml
 local.properties
+.env
+.env.*
 *.keystore
 *.jks
+*.apk
+*.aab
+outputs/
 captures/
-

@@ -32,6 +32,9 @@ class GroqAiService(
         if (apiKey.isBlank()) {
             throw IOException("Groq API key is not configured")
         }
+        if (!baseUrl.startsWith("https://")) {
+            throw IOException("Groq base URL must use HTTPS")
+        }
 
         val payload = JSONObject()
             .put("model", modelId)
@@ -54,7 +57,7 @@ class GroqAiService(
         client.newCall(request).execute().use { response ->
             val responseBody = response.body?.string().orEmpty()
             if (!response.isSuccessful) {
-                throw IOException("Groq request failed (${response.code}): $responseBody")
+                throw IOException("Groq request failed (${response.code})")
             }
 
             val json = JSONObject(responseBody)
@@ -71,4 +74,3 @@ class GroqAiService(
         val JSON_MEDIA_TYPE = "application/json; charset=utf-8".toMediaType()
     }
 }
-

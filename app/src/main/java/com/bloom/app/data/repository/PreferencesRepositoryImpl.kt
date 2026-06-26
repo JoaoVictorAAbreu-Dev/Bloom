@@ -57,6 +57,8 @@ class PreferencesRepositoryImpl(
             longBreakMinutes = this[Keys.longBreakMinutes] ?: 15,
             autoStartNextSession = this[Keys.autoStartNextSession] ?: true,
             notificationsEnabled = this[Keys.notificationsEnabled] ?: true,
+            bloomCoachEnabled = this[Keys.bloomCoachEnabled] ?: false,
+            allowHabitContextForAi = this[Keys.allowHabitContextForAi] ?: false,
             onboardingCompleted = this[Keys.onboardingCompleted] ?: false,
             authCompleted = this[Keys.authCompleted] ?: false,
             seedDataCreated = this[Keys.seedDataCreated] ?: false,
@@ -73,6 +75,8 @@ class PreferencesRepositoryImpl(
         this[Keys.longBreakMinutes] = updated.longBreakMinutes
         this[Keys.autoStartNextSession] = updated.autoStartNextSession
         this[Keys.notificationsEnabled] = updated.notificationsEnabled
+        this[Keys.bloomCoachEnabled] = updated.bloomCoachEnabled
+        this[Keys.allowHabitContextForAi] = updated.allowHabitContextForAi
         this[Keys.onboardingCompleted] = updated.onboardingCompleted
         this[Keys.authCompleted] = updated.authCompleted
         this[Keys.seedDataCreated] = updated.seedDataCreated
@@ -88,6 +92,8 @@ class PreferencesRepositoryImpl(
         val longBreakMinutes = intPreferencesKey("long_break_minutes")
         val autoStartNextSession = booleanPreferencesKey("auto_start_next_session")
         val notificationsEnabled = booleanPreferencesKey("notifications_enabled")
+        val bloomCoachEnabled = booleanPreferencesKey("bloom_coach_enabled")
+        val allowHabitContextForAi = booleanPreferencesKey("allow_habit_context_for_ai")
         val onboardingCompleted = booleanPreferencesKey("onboarding_completed")
         val authCompleted = booleanPreferencesKey("auth_completed")
         val seedDataCreated = booleanPreferencesKey("seed_data_created")

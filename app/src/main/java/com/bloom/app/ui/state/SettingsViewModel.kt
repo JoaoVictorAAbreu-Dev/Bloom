@@ -89,6 +89,25 @@ class SettingsViewModel(
         }
     }
 
+    fun toggleBloomCoach(enabled: Boolean) {
+        viewModelScope.launch {
+            container.updatePreferencesUseCase { current ->
+                current.copy(
+                    bloomCoachEnabled = enabled,
+                    allowHabitContextForAi = if (enabled) current.allowHabitContextForAi else false,
+                )
+            }
+        }
+    }
+
+    fun toggleHabitContextForAi(enabled: Boolean) {
+        viewModelScope.launch {
+            container.updatePreferencesUseCase { current ->
+                current.copy(allowHabitContextForAi = enabled && current.bloomCoachEnabled)
+            }
+        }
+    }
+
     fun exportData() {
         viewModelScope.launch {
             val preferences = container.observePreferencesUseCase().first()

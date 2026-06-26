@@ -26,26 +26,33 @@ android {
         versionCode = 1
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField(
-            "String",
-            "GROQ_API_KEY",
-            "\"${localProperties.getProperty("groqApiKey", "").toBuildConfigValue()}\"",
-        )
-        buildConfigField(
-            "String",
-            "GROQ_MODEL",
-            "\"${localProperties.getProperty("groqModel", "groq/compound-mini").toBuildConfigValue()}\"",
-        )
-        buildConfigField(
-            "String",
-            "GROQ_BASE_URL",
-            "\"${localProperties.getProperty("groqBaseUrl", "https://api.groq.com/openai/v1").toBuildConfigValue()}\"",
-        )
     }
 
     buildTypes {
+        debug {
+            buildConfigField(
+                "String",
+                "GROQ_API_KEY",
+                "\"${localProperties.getProperty("groqApiKey", "").toBuildConfigValue()}\"",
+            )
+            buildConfigField(
+                "String",
+                "GROQ_MODEL",
+                "\"${localProperties.getProperty("groqModel", "groq/compound-mini").toBuildConfigValue()}\"",
+            )
+            buildConfigField(
+                "String",
+                "GROQ_BASE_URL",
+                "\"${localProperties.getProperty("groqBaseUrl", "https://api.groq.com/openai/v1").toBuildConfigValue()}\"",
+            )
+        }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            // Production builds must not embed provider API keys. Use a backend proxy for Groq.
+            buildConfigField("String", "GROQ_API_KEY", "\"\"")
+            buildConfigField("String", "GROQ_MODEL", "\"groq/compound-mini\"")
+            buildConfigField("String", "GROQ_BASE_URL", "\"https://api.groq.com/openai/v1\"")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",

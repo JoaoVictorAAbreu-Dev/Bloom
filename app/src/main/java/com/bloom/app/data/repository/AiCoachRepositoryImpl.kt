@@ -1,6 +1,6 @@
 package com.bloom.app.data.repository
 
-import com.bloom.app.data.remote.GroqAiService
+import com.bloom.app.data.remote.AiGateway
 import com.bloom.app.domain.model.AiCoachContext
 import com.bloom.app.domain.model.AiCoachQuickAction
 import com.bloom.app.domain.model.AiCoachReply
@@ -10,21 +10,29 @@ import com.bloom.app.domain.usecase.BuildAiCoachPromptUseCase
 import java.io.IOException
 
 class AiCoachRepositoryImpl(
-    private val groqAiService: GroqAiService,
+    private val aiGateway: AiGateway,
     private val buildAiCoachPromptUseCase: BuildAiCoachPromptUseCase,
 ) : AiCoachRepository {
-    override val modelId: String = groqAiService.modelId
-    override val baseUrl: String = groqAiService.baseUrl
-    override val isConfigured: Boolean = groqAiService.isConfigured
+    override val modelId: String = aiGateway.modelId
+    override val baseUrl: String = aiGateway.baseUrl
+    override val isConfigured: Boolean = aiGateway.isConfigured
 
     override suspend fun generateReply(context: AiCoachContext, userPrompt: String): AiCoachReply {
+        if (!context.preferences.bloomCoachEnabled) {
+            return AiCoachReply(
+                text = "Bloom Coach is disabled. Enable it in Settings > Privacy and AI to use AI suggestions.",
+                source = AiCoachSource.LOCAL,
+                modelId = modelId,
+            )
+        }
+
         val prompt = buildAiCoachPromptUseCase(context, userPrompt)
         if (!isConfigured) {
             return offlineReply(context, userPrompt)
         }
 
         return runCatching {
-            val text = groqAiService.generateReply(prompt)
+            val text = aiGateway.generateReply(prompt)
             AiCoachReply(
                 text = text,
                 source = AiCoachSource.GROQ,

@@ -70,7 +70,7 @@ Deferred because they require external platform integrations:
 
 ## Local AI setup
 
-Bloom Coach uses Groq when the API key is configured in `app/local.properties`.
+Bloom Coach uses Groq in debug builds when the API key is configured in root `local.properties`.
 
 ```properties
 groqApiKey=your_groq_api_key_here
@@ -85,6 +85,7 @@ If the key is missing, the app keeps working with local fallback guidance.
 - Technical guide: [docs/TECHNICAL.md](docs/TECHNICAL.md)
 - User guide: [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
 - QA report: [docs/QA_V2.md](docs/QA_V2.md)
+- Security guide: [docs/SECURITY.md](docs/SECURITY.md)
 
 ## Project structure
 

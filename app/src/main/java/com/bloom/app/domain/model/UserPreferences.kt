@@ -10,6 +10,8 @@ data class UserPreferences(
     val longBreakMinutes: Int,
     val autoStartNextSession: Boolean,
     val notificationsEnabled: Boolean,
+    val bloomCoachEnabled: Boolean,
+    val allowHabitContextForAi: Boolean,
     val onboardingCompleted: Boolean,
     val authCompleted: Boolean,
     val seedDataCreated: Boolean,

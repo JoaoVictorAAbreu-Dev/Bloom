@@ -21,8 +21,8 @@ class BuildAiCoachPromptUseCaseTest {
         val prompt = useCase(sampleContext(), "Write a calm plan for today")
 
         assertTrue(prompt.systemPrompt.contains("Bloom Coach"))
-        assertTrue(prompt.systemPrompt.contains("Reply in Brazilian Portuguese"))
-        assertTrue(prompt.userPrompt.contains("User: Ana"))
+        assertTrue(prompt.systemPrompt.contains("Default to Brazilian Portuguese"))
+        assertTrue(prompt.userPrompt.contains("Profile: [local]"))
         assertTrue(prompt.userPrompt.contains("Write a calm plan for today"))
         assertTrue(prompt.userPrompt.contains("Habits today: 2/3"))
     }
@@ -31,13 +31,18 @@ class BuildAiCoachPromptUseCaseTest {
         userName = "Ana",
         preferences = UserPreferences(
             userName = "Ana",
+            userEmail = "",
+            primaryGoal = "Build consistency",
             themeMode = ThemeMode.SYSTEM,
             focusMinutes = 25,
             shortBreakMinutes = 5,
             longBreakMinutes = 15,
             autoStartNextSession = true,
             notificationsEnabled = true,
+            bloomCoachEnabled = true,
+            allowHabitContextForAi = true,
             onboardingCompleted = true,
+            authCompleted = true,
             seedDataCreated = true,
         ),
         habits = listOf(
@@ -76,6 +81,11 @@ class BuildAiCoachPromptUseCaseTest {
             weeklyConsistency = 80,
             weeklyFocusMinutes = listOf(5, 10, 25, 0, 30, 15, 20),
             weeklyHabitCompletions = listOf(1, 2, 1, 0, 2, 1, 3),
+            monthlyFocusMinutes = listOf(60, 90, 120, 150),
+            monthlyHabitCompletions = List(28) { if (it % 2 == 0) 1 else 0 },
+            averageFocusMinutes = 25,
+            mostProductiveHourLabel = "19:00",
+            topHabitName = "Water plants",
             gardenGrowth = 42,
         ),
         rewardsUnlocked = 2,
@@ -91,4 +101,3 @@ class BuildAiCoachPromptUseCaseTest {
         ),
     )
 }
-

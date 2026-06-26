@@ -77,6 +77,8 @@ Use Settings to:
 - tune Pomodoro durations
 - configure notification and auto-start preferences
 - open Bloom Coach
+- enable or disable Bloom Coach
+- decide whether habit context can be used for AI suggestions
 - generate a local JSON export snapshot
 - reset local data
 
@@ -119,5 +121,5 @@ Recommended flow:
 ## Troubleshooting
 
 - If the app does not install, verify the phone is on the same network as the PC.
-- If Bloom Coach says the API is not configured, add `groqApiKey` to `app/local.properties`.
+- If Bloom Coach says the API is not configured, add `groqApiKey` to root `local.properties` for a debug build.
 - If the visual preview looks outdated, regenerate the screenshots after the next UI update.

@@ -2,9 +2,11 @@ package com.bloom.app
 
 import android.content.Context
 import com.bloom.app.data.local.BloomDatabase
+import com.bloom.app.data.remote.GroqAiGateway
 import com.bloom.app.data.remote.GroqAiService
 import com.bloom.app.data.repository.AiCoachRepositoryImpl
 import com.bloom.app.data.repository.HabitRepositoryImpl
+import com.bloom.app.data.repository.KeystoreSecurePreferencesRepository
 import com.bloom.app.data.repository.PomodoroRepositoryImpl
 import com.bloom.app.data.repository.PreferencesRepositoryImpl
 import com.bloom.app.data.repository.RewardRepositoryImpl
@@ -14,6 +16,7 @@ import com.bloom.app.domain.repository.HabitRepository
 import com.bloom.app.domain.repository.PomodoroRepository
 import com.bloom.app.domain.repository.PreferencesRepository
 import com.bloom.app.domain.repository.RewardRepository
+import com.bloom.app.domain.repository.SecurePreferencesRepository
 import com.bloom.app.domain.repository.StatisticsRepository
 import com.bloom.app.domain.usecase.BuildAiCoachPromptUseCase
 import com.bloom.app.domain.usecase.CalculateHabitStreakUseCase
@@ -46,6 +49,7 @@ class BloomAppContainer(context: Context) {
     )
     val pomodoroRepository: PomodoroRepository = PomodoroRepositoryImpl(database.pomodoroSessionDao())
     val preferencesRepository: PreferencesRepository = PreferencesRepositoryImpl(context)
+    val securePreferencesRepository: SecurePreferencesRepository = KeystoreSecurePreferencesRepository(context)
     val statisticsRepository: StatisticsRepository = StatisticsRepositoryImpl(
         habitRepository = habitRepository,
         pomodoroRepository = pomodoroRepository,
@@ -53,7 +57,7 @@ class BloomAppContainer(context: Context) {
     )
     val rewardRepository: RewardRepository = RewardRepositoryImpl()
     val aiCoachRepository: AiCoachRepository = AiCoachRepositoryImpl(
-        groqAiService = GroqAiService(),
+        aiGateway = GroqAiGateway(GroqAiService()),
         buildAiCoachPromptUseCase = BuildAiCoachPromptUseCase(),
     )
 

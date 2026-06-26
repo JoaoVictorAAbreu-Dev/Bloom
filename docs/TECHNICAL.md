@@ -46,11 +46,12 @@ DataStore stores lightweight preferences:
 ## AI integration
 
 Bloom Coach uses Groq through a repository boundary.
+Security details are documented in [SECURITY.md](SECURITY.md).
 
 Behavior:
 
 1. The app gathers context from habits, streaks, focus time, statistics, rewards, and recent sessions.
-2. If `groqApiKey` exists in `app/local.properties`, Bloom sends the prompt to Groq.
+2. If `groqApiKey` exists in root `local.properties` for a debug build, Bloom sends the prompt to Groq.
 3. If the key is absent or the request fails, the app returns a local analytic fallback response.
 
 Default configuration:

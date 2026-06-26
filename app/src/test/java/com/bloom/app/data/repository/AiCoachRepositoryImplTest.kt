@@ -1,5 +1,6 @@
 package com.bloom.app.data.repository
 
+import com.bloom.app.data.remote.GroqAiGateway
 import com.bloom.app.data.remote.GroqAiService
 import com.bloom.app.domain.model.AiCoachContext
 import com.bloom.app.domain.model.AiCoachSource
@@ -20,7 +21,7 @@ import org.junit.Test
 
 class AiCoachRepositoryImplTest {
     private val repository = AiCoachRepositoryImpl(
-        groqAiService = GroqAiService(apiKeyProvider = { "" }),
+        aiGateway = GroqAiGateway(GroqAiService(apiKeyProvider = { "" })),
         buildAiCoachPromptUseCase = BuildAiCoachPromptUseCase(),
     )
 
@@ -29,8 +30,8 @@ class AiCoachRepositoryImplTest {
         val reply = repository.generateReply(sampleContext(), "Help me focus now")
 
         assertEquals(AiCoachSource.LOCAL, reply.source)
-        assertTrue(reply.text.contains("25 min"))
-        assertTrue(reply.text.contains("foco"))
+        assertTrue(reply.text.contains("25 minutes"))
+        assertTrue(reply.text.contains("Focus"))
     }
 
     @Test
@@ -45,13 +46,18 @@ class AiCoachRepositoryImplTest {
         userName = "Ana",
         preferences = UserPreferences(
             userName = "Ana",
+            userEmail = "",
+            primaryGoal = "Build consistency",
             themeMode = ThemeMode.SYSTEM,
             focusMinutes = 25,
             shortBreakMinutes = 5,
             longBreakMinutes = 15,
             autoStartNextSession = true,
             notificationsEnabled = true,
+            bloomCoachEnabled = true,
+            allowHabitContextForAi = true,
             onboardingCompleted = true,
+            authCompleted = true,
             seedDataCreated = true,
         ),
         habits = listOf(
@@ -90,6 +96,11 @@ class AiCoachRepositoryImplTest {
             weeklyConsistency = 80,
             weeklyFocusMinutes = listOf(5, 10, 25, 0, 30, 15, 20),
             weeklyHabitCompletions = listOf(1, 2, 1, 0, 2, 1, 3),
+            monthlyFocusMinutes = listOf(60, 90, 120, 150),
+            monthlyHabitCompletions = List(28) { if (it % 2 == 0) 1 else 0 },
+            averageFocusMinutes = 25,
+            mostProductiveHourLabel = "19:00",
+            topHabitName = "Water plants",
             gardenGrowth = 42,
         ),
         rewardsUnlocked = 2,
@@ -105,4 +116,3 @@ class AiCoachRepositoryImplTest {
         ),
     )
 }
-
