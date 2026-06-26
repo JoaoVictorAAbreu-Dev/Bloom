@@ -15,13 +15,18 @@ class SettingsViewModel(
     private val container: BloomAppContainer,
 ) : ViewModel() {
     private val resetInProgress = MutableStateFlow(false)
+    private val statistics = container.observeStatisticsUseCase()
 
     val uiState = combine(
         container.observePreferencesUseCase(),
+        statistics,
+        container.observeRewardsUseCase(statistics),
         resetInProgress,
-    ) { preferences, resetting ->
+    ) { preferences, statistics, rewards, resetting ->
         SettingsUiState(
             preferences = preferences,
+            statistics = statistics,
+            rewards = rewards,
             resetInProgress = resetting,
             aiIntegration = CoachIntegrationUiState(
                 configured = container.aiCoachRepository.isConfigured,

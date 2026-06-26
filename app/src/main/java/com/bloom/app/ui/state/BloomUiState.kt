@@ -100,6 +100,8 @@ data class RoutineUiState(
 
 data class SettingsUiState(
     val preferences: UserPreferences = defaultUserPreferences(),
+    val statistics: BloomStatistics = HomeUiState().statistics,
+    val rewards: List<Reward> = emptyList(),
     val resetInProgress: Boolean = false,
     val aiIntegration: CoachIntegrationUiState = CoachIntegrationUiState(),
 )
