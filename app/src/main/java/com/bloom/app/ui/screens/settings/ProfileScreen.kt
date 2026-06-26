@@ -77,7 +77,7 @@ fun ProfileScreen(
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
-                        text = "A calm, growing routine.",
+                        text = uiState.preferences.primaryGoal,
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

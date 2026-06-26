@@ -17,7 +17,6 @@ import com.bloom.app.domain.repository.RewardRepository
 import com.bloom.app.domain.repository.StatisticsRepository
 import com.bloom.app.domain.usecase.BuildAiCoachPromptUseCase
 import com.bloom.app.domain.usecase.CalculateHabitStreakUseCase
-import com.bloom.app.domain.usecase.CompleteOnboardingUseCase
 import com.bloom.app.domain.usecase.DeleteHabitUseCase
 import com.bloom.app.domain.usecase.GenerateAiCoachReplyUseCase
 import com.bloom.app.domain.usecase.ObserveHabitsByCategoryUseCase
@@ -67,7 +66,6 @@ class BloomAppContainer(context: Context) {
     val observePreferencesUseCase = ObservePreferencesUseCase(preferencesRepository)
     val updatePreferencesUseCase = UpdatePreferencesUseCase(preferencesRepository)
     val updateThemeModeUseCase = UpdateThemeModeUseCase(preferencesRepository)
-    val completeOnboardingUseCase = CompleteOnboardingUseCase(preferencesRepository)
     val observePomodoroSessionsUseCase = ObservePomodoroSessionsUseCase(pomodoroRepository)
     val savePomodoroSessionUseCase = SavePomodoroSessionUseCase(pomodoroRepository)
     val observeStatisticsUseCase = ObserveStatisticsUseCase(statisticsRepository)

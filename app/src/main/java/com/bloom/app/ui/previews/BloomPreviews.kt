@@ -190,6 +190,7 @@ private fun SettingsScreenPreview() {
                 preferences = UserPreferences(
                     userName = "Alex",
                     userEmail = "alex@local",
+                    primaryGoal = "Build consistency",
                     themeMode = ThemeMode.SYSTEM,
                     focusMinutes = 25,
                     shortBreakMinutes = 5,

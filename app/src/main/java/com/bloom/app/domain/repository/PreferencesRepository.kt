@@ -8,7 +8,6 @@ interface PreferencesRepository {
     val preferences: Flow<UserPreferences>
     suspend fun updateThemeMode(themeMode: ThemeMode)
     suspend fun updatePreferences(transform: (UserPreferences) -> UserPreferences)
-    suspend fun completeOnboarding()
     suspend fun setSeeded()
     suspend fun reset()
 }

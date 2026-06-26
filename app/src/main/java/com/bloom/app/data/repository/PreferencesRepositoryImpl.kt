@@ -36,10 +36,6 @@ class PreferencesRepositoryImpl(
         dataStore.edit { prefs -> prefs.merge(updated) }
     }
 
-    override suspend fun completeOnboarding() {
-        dataStore.edit { prefs -> prefs[Keys.onboardingCompleted] = true }
-    }
-
     override suspend fun setSeeded() {
         dataStore.edit { prefs -> prefs[Keys.seedDataCreated] = true }
     }
@@ -54,6 +50,7 @@ class PreferencesRepositoryImpl(
         return UserPreferences(
             userName = this[Keys.userName] ?: "Alex",
             userEmail = this[Keys.userEmail] ?: "",
+            primaryGoal = this[Keys.primaryGoal] ?: "Build consistency",
             themeMode = (this[Keys.themeMode] ?: ThemeMode.SYSTEM.name).toThemeModeOrDefault(),
             focusMinutes = this[Keys.focusMinutes] ?: 25,
             shortBreakMinutes = this[Keys.shortBreakMinutes] ?: 5,
@@ -69,6 +66,7 @@ class PreferencesRepositoryImpl(
     private fun androidx.datastore.preferences.core.MutablePreferences.merge(updated: UserPreferences) {
         this[Keys.userName] = updated.userName
         this[Keys.userEmail] = updated.userEmail
+        this[Keys.primaryGoal] = updated.primaryGoal
         this[Keys.themeMode] = updated.themeMode.name
         this[Keys.focusMinutes] = updated.focusMinutes
         this[Keys.shortBreakMinutes] = updated.shortBreakMinutes
@@ -83,6 +81,7 @@ class PreferencesRepositoryImpl(
     private object Keys {
         val userName = stringPreferencesKey("user_name")
         val userEmail = stringPreferencesKey("user_email")
+        val primaryGoal = stringPreferencesKey("primary_goal")
         val themeMode = stringPreferencesKey("theme_mode")
         val focusMinutes = intPreferencesKey("focus_minutes")
         val shortBreakMinutes = intPreferencesKey("short_break_minutes")

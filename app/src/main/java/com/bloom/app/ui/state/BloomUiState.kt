@@ -14,6 +14,7 @@ import com.bloom.app.domain.model.UserPreferences
 fun defaultUserPreferences() = UserPreferences(
     userName = "Alex",
     userEmail = "",
+    primaryGoal = "Build consistency",
     themeMode = ThemeMode.SYSTEM,
     focusMinutes = 25,
     shortBreakMinutes = 5,

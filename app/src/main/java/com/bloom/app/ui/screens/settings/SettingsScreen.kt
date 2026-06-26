@@ -88,6 +88,11 @@ fun SettingsScreen(
                 onSelected = onThemeChange,
             )
             StaticSettingRow(
+                title = "Primary goal",
+                description = "Chosen during onboarding.",
+                value = uiState.preferences.primaryGoal,
+            )
+            StaticSettingRow(
                 title = "Language",
                 description = "English now. Localization-ready.",
                 value = "System",

@@ -125,8 +125,8 @@ private fun BloomNavigation(
             }
             composable(BloomDestination.ONBOARDING) {
                 OnboardingScreen(
-                    onStart = {
-                        rootViewModel.completeOnboarding()
+                    onStart = { setup ->
+                        rootViewModel.completeOnboarding(setup)
                         navController.navigate(BloomDestination.AUTH) {
                             popUpTo(BloomDestination.ONBOARDING) { inclusive = true }
                         }

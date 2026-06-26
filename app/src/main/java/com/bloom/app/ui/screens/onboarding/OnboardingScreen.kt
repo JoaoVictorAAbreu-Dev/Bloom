@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.platform.LocalContext
 import android.content.pm.PackageManager
+import com.bloom.app.domain.model.OnboardingSetup
 import com.bloom.app.ui.components.BloomButton
 import com.bloom.app.ui.components.BloomCard
 import com.bloom.app.ui.components.BloomLogoMark
@@ -55,7 +56,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(
-    onStart: () -> Unit,
+    onStart: (OnboardingSetup) -> Unit,
 ) {
     val pages = remember {
         listOf(
@@ -171,7 +172,15 @@ fun OnboardingScreen(
                         if (pagerState.currentPage < pages.lastIndex) {
                             scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
                         } else {
-                            onStart()
+                            onStart(
+                                OnboardingSetup(
+                                    primaryGoal = selectedGoal,
+                                    starterHabits = selectedHabits.toList(),
+                                    focusMinutes = focusMinutes,
+                                    shortBreakMinutes = shortBreakMinutes,
+                                    notificationsEnabled = notificationsStatus == "Enabled",
+                                ),
+                            )
                         }
                     },
                 )
