@@ -5,12 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.MaterialTheme
@@ -70,6 +73,10 @@ fun StatisticsScreen(
                 statisticsUiState = uiState,
             )
 
+            ConsistencyHeatmapCard(
+                values = uiState.statistics.weeklyHabitCompletions,
+            )
+
             Row(
                 modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding),
                 horizontalArrangement = Arrangement.spacedBy(BloomSpacing.cardGap),
@@ -125,7 +132,7 @@ fun StatisticsScreen(
                             onClick = { },
                             label = {
                                 Text(
-                                    text = "${session.mode.label} • ${session.durationMinutes} min • ${if (session.completed) "Done" else "Stopped"}",
+                                    text = "${session.mode.label} - ${session.durationMinutes} min - ${if (session.completed) "Done" else "Stopped"}",
                                 )
                             },
                             colors = AssistChipDefaults.assistChipColors(
@@ -138,6 +145,90 @@ fun StatisticsScreen(
             }
         }
     }
+}
+
+@Composable
+private fun ConsistencyHeatmapCard(
+    values: List<Int>,
+) {
+    val weekValues = (0 until 7).map { index -> values.getOrNull(index) ?: 0 }
+    val heatmapValues = List(21) { 0 } + weekValues
+    val activeDays = weekValues.count { it > 0 }
+
+    BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
+        Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column {
+                    Text(text = "Consistency Heatmap", style = MaterialTheme.typography.titleLarge)
+                    Text(
+                        text = "$activeDays active days this week",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                AssistChip(
+                    onClick = { },
+                    label = { Text("28 days") },
+                    colors = AssistChipDefaults.assistChipColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    ),
+                )
+            }
+
+            Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.xs)) {
+                heatmapValues.chunked(7).forEach { week ->
+                    Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.xs)) {
+                        week.forEach { value ->
+                            HeatmapCell(value = value)
+                        }
+                    }
+                }
+            }
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(BloomSpacing.xs),
+            ) {
+                Text(
+                    text = "Less",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                listOf(0, 1, 2, 4).forEach { value ->
+                    HeatmapCell(value = value, compact = true)
+                }
+                Text(
+                    text = "More",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun HeatmapCell(
+    value: Int,
+    compact: Boolean = false,
+) {
+    val primary = MaterialTheme.colorScheme.primary
+    val color = when {
+        value <= 0 -> MaterialTheme.colorScheme.surfaceVariant
+        value == 1 -> primary.copy(alpha = 0.38f)
+        value == 2 -> primary.copy(alpha = 0.62f)
+        else -> primary
+    }
+    Spacer(
+        modifier = Modifier
+            .size(if (compact) 12.dp else 28.dp)
+            .background(color = color, shape = RoundedCornerShape(6.dp)),
+    )
 }
 
 @Composable
