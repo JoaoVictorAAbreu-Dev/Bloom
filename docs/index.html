@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FBF9F5" />
+  <title>Bloom | Download</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fbf9f5;
+      --surface: rgba(255, 255, 255, 0.8);
+      --surface-strong: #ffffff;
+      --surface-variant: #f0ede6;
+      --primary: #8daa91;
+      --primary-dark: #4a654f;
+      --text: #1b1c1a;
+      --text-secondary: #424842;
+      --accent: #ae98d6;
+      --shadow: 0 24px 60px rgba(74, 101, 79, 0.16);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: Inter, Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(174, 152, 214, 0.16), transparent 24%),
+        radial-gradient(circle at top right, rgba(141, 170, 145, 0.16), transparent 20%),
+        linear-gradient(180deg, #fffdf8 0%, var(--bg) 40%, #f5f1e8 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: 1px solid rgba(74, 101, 79, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--primary-dark);
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 6vw, 5.8rem);
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+      max-width: 9ch;
+    }
+
+    .subtitle {
+      max-width: 58ch;
+      margin: 18px 0 28px;
+      font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      will-change: transform;
+    }
+
+    .button:hover { transform: translateY(-2px); }
+    .button.primary {
+      background: linear-gradient(135deg, var(--primary-dark), #5c775f);
+      color: white;
+      box-shadow: 0 16px 30px rgba(74, 101, 79, 0.24);
+    }
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--text);
+      border-color: rgba(74, 101, 79, 0.12);
+    }
+
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .feature {
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(74, 101, 79, 0.1);
+      box-shadow: 0 10px 24px rgba(74, 101, 79, 0.06);
+    }
+
+    .feature strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .feature span {
+      color: var(--text-secondary);
+      line-height: 1.55;
+      font-size: 0.96rem;
+    }
+
+    .visual {
+      position: relative;
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero-card, .qr-card, .steps-card {
+      background: var(--surface);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(74, 101, 79, 0.1);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      overflow: hidden;
+      padding: 14px;
+    }
+
+    .hero-card img {
+      width: 100%;
+      display: block;
+      border-radius: calc(var(--radius-xl) - 8px);
+      aspect-ratio: 16 / 11;
+      object-fit: cover;
+    }
+
+    .qr-grid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 18px 20px;
+    }
+
+    .qr-copy h2 {
+      margin: 0 0 8px;
+      font-size: 1.25rem;
+    }
+
+    .qr-copy p {
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .qr-box {
+      width: 132px;
+      height: 132px;
+      border-radius: 20px;
+      padding: 10px;
+      background: white;
+      border: 1px solid rgba(74, 101, 79, 0.12);
+    }
+
+    .qr-box img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 12px;
+    }
+
+    .steps-card {
+      padding: 18px 20px;
+    }
+
+    .steps-card ol {
+      margin: 12px 0 0;
+      padding-left: 20px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(141, 170, 145, 0.14);
+      color: var(--primary-dark);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    @media (max-width: 940px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-top: 16px;
+      }
+      h1 { max-width: none; }
+    }
+
+    @media (max-width: 640px) {
+      .page { width: min(100% - 20px, 1180px); }
+      .feature-list, .qr-grid { grid-template-columns: 1fr; }
+      .qr-box { width: 100%; height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Bloom install page</div>
+        <h1>Grow a little every day.</h1>
+        <p class="subtitle">
+          Baixe o Bloom e comece a organizar hábitos, rotina e foco com uma experiência calma,
+          premium e offline-first. Use o QR code ao lado para instalar no Android em segundos.
+        </p>
+
+        <div class="cta-row">
+          <a class="button primary" href="https://github.com/JoaoVictorAAbreu-Dev/Bloom/releases" target="_blank" rel="noreferrer">
+            Download now
+          </a>
+          <a class="button secondary" href="../README.md">
+            View README
+          </a>
+        </div>
+
+        <div class="feature-list">
+          <div class="feature">
+            <strong>Offline-first</strong>
+            <span>Use o app sem conta online, com dados locais e fluxos principais funcionando no aparelho.</span>
+          </div>
+          <div class="feature">
+            <strong>Habit + Focus</strong>
+            <span>Hábitos, Pomodoro, estatísticas e jardim crescem juntos em uma única rotina diária.</span>
+          </div>
+          <div class="feature">
+            <strong>Secure by design</strong>
+            <span>Sem backend direto no app para IA em produção e com proteção local de dados sensíveis.</span>
+          </div>
+          <div class="feature">
+            <strong>Premium UI</strong>
+            <span>Visual inspirado em jardim, com calma, espaço e ilustrações em pixel art nos detalhes.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="visual">
+        <div class="hero-card">
+          <img src="./assets/download-hero.png" alt="Bloom app download hero artwork" />
+        </div>
+
+        <div class="qr-card">
+          <div class="qr-grid">
+            <div class="qr-copy">
+              <h2>Scan to install</h2>
+              <p>Abra a câmera do seu Android, escaneie o QR e siga para a página de download.</p>
+            </div>
+            <div class="qr-box">
+              <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=https%3A%2F%2Fgithub.com%2FJoaoVictorAAbreu-Dev%2FBloom%2Freleases"
+                alt="QR code for Bloom download page"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="steps-card">
+          <strong>How to install</strong>
+          <ol>
+            <li>Abra a página de download.</li>
+            <li>Escaneie o QR code no seu celular.</li>
+            <li>Baixe o APK mais recente.</li>
+            <li>Permita instalação de fontes desconhecidas se o Android pedir.</li>
+          </ol>
+          <div class="pill-row">
+            <span class="pill">Android</span>
+            <span class="pill">QR install</span>
+            <span class="pill">GitHub Releases</span>
+            <span class="pill">Bloom v2</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
