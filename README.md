@@ -7,6 +7,12 @@
 
 Bloom is a native Android app for habits, routine planning, Pomodoro focus, personal growth, and local AI coaching.
 
+## Download
+
+- Install page: [Bloom install page](https://joaovictorabreu-dev.github.io/Bloom/)
+- Releases: [GitHub Releases](https://github.com/JoaoVictorAAbreu-Dev/Bloom/releases)
+- QR install guide: [docs/USER_GUIDE.md](docs/USER_GUIDE.md#installing-with-the-qr-code)
+
 It follows an Organic Productivity design language: calm, premium, minimal, and warm, with pixel-art details reserved for illustrations, rewards, and empty states.
 
 ## What Bloom does
