@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.bloom.app.domain.model.HabitCategory
-import com.bloom.app.ui.components.BloomCard
+import com.bloom.app.ui.components.BloomEmptyState
 import com.bloom.app.ui.components.BloomHabitCard
 import com.bloom.app.ui.components.BloomHeader
 import com.bloom.app.ui.state.HabitsUiState
@@ -82,7 +82,9 @@ fun HabitsScreen(
             }
             if (uiState.habits.isEmpty()) {
                 item {
-                    BloomCardEmptyState(
+                    BloomEmptyState(
+                        title = "No habits yet",
+                        message = "Add your first habit to start cultivating the garden.",
                         modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding),
                     )
                 }
@@ -132,26 +134,6 @@ private fun HabitFilters(
                     selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
                     containerColor = MaterialTheme.colorScheme.surface,
                 ),
-            )
-        }
-    }
-}
-
-@Composable
-private fun BloomCardEmptyState(
-    modifier: Modifier = Modifier,
-) {
-    BloomCard(modifier = modifier.fillMaxWidth()) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "No habits yet",
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Text(
-                text = "Add your first habit to start cultivating the garden.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
