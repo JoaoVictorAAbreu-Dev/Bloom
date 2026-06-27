@@ -2,6 +2,9 @@
 
 ![Bloom banner](docs/assets/bloom-banner.png)
 
+[![Download Bloom](https://img.shields.io/badge/Download-GitHub_Releases-1B1C1A?style=for-the-badge&logo=github)](https://github.com/JoaoVictorAAbreu-Dev/Bloom/releases)
+[![Install with QR](https://img.shields.io/badge/Install-QR_Code-8DAA91?style=for-the-badge)](docs/USER_GUIDE.md#installing-with-the-qr-code)
+
 Bloom is a native Android app for habits, routine planning, Pomodoro focus, personal growth, and local AI coaching.
 
 It follows an Organic Productivity design language: calm, premium, minimal, and warm, with pixel-art details reserved for illustrations, rewards, and empty states.
