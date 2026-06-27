@@ -4,43 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#FBF9F5" />
-  <meta name="description" content="Bloom install page with QR code, download links and a premium preview of the app." />
+  <meta name="description" content="Bloom install page with a clean design, one hero image and QR code for quick installation." />
   <title>Bloom | Download</title>
   <style>
     :root {
-      color-scheme: light;
       --bg: #fbf9f5;
-      --surface: rgba(255, 255, 255, 0.76);
+      --surface: rgba(255, 255, 255, 0.74);
       --surface-strong: #ffffff;
-      --surface-variant: #f0ede6;
       --primary: #8daa91;
       --primary-dark: #4a654f;
       --text: #1b1c1a;
-      --text-secondary: #424842;
-      --accent: #ae98d6;
-      --shadow: 0 24px 60px rgba(74, 101, 79, 0.16);
-      --radius-xl: 32px;
-      --radius-lg: 24px;
-      --radius-md: 18px;
+      --text-secondary: #4b5149;
+      --border: rgba(74, 101, 79, 0.12);
+      --shadow: 0 24px 60px rgba(74, 101, 79, 0.12);
+      --radius: 28px;
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
     html, body { margin: 0; min-height: 100%; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: Inter, Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(174, 152, 214, 0.16), transparent 22%),
-        radial-gradient(circle at top right, rgba(141, 170, 145, 0.16), transparent 20%),
-        linear-gradient(180deg, #fffdf8 0%, var(--bg) 42%, #f5f1e8 100%);
+        radial-gradient(circle at top left, rgba(141, 170, 145, 0.12), transparent 22%),
+        radial-gradient(circle at top right, rgba(174, 152, 214, 0.12), transparent 18%),
+        linear-gradient(180deg, #fffdf9 0%, var(--bg) 40%, #f5f1e8 100%);
       color: var(--text);
-      overflow-x: hidden;
     }
 
     .page {
-      width: min(1180px, calc(100% - 32px));
+      width: min(1120px, calc(100% - 28px));
       margin: 0 auto;
-      padding: 22px 0 48px;
+      padding: 22px 0 42px;
     }
 
     .topbar {
@@ -48,356 +43,187 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 28px;
-      position: sticky;
-      top: 14px;
-      z-index: 5;
       padding: 14px 18px;
+      margin-bottom: 28px;
+      border: 1px solid var(--border);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(74, 101, 79, 0.1);
-      box-shadow: 0 16px 34px rgba(74, 101, 79, 0.08);
+      background: rgba(255, 255, 255, 0.68);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 12px 28px rgba(74, 101, 79, 0.06);
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      text-decoration: none;
+      gap: 10px;
       color: var(--text);
+      text-decoration: none;
       font-weight: 800;
       letter-spacing: -0.03em;
     }
 
     .brand img {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 10px;
       object-fit: cover;
-      box-shadow: 0 8px 20px rgba(74, 101, 79, 0.18);
-    }
-
-    .topbar-links {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .topbar-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.95rem;
-      padding: 8px 12px;
-      border-radius: 999px;
-      transition: background 180ms ease, color 180ms ease;
-    }
-
-    .topbar-links a:hover {
-      background: rgba(141, 170, 145, 0.12);
-      color: var(--primary-dark);
     }
 
     .hero {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 28px;
+      grid-template-columns: 1fr 0.92fr;
+      gap: 24px;
       align-items: center;
-      min-height: calc(100vh - 120px);
+      min-height: calc(100vh - 128px);
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border: 1px solid rgba(74, 101, 79, 0.12);
+      padding: 8px 12px;
+      border: 1px solid var(--border);
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.6);
       color: var(--primary-dark);
       font-size: 0.9rem;
-      letter-spacing: 0.02em;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(3rem, 6vw, 5.8rem);
-      line-height: 0.96;
+      font-size: clamp(3rem, 6vw, 5.4rem);
+      line-height: 0.95;
       letter-spacing: -0.05em;
-      max-width: 9ch;
+      max-width: 8ch;
     }
 
     .subtitle {
-      max-width: 58ch;
-      margin: 18px 0 28px;
-      font-size: clamp(1.05rem, 1.7vw, 1.3rem);
-      line-height: 1.7;
+      margin: 16px 0 22px;
+      max-width: 52ch;
+      font-size: 1.06rem;
+      line-height: 1.75;
       color: var(--text-secondary);
     }
 
     .cta-row {
       display: flex;
+      gap: 12px;
       flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
     }
 
     .button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      min-height: 52px;
-      padding: 0 22px;
+      min-height: 50px;
+      padding: 0 20px;
       border-radius: 999px;
-      border: 1px solid transparent;
       text-decoration: none;
       font-weight: 700;
-      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
-      will-change: transform;
+      transition: transform 160ms ease, box-shadow 160ms ease;
     }
 
-    .button:hover { transform: translateY(-2px); }
+    .button:hover { transform: translateY(-1px); }
     .button.primary {
-      background: linear-gradient(135deg, var(--primary-dark), #5c775f);
+      background: linear-gradient(135deg, var(--primary-dark), #59705c);
       color: white;
       box-shadow: 0 16px 30px rgba(74, 101, 79, 0.24);
     }
     .button.secondary {
+      border: 1px solid var(--border);
       background: rgba(255, 255, 255, 0.72);
       color: var(--text);
-      border-color: rgba(74, 101, 79, 0.12);
     }
 
-    .feature-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 24px;
-    }
-
-    .feature {
-      padding: 16px 18px;
-      border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid rgba(74, 101, 79, 0.1);
-      box-shadow: 0 10px 24px rgba(74, 101, 79, 0.06);
-    }
-
-    .feature strong {
-      display: block;
-      font-size: 1rem;
-      margin-bottom: 6px;
-    }
-
-    .feature span {
+    .fineprint {
       color: var(--text-secondary);
-      line-height: 1.55;
-      font-size: 0.96rem;
-    }
-
-    .proof-strip {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 22px;
-    }
-
-    .proof-card {
-      padding: 16px 18px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid rgba(74, 101, 79, 0.1);
-      box-shadow: 0 10px 24px rgba(74, 101, 79, 0.06);
-    }
-
-    .proof-card strong {
-      display: block;
-      font-size: 1.08rem;
-      margin-bottom: 5px;
-    }
-
-    .proof-card span {
-      color: var(--text-secondary);
-      line-height: 1.55;
       font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 52ch;
+      margin: 0;
     }
 
-    .visual {
-      position: relative;
-      display: grid;
-      gap: 18px;
-    }
-
-    .hero-card, .qr-card, .steps-card, .gallery {
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       background: var(--surface);
-      backdrop-filter: blur(24px);
-      border: 1px solid rgba(74, 101, 79, 0.1);
-      border-radius: var(--radius-xl);
+      backdrop-filter: blur(20px);
       box-shadow: var(--shadow);
+      overflow: hidden;
     }
 
-    .hero-card {
-      overflow: hidden;
+    .hero-visual {
       padding: 14px;
     }
 
-    .hero-card img {
+    .hero-visual img {
       width: 100%;
       display: block;
-      border-radius: calc(var(--radius-xl) - 8px);
+      border-radius: calc(var(--radius) - 8px);
       aspect-ratio: 16 / 11;
       object-fit: cover;
+      background: #fff;
     }
 
-    .qr-grid {
+    .qr-card {
+      margin-top: 14px;
+      padding: 18px;
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 14px;
+      gap: 16px;
       align-items: center;
-      padding: 18px 20px;
     }
 
-    .qr-copy h2, .gallery h2 {
+    .qr-copy h2,
+    .preview h2 {
       margin: 0 0 8px;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
     }
 
-    .qr-copy p, .gallery p {
+    .qr-copy p,
+    .preview p {
       margin: 0;
       color: var(--text-secondary);
       line-height: 1.65;
     }
 
-    .qr-box {
-      width: 132px;
-      height: 132px;
-      border-radius: 20px;
+    .qr {
+      width: 136px;
+      height: 136px;
       padding: 10px;
-      background: white;
-      border: 1px solid rgba(74, 101, 79, 0.12);
+      border-radius: 18px;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
     }
 
-    .qr-box img {
+    .qr img {
       width: 100%;
       height: 100%;
       display: block;
       border-radius: 12px;
     }
 
-    .steps-card {
-      padding: 18px 20px;
-    }
-
-    .steps-card strong {
-      font-size: 1rem;
-    }
-
-    .steps-card ol {
-      margin: 12px 0 0;
-      padding-left: 20px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .pill {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(141, 170, 145, 0.14);
-      color: var(--primary-dark);
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .gallery {
-      margin-top: 34px;
-      padding: 24px;
-    }
-
-    .gallery p {
-      max-width: 68ch;
-      margin-bottom: 20px;
-    }
-
-    .shot-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.9fr 0.9fr;
-      gap: 16px;
-    }
-
-    .shot {
-      position: relative;
-      overflow: hidden;
-      border-radius: 26px;
-      border: 1px solid rgba(74, 101, 79, 0.12);
-      background: #fff;
-      min-height: 280px;
-      box-shadow: 0 14px 32px rgba(74, 101, 79, 0.08);
-    }
-
-    .shot img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-    }
-
-    .label {
-      position: absolute;
-      left: 14px;
-      bottom: 14px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.78);
-      color: var(--primary-dark);
-      font-weight: 700;
-      box-shadow: 0 8px 18px rgba(74, 101, 79, 0.12);
-      backdrop-filter: blur(12px);
-    }
-
-    @media (max-width: 940px) {
-      .topbar {
-        border-radius: 24px;
-      }
-
+    @media (max-width: 900px) {
       .hero {
         grid-template-columns: 1fr;
         min-height: auto;
-        padding-top: 16px;
       }
 
-      h1 { max-width: none; }
-
-      .feature-list,
-      .proof-strip,
-      .shot-grid,
-      .qr-grid {
+      .qr-card {
         grid-template-columns: 1fr;
+      }
+
+      .qr {
+        width: 100%;
+        aspect-ratio: 1;
+        height: auto;
       }
     }
 
     @media (max-width: 640px) {
-      .page { width: min(100% - 20px, 1180px); }
-      .topbar {
-        padding: 12px 14px;
-      }
-      .topbar-links {
-        display: none;
-      }
-      .qr-box {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 1 / 1;
-      }
+      .page { width: min(100% - 18px, 1120px); }
+      .topbar { padding: 12px 14px; }
     }
   </style>
 </head>
@@ -408,123 +234,42 @@
         <img src="./assets/bloom-logo.png" alt="Bloom logo" />
         <span>Bloom</span>
       </a>
-      <nav class="topbar-links" aria-label="Primary">
-        <a href="#download">Download</a>
-        <a href="#preview">Preview</a>
-        <a href="#install">Install</a>
-      </nav>
+      <a class="button secondary" href="https://github.com/JoaoVictorAAbreu-Dev/Bloom/releases" target="_blank" rel="noreferrer">Download</a>
     </header>
 
-    <section class="hero">
+    <section class="hero" id="top">
       <div>
-        <div id="top" class="eyebrow">Bloom install page</div>
+        <div class="eyebrow">Install Bloom</div>
         <h1>Grow a little every day.</h1>
         <p class="subtitle">
-          Baixe o Bloom e comece a organizar hábitos, rotina e foco com uma experiência calma,
-          premium e offline-first. Use o QR code ao lado para instalar no Android em segundos.
+          Baixe o Bloom e use um app simples, calmo e premium para hábitos, foco e rotina.
+          Escaneie o QR code para ir direto ao download.
         </p>
 
-        <div class="cta-row" id="download">
-          <a class="button primary" href="https://github.com/JoaoVictorAAbreu-Dev/Bloom/releases" target="_blank" rel="noreferrer">
-            Download now
-          </a>
-          <a class="button secondary" href="../README.md">View README</a>
+        <div class="cta-row">
+          <a class="button primary" href="https://github.com/JoaoVictorAAbreu-Dev/Bloom/releases" target="_blank" rel="noreferrer">Download APK</a>
+          <a class="button secondary" href="../README.md">Read README</a>
         </div>
 
-        <div class="feature-list">
-          <div class="feature">
-            <strong>Offline-first</strong>
-            <span>Use o app sem conta online, com dados locais e fluxos principais funcionando no aparelho.</span>
-          </div>
-          <div class="feature">
-            <strong>Habit + Focus</strong>
-            <span>Hábitos, Pomodoro, estatísticas e jardim crescem juntos em uma única rotina diária.</span>
-          </div>
-          <div class="feature">
-            <strong>Secure by design</strong>
-            <span>Sem backend direto no app para IA em produção e com proteção local de dados sensíveis.</span>
-          </div>
-          <div class="feature">
-            <strong>Premium UI</strong>
-            <span>Visual inspirado em jardim, com calma, espaço e ilustrações em pixel art nos detalhes.</span>
-          </div>
-        </div>
-
-        <div class="proof-strip">
-          <div class="proof-card">
-            <strong>1 tap</strong>
-            <span>Do README para o download com menos fricção e mais clareza.</span>
-          </div>
-          <div class="proof-card">
-            <strong>QR install</strong>
-            <span>Instalação rápida no Android com o código visível na mesma página.</span>
-          </div>
-          <div class="proof-card">
-            <strong>Bloom identity</strong>
-            <span>A página preserva o tom visual da marca e reforça a percepção premium.</span>
-          </div>
-        </div>
+        <p class="fineprint">
+          Offline-first, com interface limpa e sem distrações desnecessárias.
+        </p>
       </div>
 
-      <div class="visual">
-        <div class="hero-card">
-          <img src="./assets/download-hero.png" alt="Bloom app download hero artwork" />
-        </div>
-
-        <div class="qr-card" id="install">
-          <div class="qr-grid">
-            <div class="qr-copy">
-              <h2>Scan to install</h2>
-              <p>Abra a câmera do seu Android, escaneie o QR e siga para a página de download.</p>
-            </div>
-            <div class="qr-box">
-              <img
-                src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=https%3A%2F%2Fgithub.com%2FJoaoVictorAAbreu-Dev%2FBloom%2Freleases"
-                alt="QR code for Bloom download page"
-              />
-            </div>
+      <div class="card hero-visual">
+        <img src="./assets/download/hero-clean.png" alt="Bloom hero illustration" />
+        <div class="card qr-card">
+          <div class="qr-copy">
+            <h2>Scan to install</h2>
+            <p>Abra a câmera do Android e escaneie o QR code ao lado.</p>
           </div>
-        </div>
-
-        <div class="steps-card">
-          <strong>How to install</strong>
-          <ol>
-            <li>Abra a página de download.</li>
-            <li>Escaneie o QR code no seu celular.</li>
-            <li>Baixe o APK mais recente.</li>
-            <li>Permita instalação de fontes desconhecidas se o Android pedir.</li>
-          </ol>
-          <div class="pill-row">
-            <span class="pill">Android</span>
-            <span class="pill">QR install</span>
-            <span class="pill">GitHub Releases</span>
-            <span class="pill">Bloom v2</span>
+          <div class="qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=https%3A%2F%2Fgithub.com%2FJoaoVictorAAbreu-Dev%2FBloom%2Freleases" alt="QR code for Bloom releases" />
           </div>
         </div>
       </div>
     </section>
 
-    <section class="gallery" id="preview">
-      <h2>Preview the app</h2>
-      <p>
-        A landing também precisa vender o que o usuário vai encontrar após o download. Por isso a página destaca o visual do Bloom
-        com imagens que mostram o tom calmo, o jardim e o foco no produto.
-      </p>
-      <div class="shot-grid">
-        <figure class="shot">
-          <img src="./assets/bloom-banner.png" alt="Bloom feature banner" />
-          <figcaption class="label">Feature banner</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="./assets/bloom-splash-hero.png" alt="Bloom splash hero illustration" />
-          <figcaption class="label">Splash illustration</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="./assets/bloom-logo.png" alt="Bloom logo mark" />
-          <figcaption class="label">Brand mark</figcaption>
-        </figure>
-      </div>
-    </section>
   </main>
 </body>
 </html>

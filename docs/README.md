@@ -20,4 +20,4 @@ This folder contains the public-facing documentation and the install landing pag
 
 ## Publishing note
 
-When GitHub Pages is enabled for this repository, the install page should be published from the `docs/` folder.
+The install page is currently deployed on Vercel from the `docs/` folder and linked from the root README.
