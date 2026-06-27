@@ -2,14 +2,15 @@
 
 ![Bloom banner](docs/assets/bloom-banner.png)
 
-[![Download Bloom](https://img.shields.io/badge/Download-Bloom_Install_Page-1B1C1A?style=for-the-badge&logo=vercel)](https://docs-dzjo8wevx-joaovictor-labs.vercel.app)
-[![Install with QR](https://img.shields.io/badge/Install-QR_Code-8DAA91?style=for-the-badge)](https://docs-dzjo8wevx-joaovictor-labs.vercel.app)
+[![Download Bloom](https://img.shields.io/badge/Download-Bloom_Install_Page-1B1C1A?style=for-the-badge&logo=vercel)](https://docs-flax-pi.vercel.app)
+[![Install with QR](https://img.shields.io/badge/Install-QR_Code-8DAA91?style=for-the-badge)](https://docs-flax-pi.vercel.app)
 
 Bloom is a native Android app for habits, routine planning, Pomodoro focus, personal growth, and local AI coaching.
 
 ## Download
 
-- Install page: [Bloom install page](https://docs-dzjo8wevx-joaovictor-labs.vercel.app)
+- Install page: [Bloom install page](https://docs-flax-pi.vercel.app)
+- Release notes: [Bloom release page](https://docs-flax-pi.vercel.app/release.html)
 - Releases: [GitHub Releases](https://github.com/JoaoVictorAAbreu-Dev/Bloom/releases)
 - QR install guide: [docs/USER_GUIDE.md](docs/USER_GUIDE.md#installing-with-the-qr-code)
 

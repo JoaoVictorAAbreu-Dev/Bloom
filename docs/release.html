@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FBF9F5" />
+  <meta name="description" content="Bloom release page with version, changelog and APK download links." />
+  <title>Bloom | Release</title>
+  <style>
+    :root {
+      --bg: #fbf9f5;
+      --surface: rgba(255, 255, 255, 0.76);
+      --primary: #8daa91;
+      --primary-dark: #4a654f;
+      --text: #1b1c1a;
+      --text-secondary: #4b5149;
+      --border: rgba(74, 101, 79, 0.12);
+      --shadow: 0 24px 60px rgba(74, 101, 79, 0.12);
+      --radius: 28px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: Inter, Manrope, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(141, 170, 145, 0.12), transparent 20%),
+        linear-gradient(180deg, #fffdf9 0%, var(--bg) 45%, #f5f1e8 100%);
+      color: var(--text);
+    }
+
+    .page {
+      width: min(1080px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.68);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 12px 28px rgba(74, 101, 79, 0.06);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .brand img {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .intro {
+      padding: 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--primary-dark);
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.6rem, 5vw, 4.6rem);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .meta-item {
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--border);
+    }
+
+    .meta-item span {
+      display: block;
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .meta-item strong {
+      font-size: 1.08rem;
+    }
+
+    .subtitle {
+      max-width: 60ch;
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-size: 1.03rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .button:hover { transform: translateY(-1px); }
+    .button.primary {
+      background: linear-gradient(135deg, var(--primary-dark), #59705c);
+      color: white;
+      box-shadow: 0 16px 30px rgba(74, 101, 79, 0.24);
+    }
+    .button.secondary {
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--text);
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+    }
+
+    .changelog {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .note {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(141, 170, 145, 0.12);
+      color: var(--primary-dark);
+      line-height: 1.65;
+    }
+
+    .download {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .download a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      border-radius: 18px;
+      padding: 0 18px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .download a.primary {
+      background: linear-gradient(135deg, var(--primary-dark), #59705c);
+      color: white;
+      border-color: transparent;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .meta {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page { width: min(100% - 18px, 1080px); }
+      .intro, .panel { padding: 20px; }
+      .topbar { padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <a class="brand" href="./index.html">
+        <img src="./assets/bloom-logo.png" alt="Bloom logo" />
+        <span>Bloom</span>
+      </a>
+      <a class="button secondary" href="./index.html">Install page</a>
+    </header>
+
+    <section class="hero">
+      <article class="card intro">
+        <div class="eyebrow">Release 1.0.0</div>
+        <h1>Bloom release notes</h1>
+        <p class="subtitle">
+          Use esta página como ponto único para baixar a versão publicada do Bloom e entender rapidamente o que mudou nesta entrega.
+        </p>
+
+        <div class="meta">
+          <div class="meta-item">
+            <span>Version</span>
+            <strong>1.0.0</strong>
+          </div>
+          <div class="meta-item">
+            <span>Platform</span>
+            <strong>Android</strong>
+          </div>
+          <div class="meta-item">
+            <span>Status</span>
+            <strong>Public build</strong>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <a class="button primary" href="https://github.com/JoaoVictorAAbreu-Dev/Bloom/releases" target="_blank" rel="noreferrer">Download APK</a>
+          <a class="button secondary" href="./index.html">Scan QR page</a>
+        </div>
+      </article>
+
+      <aside class="card panel">
+        <h2>Changelog</h2>
+        <ul class="changelog">
+          <li>Landing page de download publicada na Vercel.</li>
+          <li>Fluxo de instalação com QR code para Android.</li>
+          <li>Hero visual e preview simplificados para foco no download.</li>
+          <li>README atualizado com link direto para a página pública.</li>
+        </ul>
+
+        <div class="note">
+          Se você estiver abrindo esta página pela primeira vez, comece pela instalação do APK. Depois volte aqui para conferir a versão publicada e o histórico de mudanças.
+        </div>
+
+        <div class="download">
+          <a class="primary" href="https://github.com/JoaoVictorAAbreu-Dev/Bloom/releases" target="_blank" rel="noreferrer">Get latest APK</a>
+          <a href="./index.html">Open download page</a>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>

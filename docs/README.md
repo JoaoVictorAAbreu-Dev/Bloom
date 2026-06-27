@@ -5,6 +5,7 @@ This folder contains the public-facing documentation and the install landing pag
 ## Main links
 
 - Install page: [index.html](index.html)
+- Release page: [release.html](release.html)
 - User guide: [USER_GUIDE.md](USER_GUIDE.md)
 - Technical overview: [TECHNICAL.md](TECHNICAL.md)
 - Production notes: [PRODUCTION.md](PRODUCTION.md)
@@ -20,4 +21,4 @@ This folder contains the public-facing documentation and the install landing pag
 
 ## Publishing note
 
-The install page is currently deployed on Vercel from the `docs/` folder and linked from the root README.
+The install and release pages are currently deployed on Vercel from the `docs/` folder and linked from the root README.
