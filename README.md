@@ -27,7 +27,7 @@ It follows an Organic Productivity design language: calm, premium, minimal, and 
 - Shows 28-day consistency, monthly focus, best focus hour, and top habit
 - Grows a rewards garden from local progress
 - Offers Bloom Coach, an AI assistant powered by a production backend proxy or debug Groq fallback
-- Exports a local JSON data snapshot from Settings
+- Exports a local JSON data snapshot from Settings and can save/share it as a file
 
 ## Stack
 
@@ -68,7 +68,7 @@ Implemented in the local MVP:
 - Full garden/rewards screen
 - Profile metrics and categorized Settings
 - Bloom Coach with Groq integration plus local analytic fallback
-- Local JSON export snapshot
+- Local JSON export snapshot and file-save flow
 
 Deferred because they require external platform integrations:
 
@@ -143,6 +143,6 @@ Recommended local build flow:
 - The project is structured as a local-first MVP.
 - No backend login is implemented yet.
 - Login and cadastro screens are local-only placeholders for future sync.
-- Backup/restore import is intentionally deferred until file-picker and cloud sync are validated.
+- Backup/restore import is intentionally deferred until the file-picker import flow is implemented and validated.
 - Any ignored APK under `app/build/outputs` may be stale and should not be treated as the final V2 build.
 - Android builds require Java 21 because the Android Gradle Plugin version in this repo does not support Java 25.

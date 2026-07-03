@@ -227,6 +227,7 @@ private fun SettingsScreenPreview() {
             onBloomCoachToggle = {},
             onHabitContextForAiToggle = {},
             onExportData = {},
+            onSaveExport = {},
             onShareExport = {},
             onClearExport = {},
             onResetData = {},

@@ -34,7 +34,7 @@ This QA pass covers the local-first Bloom V2 implementation:
 | Bloom Coach | Implemented | Dedicated chat, quick actions, summaries, local recommendations, Groq integration. |
 | AI proxy | Implemented | Spring Boot proxy keeps Groq key server-side for production. |
 | Local encryption | Implemented | Habit free text and sensitive preferences use Android Keystore with lazy plaintext re-encryption. |
-| Export | Partial | In-app JSON snapshot and native share are implemented. File save/import is still deferred. |
+| Export | Partial | In-app JSON snapshot, native share, and file save are implemented. Import is still deferred. |
 | Widgets/Wear/music | Deferred | Requires platform or third-party integrations outside this MVP pass. |
 
 ## Static Validation Performed
@@ -80,7 +80,7 @@ Risks:
 
 - Some advanced features are currently UI/data-level only and need deeper Android platform integration later.
 - Deep Focus does not block system notifications yet.
-- Export currently supports snapshot generation and native share, but file save/import is not implemented yet.
+- Export currently supports snapshot generation, native share, and file save. Import is not implemented yet.
 - QR/APK installation must be regenerated after a real Android build.
 - No automated UI tests were added in this pass.
 
@@ -93,4 +93,4 @@ Risks:
 5. Test Pomodoro completion persistence and interrupted session persistence.
 6. Test Bloom Coach with no Groq key and with a valid Groq key.
 7. Test Bloom Coach through `backend/ai-proxy` over HTTPS.
-8. Add file save/import for exports if the release scope still requires it.
+8. Add export import flow if the release scope still requires it.

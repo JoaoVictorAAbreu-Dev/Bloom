@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -47,6 +49,8 @@ import com.bloom.app.ui.state.settingsViewModelFactory
 import com.bloom.app.ui.state.statisticsViewModelFactory
 import com.bloom.app.ui.state.RootViewModel
 import com.bloom.app.ui.theme.BloomTheme
+import java.io.OutputStreamWriter
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun BloomApp(container: BloomAppContainer) {
@@ -225,6 +229,18 @@ private fun BloomNavigation(
                 val viewModel: com.bloom.app.ui.state.SettingsViewModel = viewModel(factory = settingsViewModelFactory(container))
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 val context = LocalContext.current
+                val saveExportLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.CreateDocument("application/json"),
+                ) { uri ->
+                    val snapshot = uiState.exportSnapshot
+                    if (uri != null && snapshot.isNotBlank()) {
+                        context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                            OutputStreamWriter(outputStream, StandardCharsets.UTF_8).use { writer ->
+                                writer.write(snapshot)
+                            }
+                        }
+                    }
+                }
                 SettingsScreen(
                     uiState = uiState,
                     onNameChange = viewModel::updateName,
@@ -237,6 +253,11 @@ private fun BloomNavigation(
                     onBloomCoachToggle = viewModel::toggleBloomCoach,
                     onHabitContextForAiToggle = viewModel::toggleHabitContextForAi,
                     onExportData = viewModel::exportData,
+                    onSaveExport = { snapshot ->
+                        if (snapshot.isNotBlank()) {
+                            saveExportLauncher.launch("bloom-export.json")
+                        }
+                    },
                     onShareExport = { snapshot ->
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "application/json"
