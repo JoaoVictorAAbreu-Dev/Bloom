@@ -238,4 +238,10 @@ class FocusViewModel(
         timerJob?.cancel()
         timerJob = null
     }
+
+    override fun onCleared() {
+        persistInterruptedSession()
+        cancelTicker()
+        super.onCleared()
+    }
 }

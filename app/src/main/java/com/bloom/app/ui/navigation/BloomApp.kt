@@ -83,6 +83,7 @@ private fun BloomNavigation(
         BloomDestination.STATS,
         BloomDestination.PROFILE,
     )
+    val openSettings: () -> Unit = { navController.navigate(BloomDestination.SETTINGS) }
 
     Scaffold(
         bottomBar = {
@@ -156,7 +157,7 @@ private fun BloomNavigation(
                     onOpenRoutine = { navController.navigate(BloomDestination.ROUTINE) },
                     onOpenGarden = { navController.navigate(BloomDestination.GARDEN) },
                     onOpenCoach = { navController.navigate(BloomDestination.COACH) },
-                    onNotificationsClick = { },
+                    onNotificationsClick = openSettings,
                 )
             }
             composable(BloomDestination.HABITS) {
@@ -168,7 +169,7 @@ private fun BloomNavigation(
                     onHabitToggle = viewModel::toggleCompletion,
                     onHabitClick = { habitId -> navController.navigate(BloomDestination.habitEditorRoute(habitId)) },
                     onAddHabit = { navController.navigate(BloomDestination.habitEditorRoute()) },
-                    onNotificationsClick = { },
+                    onNotificationsClick = openSettings,
                 )
             }
             composable(BloomDestination.FOCUS) {
@@ -181,7 +182,7 @@ private fun BloomNavigation(
                     onResume = viewModel::resume,
                     onStop = viewModel::stop,
                     onDeepFocusToggle = viewModel::toggleDeepFocus,
-                    onNotificationsClick = { },
+                    onNotificationsClick = openSettings,
                 )
             }
             composable(BloomDestination.STATS) {
@@ -189,7 +190,7 @@ private fun BloomNavigation(
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 StatisticsScreen(
                     uiState = uiState,
-                    onNotificationsClick = { },
+                    onNotificationsClick = openSettings,
                 )
             }
             composable(BloomDestination.PROFILE) {
@@ -199,7 +200,7 @@ private fun BloomNavigation(
                     uiState = uiState,
                     onOpenGarden = { navController.navigate(BloomDestination.GARDEN) },
                     onOpenSettings = { navController.navigate(BloomDestination.SETTINGS) },
-                    onNotificationsClick = { },
+                    onNotificationsClick = openSettings,
                 )
             }
             composable(BloomDestination.ROUTINE) {
@@ -207,7 +208,7 @@ private fun BloomNavigation(
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 RoutineScreen(
                     uiState = uiState,
-                    onNotificationsClick = { },
+                    onNotificationsClick = openSettings,
                 )
             }
             composable(BloomDestination.GARDEN) {
@@ -215,7 +216,7 @@ private fun BloomNavigation(
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 GardenScreen(
                     uiState = uiState,
-                    onNotificationsClick = { },
+                    onNotificationsClick = openSettings,
                 )
             }
             composable(BloomDestination.SETTINGS) {
@@ -236,7 +237,7 @@ private fun BloomNavigation(
                     onClearExport = viewModel::clearExport,
                     onResetData = viewModel::resetData,
                     onOpenCoach = { navController.navigate(BloomDestination.COACH) },
-                    onNotificationsClick = { },
+                    onNotificationsClick = openSettings,
                 )
             }
             composable(BloomDestination.COACH) {
@@ -250,7 +251,7 @@ private fun BloomNavigation(
                         viewModel.updateInput(prompt)
                         viewModel.send(prompt)
                     },
-                    onNotificationsClick = { },
+                    onNotificationsClick = openSettings,
                 )
             }
             composable(BloomDestination.HABIT_EDITOR) {
