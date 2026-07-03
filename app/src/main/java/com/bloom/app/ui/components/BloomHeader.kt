@@ -54,6 +54,7 @@ fun BloomHeader(
                 modifier = Modifier.size(44.dp),
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                semanticLabel = "Open notifications",
             ) {
                 Icon(
                     imageVector = Icons.Rounded.NotificationsNone,

@@ -125,6 +125,11 @@ fun BloomHabitCard(
                 modifier = Modifier.size(56.dp),
                 containerColor = actionContainerColor,
                 contentColor = actionContentColor,
+                semanticLabel = if (habit.completedToday) {
+                    "Mark habit as pending"
+                } else {
+                    "Mark habit as completed"
+                },
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Check,

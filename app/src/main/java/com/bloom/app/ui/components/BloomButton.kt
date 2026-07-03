@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.bloom.app.ui.theme.BloomColors
 import com.bloom.app.ui.theme.BloomRadius
@@ -97,6 +102,7 @@ fun BloomIconButton(
     enabled: Boolean = true,
     containerColor: Color = MaterialTheme.colorScheme.primary,
     contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    semanticLabel: String? = null,
     content: @Composable () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -104,14 +110,19 @@ fun BloomIconButton(
 
     Surface(
         enabled = enabled,
-        modifier = modifier.graphicsLayer {
-            val scale = if (pressed && enabled) 0.985f else 1f
-            scaleX = scale
-            scaleY = scale
-        },
+        modifier = modifier
+            .semantics(mergeDescendants = true) {
+                role = Role.Button
+                semanticLabel?.let { contentDescription = it }
+            }
+            .graphicsLayer {
+                val scale = if (pressed && enabled) 0.985f else 1f
+                scaleX = scale
+                scaleY = scale
+            },
         color = if (enabled) containerColor else MaterialTheme.colorScheme.surfaceVariant,
         contentColor = if (enabled) contentColor else MaterialTheme.colorScheme.onSurfaceVariant,
-        shape = BloomRadius.circle,
+        shape = CircleShape,
         onClick = onClick,
         interactionSource = interactionSource,
     ) {

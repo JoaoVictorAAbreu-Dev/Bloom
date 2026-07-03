@@ -80,6 +80,7 @@ fun HabitEditorScreen(
                     modifier = Modifier.padding(start = BloomSpacing.screenPadding),
                     containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = androidx.compose.material3.MaterialTheme.colorScheme.onSurfaceVariant,
+                    semanticLabel = "Go back",
                 ) {
                     Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = "Back")
                 }
@@ -91,6 +92,7 @@ fun HabitEditorScreen(
                         modifier = Modifier.padding(end = BloomSpacing.screenPadding),
                         containerColor = androidx.compose.material3.MaterialTheme.colorScheme.errorContainer,
                         contentColor = androidx.compose.material3.MaterialTheme.colorScheme.error,
+                        semanticLabel = "Delete habit",
                     ) {
                         Icon(imageVector = Icons.Rounded.Delete, contentDescription = "Delete habit")
                     }
@@ -296,6 +298,7 @@ private fun ColorRow(
                 modifier = Modifier,
                 containerColor = Color(colorArgb),
                 contentColor = Color.White,
+                semanticLabel = if (selectedColor == colorArgb) "Selected color" else "Choose color",
             ) {
                 Text(text = if (selectedColor == colorArgb) "On" else "")
             }

@@ -86,6 +86,7 @@ fun HomeScreen(
                     modifier = Modifier,
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    semanticLabel = "Open notifications",
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.NotificationsNone,
@@ -202,6 +203,7 @@ fun HomeScreen(
                         BloomIconButton(
                             onClick = onOpenFocus,
                             modifier = Modifier,
+                            semanticLabel = "Open focus session",
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.PlayArrow,

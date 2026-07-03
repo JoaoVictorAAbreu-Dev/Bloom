@@ -1,7 +1,7 @@
 package com.bloom.app.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,8 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import com.bloom.app.ui.theme.BloomRadius
 import com.bloom.app.ui.theme.BloomSpacing
 
@@ -46,7 +49,8 @@ fun BloomBottomBar(
             .fillMaxWidth()
             .height(78.dp)
             .background(MaterialTheme.colorScheme.surface, BloomRadius.large)
-            .padding(horizontal = BloomSpacing.md),
+            .padding(horizontal = BloomSpacing.md)
+            .selectableGroup(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -57,7 +61,12 @@ fun BloomBottomBar(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { onItemSelected(item.route) }
+                    .sizeIn(minHeight = 56.dp)
+                    .selectable(
+                        selected = selected,
+                        onClick = { onItemSelected(item.route) },
+                        role = Role.Tab,
+                    )
                     .padding(vertical = BloomSpacing.sm),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
