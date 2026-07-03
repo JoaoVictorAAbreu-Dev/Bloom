@@ -114,6 +114,8 @@ fun OnboardingScreen(
                     OnboardingPage.Concept -> ConceptStep()
                     OnboardingPage.Notifications -> NotificationsStep(
                         status = notificationsStatus,
+                        optionalLabel = optionalLabel,
+                        enabledLabel = enabledLabel,
                         onEnable = {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                                 val granted = ContextCompat.checkSelfPermission(
@@ -253,6 +255,8 @@ private fun ConceptStep() {
 @Composable
 private fun NotificationsStep(
     status: String,
+    optionalLabel: String,
+    enabledLabel: String,
     onEnable: () -> Unit,
     onSkip: () -> Unit,
 ) {

@@ -40,6 +40,11 @@ fun AuthScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var message by remember { mutableStateOf("Everything works locally for now.") }
+    val createAccountLabel = stringResource(R.string.auth_create_local_account)
+    val continueLabel = stringResource(R.string.auth_continue)
+    val continueWithoutAccountLabel = stringResource(R.string.auth_continue_without_account)
+    val forgotPasswordLabel = stringResource(R.string.auth_forgot_password)
+    val recoveryMessage = stringResource(R.string.auth_recovery_message)
 
     Column(
         modifier = Modifier
@@ -113,9 +118,9 @@ fun AuthScreen(
                 BloomButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = if (mode == AuthMode.SignUp) {
-                        stringResource(R.string.auth_create_local_account)
+                        createAccountLabel
                     } else {
-                        stringResource(R.string.auth_continue)
+                        continueLabel
                     },
                     onClick = {
                         val resolvedName = name.ifBlank { email.substringBefore("@").ifBlank { defaultName } }
@@ -124,13 +129,13 @@ fun AuthScreen(
                 )
                 BloomOutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.auth_continue_without_account),
+                    text = continueWithoutAccountLabel,
                     onClick = { onAuthenticated(defaultName, "") },
                 )
                 BloomOutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.auth_forgot_password),
-                    onClick = { message = stringResource(R.string.auth_recovery_message) },
+                    text = forgotPasswordLabel,
+                    onClick = { message = recoveryMessage },
                 )
             }
         }

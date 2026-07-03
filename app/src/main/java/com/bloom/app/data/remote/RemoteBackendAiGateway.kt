@@ -12,14 +12,14 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class RemoteBackendAiGateway(
-    baseUrl: String,
+    endpointBaseUrl: String,
     private val client: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(25, TimeUnit.SECONDS)
         .writeTimeout(10, TimeUnit.SECONDS)
         .build(),
 ) : AiGateway {
-    override val baseUrl: String = baseUrl.trim().trimEnd('/')
+    override val baseUrl: String = endpointBaseUrl.trim().trimEnd('/')
     override val modelId: String = "backend-managed"
     override val isConfigured: Boolean = this.baseUrl.startsWith("https://")
 
@@ -33,7 +33,7 @@ class RemoteBackendAiGateway(
             .put("userPrompt", prompt.userPrompt)
 
         val request = Request.Builder()
-            .url("${this.baseUrl}/api/ai/coach")
+            .url("${this@RemoteBackendAiGateway.baseUrl}/api/ai/coach")
             .addHeader("Content-Type", "application/json")
             .post(payload.toString().toRequestBody(JSON_MEDIA_TYPE))
             .build()
