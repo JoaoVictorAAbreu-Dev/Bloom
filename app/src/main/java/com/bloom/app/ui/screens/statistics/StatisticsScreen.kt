@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.bloom.app.R
 import com.bloom.app.ui.components.BloomCard
 import com.bloom.app.ui.components.BloomHeader
 import com.bloom.app.ui.components.BloomPixelMascot
@@ -46,7 +48,7 @@ fun StatisticsScreen(
     ) {
         BloomHeader(
             title = "Bloom",
-            subtitle = "Your Growth",
+            subtitle = stringResource(R.string.stats_subtitle),
             onNotificationsClick = onNotificationsClick,
         )
 
@@ -55,12 +57,12 @@ fun StatisticsScreen(
             verticalArrangement = Arrangement.spacedBy(BloomSpacing.xs),
         ) {
             Text(
-                text = "Your Growth",
+                text = stringResource(R.string.stats_title),
                 style = MaterialTheme.typography.displaySmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Text(
-                text = "Here is how your garden is flourishing this week.",
+                text = stringResource(R.string.stats_subtitle),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -82,16 +84,16 @@ fun StatisticsScreen(
                 horizontalArrangement = Arrangement.spacedBy(BloomSpacing.cardGap),
             ) {
                 BloomStatCard(
-                    title = "Focus Time",
+                    title = stringResource(R.string.stats_focus_time),
                     value = "${uiState.statistics.focusMinutesToday}m",
-                    caption = "Today",
+                    caption = stringResource(R.string.stats_today),
                     modifier = Modifier.weight(1f),
                     accentColor = Color(0xFFC6E9E9),
                 )
                 BloomStatCard(
-                    title = "Habits Done",
+                    title = stringResource(R.string.stats_habits_done),
                     value = uiState.statistics.habitsDoneToday.toString(),
-                    caption = "Today",
+                    caption = stringResource(R.string.stats_today),
                     modifier = Modifier.weight(1f),
                     accentColor = Color(0xFF8DAA91),
                 )
@@ -102,16 +104,16 @@ fun StatisticsScreen(
                 horizontalArrangement = Arrangement.spacedBy(BloomSpacing.cardGap),
             ) {
                 BloomStatCard(
-                    title = "Longest Streak",
+                    title = stringResource(R.string.stats_longest_streak),
                     value = "${uiState.statistics.longestStreak} days",
-                    caption = "Best run",
+                    caption = stringResource(R.string.stats_best_run),
                     modifier = Modifier.weight(1f),
                     accentColor = Color(0xFFAE98D6),
                 )
                 BloomStatCard(
-                    title = "Garden Growth",
+                    title = stringResource(R.string.stats_garden_growth),
                     value = uiState.statistics.gardenGrowth.toString(),
-                    caption = "Points",
+                    caption = stringResource(R.string.stats_points),
                     modifier = Modifier.weight(1f),
                     accentColor = Color(0xFFD9A441),
                 )
@@ -134,7 +136,7 @@ fun StatisticsScreen(
             BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
                 Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
                     Text(
-                        text = "Recent Sessions",
+                        text = stringResource(R.string.stats_recent_sessions),
                         style = MaterialTheme.typography.titleLarge,
                     )
                     uiState.sessions.take(6).forEach { session ->
@@ -142,7 +144,7 @@ fun StatisticsScreen(
                             onClick = { },
                             label = {
                                 Text(
-                                    text = "${session.mode.label} - ${session.durationMinutes} min - ${if (session.completed) "Done" else "Stopped"}",
+                                    text = "${session.mode.label} - ${session.durationMinutes} min - ${if (session.completed) stringResource(R.string.stats_done) else stringResource(R.string.stats_stopped)}",
                                 )
                             },
                             colors = AssistChipDefaults.assistChipColors(
@@ -174,16 +176,16 @@ private fun ConsistencyHeatmapCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column {
-                    Text(text = "Consistency Heatmap", style = MaterialTheme.typography.titleLarge)
+                    Text(text = stringResource(R.string.stats_heatmap_title), style = MaterialTheme.typography.titleLarge)
                     Text(
-                        text = "$activeDays active days in the last 28 days",
+                        text = stringResource(R.string.stats_heatmap_days, activeDays),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 AssistChip(
                     onClick = { },
-                    label = { Text("28 days") },
+                    label = { Text(stringResource(R.string.stats_28_days)) },
                     colors = AssistChipDefaults.assistChipColors(
                         containerColor = MaterialTheme.colorScheme.surfaceVariant,
                         labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -206,7 +208,7 @@ private fun ConsistencyHeatmapCard(
                 horizontalArrangement = Arrangement.spacedBy(BloomSpacing.xs),
             ) {
                 Text(
-                    text = "Less",
+                    text = stringResource(R.string.stats_less),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -214,7 +216,7 @@ private fun ConsistencyHeatmapCard(
                     HeatmapCell(value = value, compact = true)
                 }
                 Text(
-                    text = "More",
+                    text = stringResource(R.string.stats_more),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -250,9 +252,9 @@ private fun WeeklyConsistencyCard(
         Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
             Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
                 Column {
-                    Text(text = "Weekly Consistency", style = MaterialTheme.typography.titleLarge)
+                    Text(text = stringResource(R.string.stats_weekly_consistency), style = MaterialTheme.typography.titleLarge)
                     Text(
-                        text = "+${statisticsUiState.statistics.weeklyConsistency}% from last week",
+                        text = stringResource(R.string.stats_weekly_plus, statisticsUiState.statistics.weeklyConsistency),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary,
                     )
@@ -280,7 +282,7 @@ private fun WeeklyChartCard(
 ) {
     BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
         Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
-            Text(text = "Focus Time by Day", style = MaterialTheme.typography.titleLarge)
+            Text(text = stringResource(R.string.stats_focus_by_day), style = MaterialTheme.typography.titleLarge)
             WeeklyBars(
                 values = uiState.statistics.weeklyFocusMinutes,
                 labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -295,7 +297,7 @@ private fun MonthlyFocusCard(
 ) {
     BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
         Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
-            Text(text = "Monthly Focus", style = MaterialTheme.typography.titleLarge)
+            Text(text = stringResource(R.string.stats_monthly_focus), style = MaterialTheme.typography.titleLarge)
             SimpleBars(
                 values = values,
                 labels = listOf("W1", "W2", "W3", "W4"),
@@ -313,19 +315,19 @@ private fun PatternsCard(
 ) {
     BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
         Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
-            Text(text = "Productivity Patterns", style = MaterialTheme.typography.titleLarge)
+            Text(text = stringResource(R.string.stats_productivity_patterns), style = MaterialTheme.typography.titleLarge)
             Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
                 BloomStatCard(
-                    title = "Avg Focus",
+                    title = stringResource(R.string.stats_avg_focus),
                     value = "${averageFocusMinutes}m",
-                    caption = "Per session",
+                    caption = stringResource(R.string.stats_per_session),
                     modifier = Modifier.weight(1f),
                     accentColor = Color(0xFFC6E9E9),
                 )
                 BloomStatCard(
-                    title = "Best Hour",
+                    title = stringResource(R.string.stats_best_hour),
                     value = mostProductiveHour,
-                    caption = "Most focused",
+                    caption = stringResource(R.string.stats_most_focused),
                     modifier = Modifier.weight(1f),
                     accentColor = Color(0xFFD9A441),
                 )
@@ -336,7 +338,7 @@ private fun PatternsCard(
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.xxs)) {
                     Text(
-                        text = "Most completed habit",
+                        text = stringResource(R.string.stats_most_completed_habit),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -428,9 +430,9 @@ private fun EmptyStatsState() {
     BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
             BloomPixelMascot(size = 120.dp)
-            Text(text = "No data yet", style = MaterialTheme.typography.titleLarge)
+            Text(text = stringResource(R.string.stats_empty_title), style = MaterialTheme.typography.titleLarge)
             Text(
-                text = "Complete a habit or a focus session to start seeing growth.",
+                text = stringResource(R.string.stats_empty_body),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

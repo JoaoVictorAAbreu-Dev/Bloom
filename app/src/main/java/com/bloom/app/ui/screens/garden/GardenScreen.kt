@@ -25,6 +25,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.bloom.app.R
 import com.bloom.app.domain.model.Reward
 import com.bloom.app.ui.components.BloomCard
 import com.bloom.app.ui.components.BloomHeader
@@ -43,10 +45,10 @@ fun GardenScreen(
 ) {
     val unlockedCount = uiState.rewards.count { it.unlocked }
     val gardenStage = when {
-        uiState.statistics.gardenGrowth >= 80 -> "Thriving"
-        uiState.statistics.gardenGrowth >= 40 -> "Blooming"
-        uiState.statistics.gardenGrowth >= 12 -> "Sprouting"
-        else -> "Seedling"
+        uiState.statistics.gardenGrowth >= 80 -> stringResource(R.string.garden_stage_thriving)
+        uiState.statistics.gardenGrowth >= 40 -> stringResource(R.string.garden_stage_blooming)
+        uiState.statistics.gardenGrowth >= 12 -> stringResource(R.string.garden_stage_sprouting)
+        else -> stringResource(R.string.garden_stage_seedling)
     }
 
     Column(
@@ -59,7 +61,7 @@ fun GardenScreen(
     ) {
         BloomHeader(
             title = "Bloom",
-            subtitle = "Garden Rewards",
+            subtitle = stringResource(R.string.garden_subtitle),
             onNotificationsClick = onNotificationsClick,
         )
 
@@ -68,12 +70,12 @@ fun GardenScreen(
             verticalArrangement = Arrangement.spacedBy(BloomSpacing.xs),
         ) {
             Text(
-                text = "Your Garden",
+                text = stringResource(R.string.garden_title),
                 style = MaterialTheme.typography.displaySmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Text(
-                text = "Plants, decor, and companions unlocked by consistency.",
+                text = stringResource(R.string.garden_subtitle),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -89,12 +91,12 @@ fun GardenScreen(
         BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
             Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
                 Text(
-                    text = "Unlock Path",
+                    text = stringResource(R.string.garden_unlock_path),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    text = "Every habit completed and focus session feeds the garden.",
+                    text = stringResource(R.string.garden_unlock_path_body),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -182,7 +184,7 @@ private fun LivingGardenCard(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    text = "Garden level $level",
+                    text = stringResource(R.string.garden_level, level),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -210,7 +212,7 @@ private fun LivingGardenCard(
             ) {
                 AssistChip(
                     onClick = { },
-                    label = { Text("$streak day streak") },
+                    label = { Text(stringResource(R.string.garden_day_streak, streak)) },
                     colors = AssistChipDefaults.assistChipColors(
                         containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.82f),
                         labelColor = MaterialTheme.colorScheme.onSurface,
@@ -237,7 +239,7 @@ private fun GardenMilestone(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = if (unlocked) "$title unlocked" else title,
+            text = if (unlocked) stringResource(R.string.garden_unlocked, title) else title,
             style = MaterialTheme.typography.labelLarge,
             color = if (unlocked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -270,7 +272,7 @@ private fun RewardCard(
             )
             AssistChip(
                 onClick = { },
-                label = { Text(if (reward.unlocked) "Unlocked" else "Locked") },
+                label = { Text(if (reward.unlocked) stringResource(R.string.garden_unlocked, reward.title) else stringResource(R.string.garden_locked)) },
                 colors = AssistChipDefaults.assistChipColors(
                     containerColor = if (reward.unlocked) Color(reward.accentColorArgb).copy(alpha = 0.16f) else MaterialTheme.colorScheme.surfaceVariant,
                     labelColor = if (reward.unlocked) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,

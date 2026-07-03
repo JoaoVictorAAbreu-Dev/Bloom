@@ -21,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.bloom.app.R
 import com.bloom.app.domain.model.ThemeMode
 import com.bloom.app.ui.components.BloomAiBadge
 import com.bloom.app.ui.components.BloomButton
@@ -59,7 +61,7 @@ fun SettingsScreen(
     ) {
         BloomHeader(
             title = "Bloom",
-            subtitle = "Settings",
+            subtitle = stringResource(R.string.settings_subtitle),
             onNotificationsClick = onNotificationsClick,
         )
 
@@ -68,23 +70,23 @@ fun SettingsScreen(
             verticalArrangement = Arrangement.spacedBy(BloomSpacing.xs),
         ) {
             Text(
-                text = "Settings",
+                text = stringResource(R.string.settings_title),
                 style = MaterialTheme.typography.displaySmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Text(
-                text = "Tune your calm productivity system.",
+                text = stringResource(R.string.settings_subtitle),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
 
-        SettingsSection(title = "General", subtitle = "Profile, language, theme, and appearance.") {
+        SettingsSection(title = stringResource(R.string.settings_general), subtitle = stringResource(R.string.settings_general_subtitle)) {
             OutlinedTextField(
                 value = uiState.preferences.userName,
                 onValueChange = onNameChange,
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text("Display name") },
+                label = { Text(stringResource(R.string.settings_display_name)) },
                 singleLine = true,
             )
             ThemeSelector(
@@ -92,152 +94,152 @@ fun SettingsScreen(
                 onSelected = onThemeChange,
             )
             StaticSettingRow(
-                title = "Primary goal",
-                description = "Chosen during onboarding.",
+                title = stringResource(R.string.settings_primary_goal),
+                description = stringResource(R.string.settings_chosen_onboarding),
                 value = uiState.preferences.primaryGoal,
             )
             StaticSettingRow(
-                title = "Language",
-                description = "English now. Localization-ready.",
-                value = "System",
+                title = stringResource(R.string.settings_language),
+                description = stringResource(R.string.settings_localization_ready),
+                value = stringResource(R.string.settings_local),
             )
             StaticSettingRow(
-                title = "Appearance",
-                description = "Organic Productivity visual system.",
-                value = "Bloom",
+                title = stringResource(R.string.settings_appearance),
+                description = stringResource(R.string.settings_appearance_desc),
+                value = stringResource(R.string.settings_appearance_value),
             )
         }
 
-        SettingsSection(title = "Pomodoro", subtitle = "Focus timing, breaks, and session behavior.") {
+        SettingsSection(title = stringResource(R.string.settings_pomodoro), subtitle = stringResource(R.string.settings_pomodoro_subtitle)) {
             DurationSlider(
-                label = "Focus",
+                label = stringResource(R.string.settings_focus),
                 value = uiState.preferences.focusMinutes,
                 valueRange = 15f..60f,
                 onValueChange = onFocusMinutesChange,
             )
             DurationSlider(
-                label = "Short break",
+                label = stringResource(R.string.settings_short_break),
                 value = uiState.preferences.shortBreakMinutes,
                 valueRange = 3f..15f,
                 onValueChange = onShortBreakMinutesChange,
             )
             DurationSlider(
-                label = "Long break",
+                label = stringResource(R.string.settings_long_break),
                 value = uiState.preferences.longBreakMinutes,
                 valueRange = 10f..30f,
                 onValueChange = onLongBreakMinutesChange,
             )
             SettingRow(
-                title = "Auto-start next session",
-                description = "Move between focus and break automatically.",
+                title = stringResource(R.string.settings_auto_start),
+                description = stringResource(R.string.settings_auto_start_desc),
                 checked = uiState.preferences.autoStartNextSession,
                 onCheckedChange = onAutoStartToggle,
             )
             StaticSettingRow(
-                title = "Focus sounds",
-                description = "Ambient sounds can be added in the next media pass.",
-                value = "Planned",
+                title = stringResource(R.string.settings_focus_sounds),
+                description = stringResource(R.string.settings_focus_sounds_desc),
+                value = stringResource(R.string.settings_planned),
             )
         }
 
-        SettingsSection(title = "Habits", subtitle = "Reminders, weekly rules, and completion behavior.") {
+        SettingsSection(title = stringResource(R.string.settings_habits), subtitle = stringResource(R.string.settings_habits_subtitle)) {
             SettingRow(
-                title = "Notifications",
-                description = "Gentle reminders and focus alerts.",
+                title = stringResource(R.string.settings_notifications),
+                description = stringResource(R.string.settings_notifications_desc),
                 checked = uiState.preferences.notificationsEnabled,
                 onCheckedChange = onNotificationsToggle,
             )
             StaticSettingRow(
-                title = "Week starts on",
-                description = "Used by statistics and heatmaps.",
+                title = stringResource(R.string.settings_week_starts_on),
+                description = stringResource(R.string.settings_week_starts_desc),
                 value = "Monday",
             )
             StaticSettingRow(
-                title = "Completion feedback",
-                description = "Animation, haptics, and garden growth hooks.",
-                value = "Ready",
+                title = stringResource(R.string.settings_completion_feedback),
+                description = stringResource(R.string.settings_completion_feedback_desc),
+                value = stringResource(R.string.settings_ready),
             )
         }
 
-        SettingsSection(title = "AI", subtitle = "Bloom Coach configuration and history.") {
+        SettingsSection(title = stringResource(R.string.settings_ai), subtitle = stringResource(R.string.settings_ai_subtitle)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(BloomSpacing.md),
             ) {
                 BloomAiBadge()
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(text = "Bloom Coach", style = MaterialTheme.typography.titleLarge)
+                    Text(text = stringResource(R.string.settings_bloom_coach), style = MaterialTheme.typography.titleLarge)
                     Text(
                         text = if (!uiState.preferences.bloomCoachEnabled) {
-                            "Disabled by privacy settings. Enable it below to use AI suggestions."
+                            stringResource(R.string.settings_disabled_privacy)
                         } else if (uiState.aiIntegration.configured) {
-                            "Groq ready with ${uiState.aiIntegration.modelId}."
+                            stringResource(R.string.settings_groq_ready, uiState.aiIntegration.modelId)
                         } else {
-                            "Local fallback active. Configure a secure AI backend for production or a debug Groq key locally."
+                            stringResource(R.string.settings_local_fallback)
                         },
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
-                BloomButton(text = "Open", onClick = onOpenCoach)
+                BloomButton(text = stringResource(R.string.settings_open), onClick = onOpenCoach)
             }
             StaticSettingRow(
-                title = "API",
+                title = stringResource(R.string.settings_api),
                 description = uiState.aiIntegration.baseUrl,
                 value = when {
-                    !uiState.preferences.bloomCoachEnabled -> "Disabled"
-                    uiState.aiIntegration.configured -> "Online"
-                    else -> "Local"
+                    !uiState.preferences.bloomCoachEnabled -> stringResource(R.string.settings_disabled)
+                    uiState.aiIntegration.configured -> stringResource(R.string.settings_online)
+                    else -> stringResource(R.string.settings_local)
                 },
             )
             StaticSettingRow(
-                title = "History",
-                description = "Weekly and monthly summaries will use this space.",
-                value = "Planned",
+                title = stringResource(R.string.settings_history),
+                description = stringResource(R.string.settings_history_desc),
+                value = stringResource(R.string.settings_planned),
             )
         }
 
-        SettingsSection(title = "Privacy and AI", subtitle = "Control what can leave the device.") {
+        SettingsSection(title = stringResource(R.string.settings_privacy_ai), subtitle = stringResource(R.string.settings_privacy_ai_subtitle)) {
             Text(
-                text = "Bloom works offline. If enabled, Bloom Coach may send a minimized and sanitized prompt to the configured AI provider. Habit context is never sent unless you allow it.",
+                text = stringResource(R.string.settings_offline_privacy),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             SettingRow(
-                title = "Enable Bloom Coach",
-                description = "Allow AI replies when Groq is configured. Local guidance still works without a key.",
+                title = stringResource(R.string.settings_enable_bloom_coach),
+                description = stringResource(R.string.settings_enable_bloom_coach_desc),
                 checked = uiState.preferences.bloomCoachEnabled,
                 onCheckedChange = onBloomCoachToggle,
             )
             SettingRow(
-                title = "Allow habit context",
-                description = "Share sanitized habit names and routine labels for better suggestions.",
+                title = stringResource(R.string.settings_allow_habit_context),
+                description = stringResource(R.string.settings_allow_habit_context_desc),
                 checked = uiState.preferences.allowHabitContextForAi,
                 enabled = uiState.preferences.bloomCoachEnabled,
                 onCheckedChange = onHabitContextForAiToggle,
             )
         }
 
-        SettingsSection(title = "Account", subtitle = "Local data, backup, export, and restore.") {
+        SettingsSection(title = stringResource(R.string.settings_account), subtitle = stringResource(R.string.settings_account_subtitle)) {
             StaticSettingRow(
-                title = "Backup",
-                description = "Cloud backup is reserved for the sync phase.",
-                value = "Offline",
+                title = stringResource(R.string.settings_backup),
+                description = stringResource(R.string.settings_backup_desc),
+                value = stringResource(R.string.settings_offline),
             )
             StaticSettingRow(
-                title = "Export",
-                description = "Generate a local JSON snapshot from current data.",
-                value = if (uiState.exportSnapshot.isBlank()) "Ready" else "Generated",
+                title = stringResource(R.string.settings_export),
+                description = stringResource(R.string.settings_export_desc),
+                value = if (uiState.exportSnapshot.isBlank()) stringResource(R.string.settings_export_ready) else stringResource(R.string.settings_export_generated),
             )
             Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
                 BloomButton(
                     modifier = Modifier.weight(1f),
-                    text = "Export JSON",
+                    text = stringResource(R.string.settings_export_json),
                     onClick = onExportData,
                 )
                 BloomOutlinedButton(
                     modifier = Modifier.weight(1f),
-                    text = "Clear",
+                    text = stringResource(R.string.settings_clear),
                     enabled = uiState.exportSnapshot.isNotBlank(),
                     onClick = onClearExport,
                 )
@@ -255,13 +257,13 @@ fun SettingsScreen(
                 }
             }
             StaticSettingRow(
-                title = "Restore",
-                description = "Import from JSON will be added after file-picker validation.",
-                value = "Next",
+                title = stringResource(R.string.settings_restore),
+                description = stringResource(R.string.settings_restore_desc),
+                value = stringResource(R.string.settings_next),
             )
             BloomOutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = if (uiState.resetInProgress) "Resetting..." else "Reset data",
+                text = if (uiState.resetInProgress) stringResource(R.string.settings_resetting) else stringResource(R.string.settings_reset_data),
                 enabled = !uiState.resetInProgress,
                 onClick = onResetData,
             )
@@ -324,7 +326,7 @@ private fun DurationSlider(
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
             Text(text = label, style = MaterialTheme.typography.bodyLarge)
             Text(
-                text = "$value min",
+                text = stringResource(R.string.settings_minutes, value),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
