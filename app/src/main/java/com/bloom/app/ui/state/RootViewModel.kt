@@ -7,6 +7,7 @@ import com.bloom.app.domain.model.Habit
 import com.bloom.app.domain.model.HabitCategory
 import com.bloom.app.domain.model.HabitFrequency
 import com.bloom.app.domain.model.OnboardingSetup
+import com.bloom.app.security.PrivacySanitizer
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -17,6 +18,8 @@ import java.util.UUID
 class RootViewModel(
     private val container: BloomAppContainer,
 ) : ViewModel() {
+    private val privacySanitizer = PrivacySanitizer()
+
     val uiState = container.observePreferencesUseCase()
         .map { RootUiState(preferences = it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), RootUiState())
@@ -56,10 +59,12 @@ class RootViewModel(
 
     fun completeAuth(userName: String, email: String = "") {
         viewModelScope.launch {
+            val safeName = privacySanitizer.sanitize(userName).trim().take(64)
+            val safeEmail = privacySanitizer.sanitize(email).trim().take(120)
             container.updatePreferencesUseCase { current ->
                 current.copy(
-                    userName = userName.ifBlank { current.userName },
-                    userEmail = email,
+                    userName = safeName.ifBlank { current.userName },
+                    userEmail = safeEmail,
                     authCompleted = true,
                 )
             }
