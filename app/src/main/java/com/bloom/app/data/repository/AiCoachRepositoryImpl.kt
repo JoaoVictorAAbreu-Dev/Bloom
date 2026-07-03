@@ -57,11 +57,12 @@ class AiCoachRepositoryImpl(
         val focusMinutes = context.preferences.focusMinutes
         val totalHabits = context.statistics.totalHabits
         val doneHabits = context.statistics.habitsDoneToday
+        val safeNextHabit = privacySanitizer.sanitize(nextHabit)
 
         return listOf(
             AiCoachQuickAction(
                 label = "Plan my day",
-                prompt = "Help me plan today around ${privacySanitizer.sanitize(nextHabit)} and one $focusMinutes-minute Pomodoro.",
+                prompt = "Help me plan today around $safeNextHabit and one $focusMinutes-minute Pomodoro.",
             ),
             AiCoachQuickAction(
                 label = "Review habits",
@@ -82,11 +83,12 @@ class AiCoachRepositoryImpl(
         val nextHabit = context.habits.firstOrNull { !it.completedToday }?.name
             ?: context.habits.firstOrNull()?.name
             ?: "a light habit"
+        val safeNextHabit = privacySanitizer.sanitize(nextHabit)
         val topRoutine = context.routineBlocks.firstOrNull { it.active } ?: context.routineBlocks.firstOrNull()
 
         val reply = buildString {
             appendLine("Here is a simple next step:")
-            appendLine("- Focus on $nextHabit for ${context.preferences.focusMinutes} minutes.")
+            appendLine("- Focus on $safeNextHabit for ${context.preferences.focusMinutes} minutes.")
             if (context.statistics.habitsDoneToday < context.statistics.totalHabits) {
                 appendLine("- Complete one more habit to keep the garden growing.")
             }

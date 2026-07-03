@@ -59,6 +59,20 @@ class AiCoachRepositoryImplTest {
     }
 
     @Test
+    fun `sanitizes sensitive text in quick action prompts`() {
+        val context = sampleContext().copy(
+            habits = listOf(
+                sampleContext().habits.first().copy(name = "Water plants at https://example.com"),
+            ),
+        )
+
+        val actions = repository.buildQuickActions(context)
+
+        assertTrue(actions.first().prompt.contains("[url]"))
+        assertFalse(actions.first().prompt.contains("https://example.com"))
+    }
+
+    @Test
     fun `marks backend proxy replies as remote`() = runTest {
         val remoteRepository = AiCoachRepositoryImpl(
             aiGateway = object : AiGateway {
