@@ -46,6 +46,7 @@ fun SettingsScreen(
     onBloomCoachToggle: (Boolean) -> Unit,
     onHabitContextForAiToggle: (Boolean) -> Unit,
     onExportData: () -> Unit,
+    onShareExport: (String) -> Unit,
     onClearExport: () -> Unit,
     onResetData: () -> Unit,
     onOpenCoach: () -> Unit,
@@ -236,6 +237,12 @@ fun SettingsScreen(
                     modifier = Modifier.weight(1f),
                     text = stringResource(R.string.settings_export_json),
                     onClick = onExportData,
+                )
+                BloomOutlinedButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.settings_share_json),
+                    enabled = uiState.exportSnapshot.isNotBlank(),
+                    onClick = { onShareExport(uiState.exportSnapshot) },
                 )
                 BloomOutlinedButton(
                     modifier = Modifier.weight(1f),

@@ -34,12 +34,13 @@ This QA pass covers the local-first Bloom V2 implementation:
 | Bloom Coach | Implemented | Dedicated chat, quick actions, summaries, local recommendations, Groq integration. |
 | AI proxy | Implemented | Spring Boot proxy keeps Groq key server-side for production. |
 | Local encryption | Implemented | Habit free text and sensitive preferences use Android Keystore with lazy plaintext re-encryption. |
-| Export | Partial | In-app JSON snapshot exists. File save/share/import is deferred. |
+| Export | Partial | In-app JSON snapshot and native share are implemented. File save/import is still deferred. |
 | Widgets/Wear/music | Deferred | Requires platform or third-party integrations outside this MVP pass. |
 
 ## Static Validation Performed
 
 - `git diff --check` passed after each implementation block.
+- Verified `:app:assembleDebug` and `testDebugUnitTest` with Java 21 and the Gradle Wrapper.
 - Searched for broken call sites after API changes:
   - `HabitEditorScreen`
   - `FocusScreen`
@@ -53,15 +54,17 @@ This QA pass covers the local-first Bloom V2 implementation:
 
 ## Build Validation
 
-Not run.
+Validated locally:
 
-Reason:
+- `.\gradlew.bat :app:assembleDebug`
+- `.\gradlew.bat testDebugUnitTest`
 
-- `gradlew.bat` is not present in the repository.
-- `gradle` is not available on this machine PATH.
-- Android Studio is not installed on this machine.
+Environment notes:
 
-There is an ignored `app/build/outputs/apk/debug/app-debug.apk`, but it is a local artifact from before the latest V2 commits and should be treated as stale until rebuilt.
+- The workspace uses JDK 21 for Android builds.
+- The repository now includes Gradle Wrapper scripts, so no global Gradle installation is required.
+
+There is an ignored `app/build/outputs/apk/debug/app-debug.apk`, but it should only be treated as current if rebuilt after the latest V2 commits.
 
 ## UX Review
 
@@ -77,18 +80,17 @@ Risks:
 
 - Some advanced features are currently UI/data-level only and need deeper Android platform integration later.
 - Deep Focus does not block system notifications yet.
-- Export is not a real file share/save flow yet.
+- Export currently supports snapshot generation and native share, but file save/import is not implemented yet.
 - QR/APK installation must be regenerated after a real Android build.
 - No automated UI tests were added in this pass.
 
 ## Recommended Next Validation
 
-1. Add Gradle Wrapper or install Gradle.
-2. Run a clean Android build.
-3. Install the fresh APK on a real Android device.
-4. Test first run: splash -> onboarding -> local auth -> home.
-5. Test habit CRUD, completion animation, and Room migration from version 1 to 2.
-6. Test Pomodoro completion persistence and interrupted session persistence.
-7. Test Bloom Coach with no Groq key and with a valid Groq key.
-8. Test Bloom Coach through `backend/ai-proxy` over HTTPS.
-9. Generate a new QR install page only after the fresh APK is verified.
+1. Run a release build with the same toolchain and verify the generated APK.
+2. Install the fresh APK on a real Android device.
+3. Test first run: splash -> onboarding -> local auth -> home.
+4. Test habit CRUD, completion animation, and Room migration from version 1 to 2.
+5. Test Pomodoro completion persistence and interrupted session persistence.
+6. Test Bloom Coach with no Groq key and with a valid Groq key.
+7. Test Bloom Coach through `backend/ai-proxy` over HTTPS.
+8. Add file save/import for exports if the release scope still requires it.

@@ -29,9 +29,9 @@ Required local tooling:
 - Android SDK
 - Gradle or Gradle Wrapper
 
-The current workspace does not include `gradlew.bat`, so a clean release build cannot be completed here until Gradle tooling is restored.
+The repository now includes Gradle Wrapper scripts, so a clean local build can be run without installing Gradle globally.
 
-Expected command after tooling exists:
+Expected command:
 
 ```powershell
 .\gradlew.bat :app:assembleRelease

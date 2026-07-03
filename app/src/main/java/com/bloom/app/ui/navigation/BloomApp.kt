@@ -1,5 +1,6 @@
 package com.bloom.app.ui.navigation
 
+import android.content.Intent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,6 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -222,6 +224,7 @@ private fun BloomNavigation(
             composable(BloomDestination.SETTINGS) {
                 val viewModel: com.bloom.app.ui.state.SettingsViewModel = viewModel(factory = settingsViewModelFactory(container))
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                val context = LocalContext.current
                 SettingsScreen(
                     uiState = uiState,
                     onNameChange = viewModel::updateName,
@@ -234,6 +237,14 @@ private fun BloomNavigation(
                     onBloomCoachToggle = viewModel::toggleBloomCoach,
                     onHabitContextForAiToggle = viewModel::toggleHabitContextForAi,
                     onExportData = viewModel::exportData,
+                    onShareExport = { snapshot ->
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "application/json"
+                            putExtra(Intent.EXTRA_SUBJECT, "Bloom export")
+                            putExtra(Intent.EXTRA_TEXT, snapshot)
+                        }
+                        context.startActivity(Intent.createChooser(shareIntent, "Share Bloom export"))
+                    },
                     onClearExport = viewModel::clearExport,
                     onResetData = viewModel::resetData,
                     onOpenCoach = { navController.navigate(BloomDestination.COACH) },

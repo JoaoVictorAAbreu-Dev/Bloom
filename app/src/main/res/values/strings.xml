@@ -128,6 +128,7 @@
     <string name="settings_export_ready">Ready</string>
     <string name="settings_export_generated">Generated</string>
     <string name="settings_export_json">Export JSON</string>
+    <string name="settings_share_json">Share JSON</string>
     <string name="settings_clear">Clear</string>
     <string name="settings_restore">Restore</string>
     <string name="settings_restore_desc">Import from JSON will be added after file-picker validation.</string>
