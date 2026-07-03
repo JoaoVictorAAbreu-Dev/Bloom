@@ -102,6 +102,7 @@ If the key is missing, the app keeps working with local fallback guidance.
 
 - Technical guide: [docs/TECHNICAL.md](docs/TECHNICAL.md)
 - Production readiness: [docs/PRODUCTION.md](docs/PRODUCTION.md)
+- Privacy policy: [docs/PRIVACY_POLICY.md](docs/PRIVACY_POLICY.md)
 - User guide: [docs/USER_GUIDE.md](docs/USER_GUIDE.md)
 - QA report: [docs/QA_V2.md](docs/QA_V2.md)
 - Security guide: [docs/SECURITY.md](docs/SECURITY.md)
