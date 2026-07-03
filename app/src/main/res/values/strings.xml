@@ -200,4 +200,9 @@
     <string name="coach_send">Send</string>
     <string name="coach_clear">Clear</string>
     <string name="coach_you">You</string>
+    <string name="coach_badge">Bloom Coach</string>
+    <string name="stats_card_icon">Statistic</string>
+    <string name="habit_complete">Mark habit as completed</string>
+    <string name="habit_pending">Mark habit as pending</string>
+    <string name="ai_badge">AI assistant</string>
 </resources>

@@ -32,8 +32,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.bloom.app.R
 import com.bloom.app.domain.model.Habit
 import com.bloom.app.ui.theme.BloomColors
 import com.bloom.app.ui.theme.BloomSpacing
@@ -133,7 +135,9 @@ fun BloomHabitCard(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Check,
-                    contentDescription = null,
+                    contentDescription = stringResource(
+                        if (habit.completedToday) R.string.habit_pending else R.string.habit_complete,
+                    ),
                 )
             }
         }

@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bloom.app.R
 
 @Composable
 fun BloomAiBadge(
@@ -36,9 +38,8 @@ fun BloomAiBadge(
     ) {
         Icon(
             imageVector = Icons.Rounded.AutoAwesome,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.ai_badge),
             tint = MaterialTheme.colorScheme.primary,
         )
     }
 }
-
