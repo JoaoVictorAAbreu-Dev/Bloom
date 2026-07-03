@@ -122,15 +122,20 @@ backend/ai-proxy
 
 ## Installation and test
 
-The repository currently needs a working Android SDK plus Gradle/Gradle Wrapper to generate a fresh APK.
+The repository includes a Gradle Wrapper, so you do not need a global Gradle installation.
+You still need:
 
-After the build environment is available:
+- Android SDK
+- Java 21
 
-1. Build a new debug APK.
-2. Generate a QR install page pointing to the fresh APK.
-3. Scan the QR code from the Android device.
-4. Allow installs from unknown sources if Android asks.
-5. Open Bloom and complete onboarding.
+Recommended local build flow:
+
+1. Set `JAVA_HOME` to a JDK 21 installation.
+2. Run `./gradlew :app:assembleDebug` on macOS/Linux or `gradlew.bat :app:assembleDebug` on Windows.
+3. Generate a QR install page pointing to the fresh APK.
+4. Scan the QR code from the Android device.
+5. Allow installs from unknown sources if Android asks.
+6. Open Bloom and complete onboarding.
 
 ## Notes
 
@@ -139,3 +144,4 @@ After the build environment is available:
 - Login and cadastro screens are local-only placeholders for future sync.
 - Backup/restore import is intentionally deferred until file-picker and cloud sync are validated.
 - Any ignored APK under `app/build/outputs` may be stale and should not be treated as the final V2 build.
+- Android builds require Java 21 because the Android Gradle Plugin version in this repo does not support Java 25.
