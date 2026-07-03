@@ -229,6 +229,17 @@ private fun BloomNavigation(
                 val viewModel: com.bloom.app.ui.state.SettingsViewModel = viewModel(factory = settingsViewModelFactory(container))
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 val context = LocalContext.current
+                val importExportLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.OpenDocument(),
+                ) { uri ->
+                    if (uri != null) {
+                        context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { reader ->
+                            reader.readText()
+                        }?.let { snapshot ->
+                            viewModel.importData(snapshot)
+                        }
+                    }
+                }
                 val saveExportLauncher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.CreateDocument("application/json"),
                 ) { uri ->
@@ -257,6 +268,9 @@ private fun BloomNavigation(
                         if (snapshot.isNotBlank()) {
                             saveExportLauncher.launch("bloom-export.json")
                         }
+                    },
+                    onImportExport = {
+                        importExportLauncher.launch(arrayOf("application/json", "text/json", "text/plain"))
                     },
                     onShareExport = { snapshot ->
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {

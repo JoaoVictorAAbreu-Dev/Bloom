@@ -47,6 +47,7 @@ fun SettingsScreen(
     onHabitContextForAiToggle: (Boolean) -> Unit,
     onExportData: () -> Unit,
     onSaveExport: (String) -> Unit,
+    onImportExport: () -> Unit,
     onShareExport: (String) -> Unit,
     onClearExport: () -> Unit,
     onResetData: () -> Unit,
@@ -244,6 +245,12 @@ fun SettingsScreen(
                     text = stringResource(R.string.settings_save_json),
                     enabled = uiState.exportSnapshot.isNotBlank(),
                     onClick = { onSaveExport(uiState.exportSnapshot) },
+                )
+                BloomOutlinedButton(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(R.string.settings_import_json),
+                    enabled = !uiState.importInProgress,
+                    onClick = onImportExport,
                 )
                 BloomOutlinedButton(
                     modifier = Modifier.weight(1f),

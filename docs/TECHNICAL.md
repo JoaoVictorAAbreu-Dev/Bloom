@@ -100,7 +100,7 @@ The functional UI remains clean and modern.
 - Habits -> Create and edit habit
 - Focus -> Pomodoro session history
 - Statistics -> weekly, monthly, heatmap, and productivity-pattern overview
-- Settings -> local JSON export snapshot
+- Settings -> local JSON export, save, and import flow
 
 ## V2 implementation notes
 
@@ -110,7 +110,7 @@ The functional UI remains clean and modern.
 - Existing plaintext habit/preference values are re-encrypted lazily during app startup.
 - Bloom Coach receives richer prompt context: average focus, best focus hour, top habit, monthly focus, and 28-day habit activity.
 - Deep Focus is currently an in-app mode. It changes the focus experience and copy, but it does not request Android DND access yet.
-- Local export is rendered in Settings as a JSON snapshot for inspection/copying. File save/share can be added after Android file-picker validation.
+- Local export is rendered in Settings as a JSON snapshot for inspection/copying, and can be saved or imported through the Android file picker.
 
 ## Repository layout
 
@@ -147,5 +147,5 @@ Ignored files under `app/build/outputs` can exist locally, but they may be stale
 - Add UI tests for the main navigation flows.
 - Add Android widgets for Pomodoro, next habit, progress, and garden.
 - Add Wear OS companion support.
-- Add Google Drive backup and restore.
+- Add Google Drive backup and restore for cloud sync.
 - Add real DND integration for Deep Focus after permission flow design.

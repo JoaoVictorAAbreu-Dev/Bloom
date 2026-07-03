@@ -119,6 +119,7 @@ data class SettingsUiState(
     val statistics: BloomStatistics = HomeUiState().statistics,
     val rewards: List<Reward> = emptyList(),
     val resetInProgress: Boolean = false,
+    val importInProgress: Boolean = false,
     val exportSnapshot: String = "",
     val aiIntegration: CoachIntegrationUiState = CoachIntegrationUiState(),
 )

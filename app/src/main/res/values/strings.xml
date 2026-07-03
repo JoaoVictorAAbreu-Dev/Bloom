@@ -129,6 +129,7 @@
     <string name="settings_export_generated">Generated</string>
     <string name="settings_export_json">Export JSON</string>
     <string name="settings_save_json">Save file</string>
+    <string name="settings_import_json">Import file</string>
     <string name="settings_share_json">Share JSON</string>
     <string name="settings_clear">Clear</string>
     <string name="settings_restore">Restore</string>

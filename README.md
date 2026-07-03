@@ -143,6 +143,6 @@ Recommended local build flow:
 - The project is structured as a local-first MVP.
 - No backend login is implemented yet.
 - Login and cadastro screens are local-only placeholders for future sync.
-- Backup/restore import is intentionally deferred until the file-picker import flow is implemented and validated.
+- Backup/restore now supports JSON export, save, share, and import through Android file pickers.
 - Any ignored APK under `app/build/outputs` may be stale and should not be treated as the final V2 build.
 - Android builds require Java 21 because the Android Gradle Plugin version in this repo does not support Java 25.

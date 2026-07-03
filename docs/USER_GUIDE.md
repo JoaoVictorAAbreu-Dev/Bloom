@@ -80,6 +80,8 @@ Use Settings to:
 - enable or disable Bloom Coach
 - decide whether habit context can be used for AI suggestions
 - generate a local JSON export snapshot
+- save the export as a JSON file
+- import a saved JSON backup
 - reset local data
 
 ## Bloom Coach
@@ -101,7 +103,7 @@ If Groq is not configured, the app still replies with local fallback guidance.
 
 - Account screens are offline-first and do not sync to a backend yet.
 - Deep Focus is an in-app mode and does not block Android notifications yet.
-- JSON export is shown inside Settings; file save/share is a later Android integration.
+- JSON export can be shown, saved, shared, or imported from Settings using Android file pickers.
 - Google Drive backup, widgets, Wear OS, and music integrations are not part of the current MVP.
 
 ## Installing with the QR code
