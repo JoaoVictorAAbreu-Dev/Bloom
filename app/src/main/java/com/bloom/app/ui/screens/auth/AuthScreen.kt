@@ -19,8 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import com.bloom.app.R
 import com.bloom.app.ui.components.BloomButton
 import com.bloom.app.ui.components.BloomCard
 import com.bloom.app.ui.components.BloomLogoMark
@@ -51,12 +53,12 @@ fun AuthScreen(
         BloomLogoMark(size = 160.dp)
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "Welcome back",
+                text = stringResource(R.string.auth_title),
                 style = MaterialTheme.typography.displaySmall,
                 color = MaterialTheme.colorScheme.onBackground,
             )
             Text(
-                text = "Use Bloom offline now. Sync can be added later.",
+                text = stringResource(R.string.auth_subtitle),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -67,12 +69,12 @@ fun AuthScreen(
                 Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
                     BloomOutlinedButton(
                         modifier = Modifier.weight(1f),
-                        text = "Login",
+                        text = stringResource(R.string.auth_login),
                         onClick = { mode = AuthMode.SignIn },
                     )
                     BloomOutlinedButton(
                         modifier = Modifier.weight(1f),
-                        text = "Sign up",
+                        text = stringResource(R.string.auth_signup),
                         onClick = { mode = AuthMode.SignUp },
                     )
                 }
@@ -82,7 +84,7 @@ fun AuthScreen(
                         value = name,
                         onValueChange = { name = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = { Text("Name") },
+                        label = { Text(stringResource(R.string.auth_name)) },
                         singleLine = true,
                     )
                 }
@@ -90,14 +92,14 @@ fun AuthScreen(
                     value = email,
                     onValueChange = { email = it },
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Email") },
+                    label = { Text(stringResource(R.string.auth_email)) },
                     singleLine = true,
                 )
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Password") },
+                    label = { Text(stringResource(R.string.auth_password)) },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                 )
@@ -110,7 +112,11 @@ fun AuthScreen(
 
                 BloomButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = if (mode == AuthMode.SignUp) "Create local account" else "Continue",
+                    text = if (mode == AuthMode.SignUp) {
+                        stringResource(R.string.auth_create_local_account)
+                    } else {
+                        stringResource(R.string.auth_continue)
+                    },
                     onClick = {
                         val resolvedName = name.ifBlank { email.substringBefore("@").ifBlank { defaultName } }
                         onAuthenticated(resolvedName, email)
@@ -118,13 +124,13 @@ fun AuthScreen(
                 )
                 BloomOutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Continue without account",
+                    text = stringResource(R.string.auth_continue_without_account),
                     onClick = { onAuthenticated(defaultName, "") },
                 )
                 BloomOutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Forgot password",
-                    onClick = { message = "Password recovery will be available when cloud sync is enabled." },
+                    text = stringResource(R.string.auth_forgot_password),
+                    onClick = { message = stringResource(R.string.auth_recovery_message) },
                 )
             }
         }

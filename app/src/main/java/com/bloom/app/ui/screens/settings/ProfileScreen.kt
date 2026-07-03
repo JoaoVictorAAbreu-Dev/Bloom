@@ -15,8 +15,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.bloom.app.R
 import com.bloom.app.domain.model.Reward
 import com.bloom.app.ui.components.BloomButton
 import com.bloom.app.ui.components.BloomCard
@@ -48,7 +50,7 @@ fun ProfileScreen(
     ) {
         BloomHeader(
             title = "Bloom",
-            subtitle = "Profile",
+            subtitle = stringResource(R.string.profile_title),
             onNotificationsClick = onNotificationsClick,
         )
 
@@ -82,7 +84,7 @@ fun ProfileScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     Text(
-                        text = "Garden level ${statistics.gardenGrowth}",
+                        text = stringResource(R.string.profile_garden_level, statistics.gardenGrowth),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.primary,
                     )
@@ -101,13 +103,13 @@ fun ProfileScreen(
         BloomCard(modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding)) {
             Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
                 Text(
-                    text = "Achievements",
+                    text = stringResource(R.string.profile_achievements),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 if (unlockedRewards.isEmpty()) {
                     Text(
-                        text = "Complete habits and focus sessions to unlock your first rewards.",
+                        text = stringResource(R.string.profile_complete_rewards),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -125,12 +127,12 @@ fun ProfileScreen(
         ) {
             BloomButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Open Garden",
+                text = stringResource(R.string.profile_open_garden),
                 onClick = onOpenGarden,
             )
             BloomOutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Settings",
+                text = stringResource(R.string.profile_settings),
                 onClick = onOpenSettings,
             )
         }

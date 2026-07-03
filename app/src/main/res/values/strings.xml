@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">Bloom</string>
+    <string name="auth_title">Welcome back</string>
+    <string name="auth_subtitle">Use Bloom offline now. Sync can be added later.</string>
+    <string name="auth_login">Login</string>
+    <string name="auth_signup">Sign up</string>
+    <string name="auth_name">Name</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_create_local_account">Create local account</string>
+    <string name="auth_continue">Continue</string>
+    <string name="auth_continue_without_account">Continue without account</string>
+    <string name="auth_forgot_password">Forgot password</string>
+    <string name="auth_local_message">Everything works locally for now.</string>
+    <string name="auth_recovery_message">Password recovery will be available when cloud sync is enabled.</string>
+    <string name="profile_title">Profile</string>
+    <string name="profile_achievements">Achievements</string>
+    <string name="profile_open_garden">Open Garden</string>
+    <string name="profile_settings">Settings</string>
+    <string name="profile_complete_rewards">Complete habits and focus sessions to unlock your first rewards.</string>
+    <string name="profile_garden_level">Garden level %1$d</string>
 </resources>
