@@ -38,7 +38,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import android.content.pm.PackageManager
+import com.bloom.app.R
 import com.bloom.app.domain.model.OnboardingSetup
 import com.bloom.app.ui.components.BloomButton
 import com.bloom.app.ui.components.BloomCard
@@ -71,6 +73,9 @@ fun OnboardingScreen(
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val enabledLabel = stringResource(R.string.onboarding_enabled)
+    val skippedLabel = stringResource(R.string.onboarding_skipped)
+    val optionalLabel = stringResource(R.string.onboarding_optional)
     var notificationsStatus by remember { mutableStateOf("Optional") }
     var selectedGoal by remember { mutableStateOf("Build consistency") }
     val selectedHabits = remember { mutableStateListOf("Drink water", "Read 10 pages") }
@@ -79,7 +84,7 @@ fun OnboardingScreen(
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
     ) { granted ->
-        notificationsStatus = if (granted) "Enabled" else "Skipped"
+        notificationsStatus = if (granted) enabledLabel else skippedLabel
     }
 
     Column(
@@ -116,15 +121,15 @@ fun OnboardingScreen(
                                     Manifest.permission.POST_NOTIFICATIONS,
                                 ) == PackageManager.PERMISSION_GRANTED
                                 if (granted) {
-                                    notificationsStatus = "Enabled"
+                                    notificationsStatus = enabledLabel
                                 } else {
                                     notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                                 }
                             } else {
-                                notificationsStatus = "Enabled"
+                                notificationsStatus = enabledLabel
                             }
                         },
-                        onSkip = { notificationsStatus = "Skipped" },
+                        onSkip = { notificationsStatus = skippedLabel },
                     )
                     OnboardingPage.Goal -> GoalStep(
                         selectedGoal = selectedGoal,
@@ -159,7 +164,7 @@ fun OnboardingScreen(
                 if (pagerState.currentPage > 0) {
                     BloomOutlinedButton(
                         modifier = Modifier.weight(1f),
-                        text = "Back",
+                        text = stringResource(R.string.onboarding_back),
                         onClick = {
                             scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) }
                         },
@@ -167,7 +172,7 @@ fun OnboardingScreen(
                 }
                 BloomButton(
                     modifier = Modifier.weight(1f),
-                    text = if (pagerState.currentPage < pages.lastIndex) "Next" else "Start Bloom",
+                    text = if (pagerState.currentPage < pages.lastIndex) stringResource(R.string.onboarding_next) else stringResource(R.string.onboarding_start),
                     onClick = {
                         if (pagerState.currentPage < pages.lastIndex) {
                             scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
@@ -178,7 +183,7 @@ fun OnboardingScreen(
                                     starterHabits = selectedHabits.toList(),
                                     focusMinutes = focusMinutes,
                                     shortBreakMinutes = shortBreakMinutes,
-                                    notificationsEnabled = notificationsStatus == "Enabled",
+                                    notificationsEnabled = notificationsStatus == enabledLabel,
                                 ),
                             )
                         }
@@ -206,12 +211,12 @@ private fun OnboardingHeader(
             BloomLogoMark(size = 48.dp)
             Column {
                 Text(
-                    text = "Bloom",
+                    text = stringResource(R.string.onboarding_bloom),
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
-                    text = "Grow a little every day.",
+                    text = stringResource(R.string.onboarding_tagline),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -229,9 +234,9 @@ private fun OnboardingHeader(
 private fun IntroStep() {
     OnboardingScaffold(
         art = { BloomPixelPlant(size = 132.dp) },
-        title = "Welcome to Bloom",
-        description = "A calmer place to organize habits, routines, focus sessions, and personal growth.",
-        helper = "Your progress becomes visible through a garden that grows with consistency.",
+        title = stringResource(R.string.onboarding_step_intro_title),
+        description = stringResource(R.string.onboarding_step_intro_description),
+        helper = stringResource(R.string.onboarding_step_intro_helper),
     )
 }
 
@@ -239,9 +244,9 @@ private fun IntroStep() {
 private fun ConceptStep() {
     OnboardingScaffold(
         art = { BloomPixelFlower(size = 120.dp) },
-        title = "Small actions compound",
-        description = "Bloom is built around one simple idea: grow a little every day.",
-        helper = "Complete habits, protect focus time, and review your rhythm without pressure.",
+        title = stringResource(R.string.onboarding_step_concept_title),
+        description = stringResource(R.string.onboarding_step_concept_description),
+        helper = stringResource(R.string.onboarding_step_concept_helper),
     )
 }
 
@@ -258,20 +263,20 @@ private fun NotificationsStep(
     ) {
         BloomPixelMascot(size = 120.dp)
         StepTitle(
-            title = "Gentle reminders",
-            description = "Bloom can remind you when it is time for a habit, a routine block, or a focus session.",
-            helper = "You can change this later in Settings.",
+            title = stringResource(R.string.onboarding_step_notifications_title),
+            description = stringResource(R.string.onboarding_step_notifications_description),
+            helper = stringResource(R.string.onboarding_step_notifications_helper),
         )
         StatusPill(text = status)
         Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
             BloomOutlinedButton(
                 modifier = Modifier.weight(1f),
-                text = "Skip",
+                text = optionalLabel,
                 onClick = onSkip,
             )
             BloomButton(
                 modifier = Modifier.weight(1f),
-                text = "Enable",
+                text = enabledLabel,
                 onClick = onEnable,
             )
         }
@@ -284,10 +289,10 @@ private fun GoalStep(
     onGoalSelected: (String) -> Unit,
 ) {
     val goals = listOf(
-        "Build consistency",
-        "Focus deeper",
-        "Create routine",
-        "Grow healthier",
+        stringResource(R.string.onboarding_selected_goal_build),
+        stringResource(R.string.onboarding_selected_goal_focus),
+        stringResource(R.string.onboarding_selected_goal_routine),
+        stringResource(R.string.onboarding_selected_goal_health),
     )
 
     Column(
@@ -297,9 +302,9 @@ private fun GoalStep(
     ) {
         BloomPixelTree(size = 118.dp)
         StepTitle(
-            title = "Choose your main goal",
-            description = "This sets the tone for your first routine.",
-            helper = "You can still use every part of Bloom.",
+            title = stringResource(R.string.onboarding_step_goal_title),
+            description = stringResource(R.string.onboarding_step_goal_description),
+            helper = stringResource(R.string.onboarding_step_goal_helper),
         )
         ChipGrid(
             items = goals,
@@ -315,12 +320,12 @@ private fun StarterHabitsStep(
     onHabitToggle: (String) -> Unit,
 ) {
     val habits = listOf(
-        "Drink water",
-        "Read 10 pages",
-        "Meditate",
-        "Exercise",
-        "Plan tomorrow",
-        "Study",
+        stringResource(R.string.onboarding_habit_water),
+        stringResource(R.string.onboarding_habit_read),
+        stringResource(R.string.onboarding_habit_meditate),
+        stringResource(R.string.onboarding_habit_exercise),
+        stringResource(R.string.onboarding_habit_plan),
+        stringResource(R.string.onboarding_habit_study),
     )
 
     Column(
@@ -330,9 +335,9 @@ private fun StarterHabitsStep(
     ) {
         BloomPixelPlant(size = 124.dp)
         StepTitle(
-            title = "Pick starter habits",
-            description = "Select a few habits to shape your first Bloom routine.",
-            helper = "${selectedHabits.size} selected",
+            title = stringResource(R.string.onboarding_step_habits_title),
+            description = stringResource(R.string.onboarding_step_habits_description),
+            helper = stringResource(R.string.onboarding_step_habits_helper, selectedHabits.size),
         )
         ChipGrid(
             items = habits,
@@ -356,18 +361,18 @@ private fun PomodoroSetupStep(
     ) {
         BloomPixelMascot(size = 116.dp)
         StepTitle(
-            title = "Set your first Pomodoro",
-            description = "Start with a focus rhythm that feels sustainable.",
-            helper = "Default: 25 minutes of focus and 5 minutes of break.",
+            title = stringResource(R.string.onboarding_step_pomodoro_title),
+            description = stringResource(R.string.onboarding_step_pomodoro_description),
+            helper = stringResource(R.string.onboarding_step_pomodoro_helper),
         )
         SetupSlider(
-            label = "Focus",
+            label = stringResource(R.string.onboarding_label_focus),
             value = focusMinutes,
             range = 15f..60f,
             onValueChange = onFocusChange,
         )
         SetupSlider(
-            label = "Short break",
+            label = stringResource(R.string.onboarding_label_short_break),
             value = shortBreakMinutes,
             range = 3f..15f,
             onValueChange = onShortBreakChange,

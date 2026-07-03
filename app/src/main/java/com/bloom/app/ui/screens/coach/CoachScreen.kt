@@ -19,7 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.bloom.app.R
 import com.bloom.app.domain.model.AiCoachSource
 import com.bloom.app.ui.components.BloomAiBadge
 import com.bloom.app.ui.components.BloomButton
@@ -48,7 +50,7 @@ fun CoachScreen(
         item {
             BloomHeader(
                 title = "Bloom",
-                subtitle = "Coach",
+                subtitle = stringResource(R.string.coach_title),
                 onNotificationsClick = onNotificationsClick,
             )
         }
@@ -82,7 +84,7 @@ fun CoachScreen(
                     verticalArrangement = Arrangement.spacedBy(BloomSpacing.xs),
                 ) {
                     Text(
-                        text = if (message.role == CoachMessageRole.USER) "You" else "Bloom Coach",
+                        text = if (message.role == CoachMessageRole.USER) stringResource(R.string.coach_you) else stringResource(R.string.coach_bloom),
                         style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -132,15 +134,15 @@ private fun CoachStatusCard(uiState: CoachUiState) {
             BloomAiBadge()
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Bloom Coach",
+                    text = stringResource(R.string.coach_bloom),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = if (uiState.integration.configured) {
-                        "Groq connected. Model ${uiState.integration.modelId}."
+                        stringResource(R.string.coach_connected, uiState.integration.modelId)
                     } else {
-                        "Local mode active. Configure a secure AI backend or a debug Groq key to use remote coaching."
+                        stringResource(R.string.coach_local_mode)
                     },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -155,11 +157,11 @@ private fun CoachContextCard(uiState: CoachUiState) {
     BloomCard(
         modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding),
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
-            Text(
-                text = "How it helps",
-                style = MaterialTheme.typography.titleLarge,
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
+                Text(
+                    text = stringResource(R.string.coach_how_it_helps),
+                    style = MaterialTheme.typography.titleLarge,
+                )
             uiState.contextSummary.forEach { summary ->
                 Text(
                     text = summary,
@@ -176,17 +178,17 @@ private fun CoachAnalysisCard(uiState: CoachUiState) {
     BloomCard(
         modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding),
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
-            Text(
-                text = "Actionable Analysis",
-                style = MaterialTheme.typography.titleLarge,
-            )
-            AnalysisRow(title = "This week", value = uiState.weeklySummary)
-            AnalysisRow(title = "Last 28 days", value = uiState.monthlySummary)
-            AnalysisRow(title = "Next best action", value = uiState.nextBestAction)
+            Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
+                Text(
+                    text = stringResource(R.string.coach_actionable_analysis),
+                    style = MaterialTheme.typography.titleLarge,
+                )
+            AnalysisRow(title = stringResource(R.string.coach_this_week), value = uiState.weeklySummary)
+            AnalysisRow(title = stringResource(R.string.coach_last_28_days), value = uiState.monthlySummary)
+            AnalysisRow(title = stringResource(R.string.coach_next_best_action), value = uiState.nextBestAction)
             Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.xs)) {
                 Text(
-                    text = "Recommendations",
+                    text = stringResource(R.string.coach_recommendations),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -231,7 +233,7 @@ private fun QuickActionsRow(
         verticalArrangement = Arrangement.spacedBy(BloomSpacing.sm),
     ) {
         Text(
-            text = "Quick actions",
+            text = stringResource(R.string.coach_quick_actions),
             style = MaterialTheme.typography.titleLarge,
         )
         Row(
@@ -261,18 +263,18 @@ private fun CoachInputCard(
     BloomCard(
         modifier = Modifier.padding(horizontal = BloomSpacing.screenPadding),
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
-            Text(
-                text = "Ask Bloom Coach",
-                style = MaterialTheme.typography.titleLarge,
-            )
-            OutlinedTextField(
-                value = uiState.input,
-                onValueChange = onInputChange,
-                modifier = Modifier.fillMaxWidth(),
-                minLines = 3,
-                label = { Text("Plan, review, or ask for guidance") },
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(BloomSpacing.md)) {
+                Text(
+                    text = stringResource(R.string.coach_ask_bloom),
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                OutlinedTextField(
+                    value = uiState.input,
+                    onValueChange = onInputChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 3,
+                label = { Text(stringResource(R.string.coach_prompt)) },
+                )
             if (uiState.errorMessage != null) {
                 Text(
                     text = uiState.errorMessage,
@@ -283,13 +285,13 @@ private fun CoachInputCard(
             Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.sm)) {
                 BloomButton(
                     modifier = Modifier.weight(1f),
-                    text = if (uiState.sending) "Sending..." else "Send",
+                    text = if (uiState.sending) stringResource(R.string.coach_sending) else stringResource(R.string.coach_send),
                     enabled = !uiState.sending,
                     onClick = { onSend(null) },
                 )
                 BloomOutlinedButton(
                     modifier = Modifier.weight(1f),
-                    text = "Clear",
+                    text = stringResource(R.string.coach_clear),
                     onClick = { onInputChange("") },
                 )
             }
