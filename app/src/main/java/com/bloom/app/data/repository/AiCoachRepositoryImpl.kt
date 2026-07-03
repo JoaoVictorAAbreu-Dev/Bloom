@@ -7,12 +7,15 @@ import com.bloom.app.domain.model.AiCoachReply
 import com.bloom.app.domain.model.AiCoachSource
 import com.bloom.app.domain.repository.AiCoachRepository
 import com.bloom.app.domain.usecase.BuildAiCoachPromptUseCase
+import com.bloom.app.security.PrivacySanitizer
 import java.io.IOException
 
 class AiCoachRepositoryImpl(
     private val aiGateway: AiGateway,
     private val buildAiCoachPromptUseCase: BuildAiCoachPromptUseCase,
 ) : AiCoachRepository {
+    private val privacySanitizer = PrivacySanitizer()
+
     override val modelId: String = aiGateway.modelId
     override val baseUrl: String = aiGateway.baseUrl
     override val isConfigured: Boolean = aiGateway.isConfigured
@@ -58,7 +61,7 @@ class AiCoachRepositoryImpl(
         return listOf(
             AiCoachQuickAction(
                 label = "Plan my day",
-                prompt = "Help me plan today around $nextHabit and one $focusMinutes-minute Pomodoro.",
+                prompt = "Help me plan today around ${privacySanitizer.sanitize(nextHabit)} and one $focusMinutes-minute Pomodoro.",
             ),
             AiCoachQuickAction(
                 label = "Review habits",
@@ -94,10 +97,10 @@ class AiCoachRepositoryImpl(
                 appendLine("- Your strongest focus window appears near ${context.statistics.mostProductiveHourLabel}.")
             }
             if (topRoutine != null) {
-                appendLine("- The next natural routine window is ${topRoutine.slot.lowercase()}: ${topRoutine.title}.")
+                appendLine("- The next natural routine window is ${topRoutine.slot.lowercase()}: ${privacySanitizer.sanitize(topRoutine.title)}.")
             }
             if (userPrompt.isNotBlank()) {
-                appendLine("- Request received: ${userPrompt.take(120)}")
+                appendLine("- Request received: ${privacySanitizer.sanitize(userPrompt).take(120)}")
             }
         }.trim()
 

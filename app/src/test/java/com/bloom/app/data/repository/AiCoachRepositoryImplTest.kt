@@ -18,6 +18,7 @@ import com.bloom.app.domain.model.UserPreferences
 import com.bloom.app.domain.usecase.BuildAiCoachPromptUseCase
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -42,6 +43,19 @@ class AiCoachRepositoryImplTest {
 
         assertEquals(4, actions.size)
         assertTrue(actions.first().prompt.contains("25"))
+    }
+
+    @Test
+    fun `sanitizes sensitive text in local fallback reply`() = runTest {
+        val reply = repository.generateReply(
+            sampleContext(),
+            "Email me at ana@example.com or open https://example.com",
+        )
+
+        assertEquals(AiCoachSource.LOCAL, reply.source)
+        assertFalse(reply.text.contains("ana@example.com"))
+        assertFalse(reply.text.contains("https://example.com"))
+        assertFalse(reply.text.contains("example.com"))
     }
 
     @Test
