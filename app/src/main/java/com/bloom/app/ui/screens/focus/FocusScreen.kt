@@ -25,6 +25,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.bloom.app.R
 import com.bloom.app.ui.components.BloomButton
 import com.bloom.app.ui.components.BloomCard
 import com.bloom.app.ui.components.BloomHeader
@@ -90,7 +92,7 @@ fun FocusScreen(
         ) {
             BloomHeader(
                 title = "Bloom",
-                subtitle = "Focus Session",
+                subtitle = stringResource(R.string.focus_title),
                 onNotificationsClick = onNotificationsClick,
             )
 
@@ -100,9 +102,9 @@ fun FocusScreen(
             ) {
                 Text(
                     text = if (uiState.deepFocusEnabled) {
-                        "\"Deep Focus is on. Keep the session clean.\""
+                        stringResource(R.string.focus_quote_deep)
                     } else {
-                        "\"Focus on the now. Your garden is growing.\""
+                        stringResource(R.string.focus_quote_light)
                     },
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.primary,
@@ -110,7 +112,15 @@ fun FocusScreen(
                 Row(horizontalArrangement = Arrangement.spacedBy(BloomSpacing.xs)) {
                     AssistChip(
                         onClick = { onDeepFocusToggle(!uiState.deepFocusEnabled) },
-                        label = { Text(if (uiState.deepFocusEnabled) "Deep Focus On" else "Deep Focus Off") },
+                        label = {
+                            Text(
+                                if (uiState.deepFocusEnabled) {
+                                    stringResource(R.string.focus_mode_on)
+                                } else {
+                                    stringResource(R.string.focus_mode_off)
+                                },
+                            )
+                        },
                         colors = AssistChipDefaults.assistChipColors(
                             containerColor = if (uiState.deepFocusEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
                             labelColor = if (uiState.deepFocusEnabled) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -118,7 +128,7 @@ fun FocusScreen(
                     )
                     AssistChip(
                         onClick = { },
-                        label = { Text("Offline-first") },
+                        label = { Text(stringResource(R.string.focus_offline_first)) },
                         colors = AssistChipDefaults.assistChipColors(
                             containerColor = MaterialTheme.colorScheme.surfaceVariant,
                             labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -162,7 +172,7 @@ fun FocusScreen(
                             ),
                         )
                         Text(
-                            text = "Round ${uiState.round} of ${uiState.totalRounds}",
+                            text = stringResource(R.string.focus_round, uiState.round, uiState.totalRounds),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = BloomSpacing.sm),
@@ -179,48 +189,48 @@ fun FocusScreen(
             ) {
                 BloomOutlinedButton(
                     modifier = Modifier.weight(1f),
-                    text = "Stop",
+                    text = stringResource(R.string.focus_stop),
                     onClick = onStop,
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Stop,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.focus_stop),
                         modifier = Modifier.padding(start = BloomSpacing.xs),
                     )
                 }
                 if (uiState.running) {
                     BloomButton(
                         modifier = Modifier.weight(1f),
-                        text = "Pause",
+                        text = stringResource(R.string.focus_pause),
                         onClick = onPause,
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.Pause,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.focus_pause),
                             modifier = Modifier.padding(start = BloomSpacing.xs),
                         )
                     }
                 } else if (uiState.paused) {
                     BloomButton(
                         modifier = Modifier.weight(1f),
-                        text = "Resume",
+                        text = stringResource(R.string.focus_resume),
                         onClick = onResume,
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.PlayArrow,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.focus_resume),
                             modifier = Modifier.padding(start = BloomSpacing.xs),
                         )
                     }
                 } else {
                     BloomButton(
                         modifier = Modifier.weight(1f),
-                        text = "Start",
+                        text = stringResource(R.string.focus_start),
                         onClick = onStart,
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.PlayArrow,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.focus_start),
                             modifier = Modifier.padding(start = BloomSpacing.xs),
                         )
                     }
@@ -234,14 +244,14 @@ fun FocusScreen(
                 horizontalArrangement = Arrangement.spacedBy(BloomSpacing.cardGap),
             ) {
                 BloomStatCard(
-                    title = "Focus Time",
+                    title = stringResource(R.string.focus_time),
                     value = "${uiState.focusMinutesToday}m",
                     caption = "Today",
                     modifier = Modifier.weight(1f),
                     accentColor = MaterialTheme.colorScheme.secondary,
                 )
                 BloomStatCard(
-                    title = "Sessions",
+                    title = stringResource(R.string.focus_sessions),
                     value = uiState.sessionsToday.toString(),
                     caption = "Today",
                     modifier = Modifier.weight(1f),
