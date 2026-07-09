@@ -53,7 +53,7 @@ jobs:
         run: ./gradlew :app:assembleRelease --no-daemon --no-parallel --console=plain
 
       - name: Upload debug APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bloom-debug-apk
           path: app/build/outputs/apk/debug/*.apk
@@ -61,7 +61,7 @@ jobs:
           retention-days: 14
 
       - name: Upload release APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bloom-release-unsigned-apk
           path: app/build/outputs/apk/release/*.apk
@@ -70,7 +70,7 @@ jobs:
 
       - name: Upload Android test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bloom-android-test-reports
           path: app/build/reports/tests/testDebugUnitTest
@@ -101,7 +101,7 @@ jobs:
 
       - name: Upload proxy test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bloom-ai-proxy-test-reports
           path: backend/ai-proxy/build/reports/tests/test
