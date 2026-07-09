@@ -106,9 +106,12 @@ Release build settings:
 Supply-chain controls:
 
 - Dependabot is configured for Gradle and GitHub Actions.
+- Dependabot Security Updates are enabled at repository level.
+- GitHub Secret Scanning and Push Protection are enabled at repository level.
 - Pull requests run Dependency Review and fail on new moderate-or-higher vulnerability findings.
 - Dependency Review also blocks GPL/AGPL licenses from being introduced without explicit review.
 - CI uses read-only repository permissions by default.
+- Dependabot version updates ignore major upgrades automatically; major dependency migrations should be handled in dedicated branches.
 
 Signing policy:
 
