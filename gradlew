@@ -18,7 +18,7 @@ cd "$(dirname "$PRG")" >/dev/null
 APP_HOME=$(pwd -P)
 cd "$SAVED" >/dev/null
 
-DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
+DEFAULT_JVM_OPTS='-Xmx64m -Xms64m'
 CLASSPATH="$APP_HOME/gradle/wrapper/gradle-wrapper.jar"
 
 if [ -n "${JAVA_HOME:-}" ] && [ -x "$JAVA_HOME/bin/java" ]; then
