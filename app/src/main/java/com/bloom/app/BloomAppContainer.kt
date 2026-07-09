@@ -61,7 +61,10 @@ class BloomAppContainer(context: Context) {
     val rewardRepository: RewardRepository = RewardRepositoryImpl()
     val aiCoachRepository: AiCoachRepository = AiCoachRepositoryImpl(
         aiGateway = if (BuildConfig.AI_BACKEND_BASE_URL.trim().startsWith("https://")) {
-            RemoteBackendAiGateway(BuildConfig.AI_BACKEND_BASE_URL.trim())
+            RemoteBackendAiGateway(
+                endpointBaseUrl = BuildConfig.AI_BACKEND_BASE_URL.trim(),
+                clientToken = BuildConfig.AI_BACKEND_CLIENT_TOKEN.trim(),
+            )
         } else {
             GroqAiGateway(GroqAiService())
         },

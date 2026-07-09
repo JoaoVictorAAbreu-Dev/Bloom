@@ -30,6 +30,7 @@ Main risks:
 - A Groq key inside an APK must be considered extractable.
 - Production should use `backend/ai-proxy`, which stores the Groq key server-side.
 - Release builds can point to the proxy through non-secret `aiBackendBaseUrl`.
+- The proxy can require `X-Bloom-Client-Token`; treat the matching Android value as abuse friction, not as a provider secret.
 
 ## AI Privacy Policy
 
@@ -61,6 +62,7 @@ Before data is sent to an AI provider:
 - Groq calls must use HTTPS.
 - OkHttp timeouts are configured.
 - No logging interceptor is configured.
+- The AI proxy supports a per-client in-memory rate limit and generic provider errors.
 - Certificate pinning is not enabled yet because pin rotation and backend ownership must be planned first.
 
 ## Local Storage Policy
@@ -74,6 +76,7 @@ Current state:
 - Habit free-text fields are encrypted before being persisted.
 - Sensitive preference strings are encrypted before being persisted.
 - Legacy plaintext habit and preference values are re-encrypted during app startup.
+- JSON restore validates schema version, file size, item counts, and field bounds before resetting local data.
 
 MVP limitation:
 
@@ -111,7 +114,7 @@ No extra permissions should be added without a product reason.
 - Add or restore Gradle Wrapper and run a clean release build.
 - Verify no secrets are present in Git history or APK artifacts.
 - Deploy `backend/ai-proxy` and point release builds to it with `aiBackendBaseUrl`.
-- Add file-save/share flow for exports with explicit user action.
+- Configure `BLOOM_AI_CLIENT_TOKEN` server-side and matching `AI_BACKEND_CLIENT_TOKEN` for release builds.
 - Add privacy policy copy for AI and local storage.
 - Run mobile security testing aligned with OWASP MASVS.
 - Test install, upgrade, Room migrations, and reset on a real device.

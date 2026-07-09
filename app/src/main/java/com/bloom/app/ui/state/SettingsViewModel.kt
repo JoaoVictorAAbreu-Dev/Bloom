@@ -13,6 +13,7 @@ import com.bloom.app.domain.model.Reward
 import com.bloom.app.domain.model.ThemeMode
 import com.bloom.app.domain.model.UserPreferences
 import org.json.JSONArray
+import org.json.JSONException
 import org.json.JSONObject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -144,14 +145,12 @@ class SettingsViewModel(
         viewModelScope.launch {
             importInProgress.update { true }
             try {
-                val payload = JSONObject(snapshot)
-                val preferences = payload.optJSONObject("user")?.let(::parsePreferences)
-                val habits = payload.optJSONArray("habits")?.let(::parseHabits).orEmpty()
-                val sessions = payload.optJSONArray("focusSessions")?.let(::parseSessions).orEmpty()
+                require(snapshot.length <= MAX_IMPORT_BYTES) { "Import file is too large" }
+                val payload = parseImportPayload(JSONObject(snapshot))
 
                 container.resetAllDataUseCase()
 
-                preferences?.let { importedPreferences ->
+                payload.preferences?.let { importedPreferences ->
                     container.updatePreferencesUseCase { current ->
                         current.copy(
                             userName = importedPreferences.userName,
@@ -172,14 +171,18 @@ class SettingsViewModel(
                     }
                 }
 
-                habits.forEach { habit ->
+                payload.habits.forEach { habit ->
                     container.habitRepository.upsertHabit(habit)
                 }
 
-                sessions.forEach { session ->
+                payload.sessions.forEach { session ->
                     container.pomodoroRepository.saveSession(session)
                 }
                 exportSnapshot.value = ""
+            } catch (_: IllegalArgumentException) {
+                // Invalid imports are ignored so existing local data is preserved.
+            } catch (_: JSONException) {
+                // Invalid imports are ignored so existing local data is preserved.
             } finally {
                 importInProgress.update { false }
             }
@@ -207,6 +210,7 @@ class SettingsViewModel(
     ): String {
         return buildString {
             appendLine("{")
+            appendLine("  \"schemaVersion\": $EXPORT_SCHEMA_VERSION,")
             appendLine("  \"user\": {")
             appendLine("    \"name\": \"${preferences.userName.jsonEscaped()}\",")
             appendLine("    \"email\": \"${preferences.userEmail.jsonEscaped()}\",")
@@ -238,6 +242,10 @@ class SettingsViewModel(
                 appendLine("      \"name\": \"${habit.name.jsonEscaped()}\",")
                 appendLine("      \"category\": \"${habit.category.label.jsonEscaped()}\",")
                 appendLine("      \"frequency\": \"${habit.frequency.label.jsonEscaped()}\",")
+                appendLine("      \"reminderHour\": ${habit.reminderHour ?: -1},")
+                appendLine("      \"reminderMinute\": ${habit.reminderMinute ?: -1},")
+                appendLine("      \"colorArgb\": ${habit.colorArgb},")
+                appendLine("      \"iconKey\": \"${habit.iconKey.jsonEscaped()}\",")
                 appendLine("      \"priority\": \"${habit.priority.jsonEscaped()}\",")
                 appendLine("      \"emoji\": \"${habit.emoji.jsonEscaped()}\",")
                 appendLine("      \"dailyGoal\": ${habit.dailyGoal},")
@@ -269,15 +277,32 @@ class SettingsViewModel(
         }
     }
 
+    private fun parseImportPayload(payload: JSONObject): ImportPayload {
+        val version = payload.optInt("schemaVersion", EXPORT_SCHEMA_VERSION)
+        require(version in 1..EXPORT_SCHEMA_VERSION) { "Unsupported Bloom export version" }
+
+        val preferences = payload.optJSONObject("user")?.let(::parsePreferences)
+        val habitsArray = payload.optJSONArray("habits") ?: JSONArray()
+        val sessionsArray = payload.optJSONArray("focusSessions") ?: JSONArray()
+        require(habitsArray.length() <= MAX_IMPORT_HABITS) { "Too many habits" }
+        require(sessionsArray.length() <= MAX_IMPORT_SESSIONS) { "Too many focus sessions" }
+
+        return ImportPayload(
+            preferences = preferences,
+            habits = parseHabits(habitsArray),
+            sessions = parseSessions(sessionsArray),
+        )
+    }
+
     private fun parsePreferences(user: JSONObject): UserPreferences {
         return UserPreferences(
-            userName = user.optString("name", "Alex"),
-            userEmail = user.optString("email", ""),
-            primaryGoal = user.optString("primaryGoal", "Build consistency"),
+            userName = user.optBoundedString("name", "Alex", MAX_SHORT_TEXT),
+            userEmail = user.optBoundedString("email", "", MAX_SHORT_TEXT),
+            primaryGoal = user.optBoundedString("primaryGoal", "Build consistency", MAX_SHORT_TEXT),
             themeMode = ThemeMode.entries.firstOrNull { it.name == user.optString("themeMode", ThemeMode.SYSTEM.name) } ?: ThemeMode.SYSTEM,
-            focusMinutes = user.optInt("focusMinutes", 25),
-            shortBreakMinutes = user.optInt("shortBreakMinutes", 5),
-            longBreakMinutes = user.optInt("longBreakMinutes", 15),
+            focusMinutes = user.optInt("focusMinutes", 25).coerceIn(15, 60),
+            shortBreakMinutes = user.optInt("shortBreakMinutes", 5).coerceIn(3, 15),
+            longBreakMinutes = user.optInt("longBreakMinutes", 15).coerceIn(10, 30),
             autoStartNextSession = user.optBoolean("autoStartNextSession", true),
             notificationsEnabled = user.optBoolean("notificationsEnabled", true),
             bloomCoachEnabled = user.optBoolean("bloomCoachEnabled", false),
@@ -294,23 +319,23 @@ class SettingsViewModel(
                 val item = array.optJSONObject(index) ?: continue
                 add(
                     Habit(
-                        id = item.optString("id"),
-                        name = item.optString("name"),
+                        id = item.optBoundedString("id", "imported-habit-$index", MAX_ID_TEXT).ifBlank { "imported-habit-$index" },
+                        name = item.optBoundedString("name", "Imported habit", MAX_LONG_TEXT).ifBlank { "Imported habit" },
                         category = HabitCategory.entries.firstOrNull { it.label == item.optString("category") } ?: HabitCategory.HEALTH,
                         frequency = HabitFrequency.entries.firstOrNull { it.label == item.optString("frequency") } ?: HabitFrequency.DAILY,
-                        reminderHour = item.optInt("reminderHour", -1).takeIf { it >= 0 },
-                        reminderMinute = item.optInt("reminderMinute", -1).takeIf { it >= 0 },
+                        reminderHour = item.optInt("reminderHour", -1).takeIf { it in 0..23 },
+                        reminderMinute = item.optInt("reminderMinute", -1).takeIf { it in 0..59 },
                         colorArgb = item.optInt("colorArgb", 0xFF8DAA91.toInt()),
-                        iconKey = item.optString("iconKey", "watering_can"),
-                        priority = item.optString("priority", "Medium"),
-                        emoji = item.optString("emoji", ""),
-                        dailyGoal = item.optInt("dailyGoal", 1),
-                        weeklyGoal = item.optInt("weeklyGoal", 5),
-                        customRepeat = item.optString("customRepeat", ""),
+                        iconKey = item.optBoundedString("iconKey", "watering_can", MAX_SHORT_TEXT),
+                        priority = item.optBoundedString("priority", "Medium", MAX_SHORT_TEXT),
+                        emoji = item.optBoundedString("emoji", "", MAX_SHORT_TEXT),
+                        dailyGoal = item.optInt("dailyGoal", 1).coerceIn(1, 99),
+                        weeklyGoal = item.optInt("weeklyGoal", 5).coerceIn(1, 99),
+                        customRepeat = item.optBoundedString("customRepeat", "", MAX_LONG_TEXT),
                         createdAtMillis = item.optLong("createdAtMillis", System.currentTimeMillis()),
-                        streak = item.optInt("streak", 0),
+                        streak = item.optInt("streak", 0).coerceAtLeast(0),
                         completedToday = item.optBoolean("completedToday", false),
-                        completionCount = item.optInt("completionCount", 0),
+                        completionCount = item.optInt("completionCount", 0).coerceAtLeast(0),
                     )
                 )
             }
@@ -323,9 +348,9 @@ class SettingsViewModel(
                 val item = array.optJSONObject(index) ?: continue
                 add(
                     PomodoroSession(
-                        id = item.optString("id"),
+                        id = item.optBoundedString("id", "imported-session-$index", MAX_ID_TEXT).ifBlank { "imported-session-$index" },
                         mode = PomodoroMode.entries.firstOrNull { it.name == item.optString("mode") } ?: PomodoroMode.FOCUS,
-                        durationMinutes = item.optInt("durationMinutes", 25),
+                        durationMinutes = item.optInt("durationMinutes", 25).coerceIn(1, 240),
                         startedAtMillis = item.optLong("startedAtMillis", System.currentTimeMillis()),
                         finishedAtMillis = item.optLong("finishedAtMillis", System.currentTimeMillis()),
                         completed = item.optBoolean("completed", false),
@@ -337,5 +362,25 @@ class SettingsViewModel(
 
     private fun String.jsonEscaped(): String {
         return replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
+    }
+
+    private fun JSONObject.optBoundedString(key: String, defaultValue: String, maxLength: Int): String {
+        return optString(key, defaultValue).take(maxLength)
+    }
+
+    private data class ImportPayload(
+        val preferences: UserPreferences?,
+        val habits: List<Habit>,
+        val sessions: List<PomodoroSession>,
+    )
+
+    private companion object {
+        const val EXPORT_SCHEMA_VERSION = 1
+        const val MAX_IMPORT_BYTES = 512 * 1024
+        const val MAX_IMPORT_HABITS = 500
+        const val MAX_IMPORT_SESSIONS = 2_000
+        const val MAX_ID_TEXT = 80
+        const val MAX_SHORT_TEXT = 120
+        const val MAX_LONG_TEXT = 240
     }
 }

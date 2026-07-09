@@ -22,6 +22,7 @@ Copy `.env.example` into your deployment environment and set real values there. 
 GROQ_API_KEY=replace_with_server_side_key
 GROQ_MODEL=groq/compound-mini
 GROQ_BASE_URL=https://api.groq.com/openai/v1
+BLOOM_AI_CLIENT_TOKEN=replace_with_random_client_token
 ```
 
 ## Run locally
@@ -68,10 +69,12 @@ Set the backend URL in the Android project root `local.properties` or CI environ
 
 ```properties
 aiBackendBaseUrl=https://your-bloom-ai-proxy.example.com
+aiBackendClientToken=replace_with_random_client_token
 ```
 
 ```bash
 AI_BACKEND_BASE_URL=https://your-bloom-ai-proxy.example.com
+AI_BACKEND_CLIENT_TOKEN=replace_with_random_client_token
 ```
 
 If this value starts with `https://`, Bloom uses the backend proxy. If it is empty, debug builds can still use the direct Groq fallback configured with `groqApiKey`, but release builds do not embed a Groq key.
@@ -79,6 +82,8 @@ If this value starts with `https://`, Bloom uses the backend proxy. If it is emp
 ## Security behavior
 
 - Requires HTTPS for provider and app-facing backend URLs.
+- Can require `X-Bloom-Client-Token` for app-to-proxy requests.
+- Applies a small in-memory per-client rate limit.
 - Masks emails, phone numbers, URLs, bearer tokens, and common API key formats.
 - Caps prompt size through `bloom.ai.max-prompt-characters`.
 - Returns generic errors instead of provider details.

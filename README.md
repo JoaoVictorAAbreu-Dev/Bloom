@@ -84,9 +84,10 @@ For production, Bloom Coach should use the backend proxy in `backend/ai-proxy` s
 
 ```properties
 aiBackendBaseUrl=https://your-bloom-ai-proxy.example.com
+aiBackendClientToken=replace_with_random_client_token
 ```
 
-CI builds can use `AI_BACKEND_BASE_URL` instead of `local.properties`.
+CI builds can use `AI_BACKEND_BASE_URL` and `AI_BACKEND_CLIENT_TOKEN` instead of `local.properties`.
 
 Debug builds can still call Groq directly when the API key is configured in root `local.properties`.
 
@@ -143,6 +144,6 @@ Recommended local build flow:
 - The project is structured as a local-first MVP.
 - No backend login is implemented yet.
 - Login and cadastro screens are local-only placeholders for future sync.
-- Backup/restore now supports JSON export, save, share, and import through Android file pickers.
+- Backup/restore now supports bounded JSON export, save, share, and import through Android file pickers.
 - Any ignored APK under `app/build/outputs` may be stale and should not be treated as the final V2 build.
 - Android builds require Java 21 because the Android Gradle Plugin version in this repo does not support Java 25.

@@ -54,6 +54,11 @@ android {
                 "AI_BACKEND_BASE_URL",
                 "\"${secretProperty("aiBackendBaseUrl", "AI_BACKEND_BASE_URL").toBuildConfigValue()}\"",
             )
+            buildConfigField(
+                "String",
+                "AI_BACKEND_CLIENT_TOKEN",
+                "\"${secretProperty("aiBackendClientToken", "AI_BACKEND_CLIENT_TOKEN").toBuildConfigValue()}\"",
+            )
         }
         release {
             isMinifyEnabled = true
@@ -66,6 +71,11 @@ android {
                 "String",
                 "AI_BACKEND_BASE_URL",
                 "\"${secretProperty("aiBackendBaseUrl", "AI_BACKEND_BASE_URL").toBuildConfigValue()}\"",
+            )
+            buildConfigField(
+                "String",
+                "AI_BACKEND_CLIENT_TOKEN",
+                "\"${secretProperty("aiBackendClientToken", "AI_BACKEND_CLIENT_TOKEN").toBuildConfigValue()}\"",
             )
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

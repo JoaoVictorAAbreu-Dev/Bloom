@@ -8,4 +8,7 @@ data class AiProxyProperties(
     val groqModel: String = System.getenv("GROQ_MODEL") ?: "groq/compound-mini",
     val groqBaseUrl: String = System.getenv("GROQ_BASE_URL") ?: "https://api.groq.com/openai/v1",
     val maxPromptCharacters: Int = 2_400,
+    val clientToken: String = System.getenv("BLOOM_AI_CLIENT_TOKEN").orEmpty(),
+    val rateLimitWindowSeconds: Long = 60,
+    val rateLimitRequests: Int = 20,
 )

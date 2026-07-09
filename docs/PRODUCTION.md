@@ -8,18 +8,21 @@ Required steps:
 
 1. Deploy `backend/ai-proxy` behind HTTPS.
 2. Store `GROQ_API_KEY` only in the backend environment.
-3. Configure Android with root `local.properties` or CI environment variable:
+3. Configure `BLOOM_AI_CLIENT_TOKEN` on the proxy and a matching Android client token.
+4. Configure Android with root `local.properties` or CI environment variables:
 
 ```properties
 aiBackendBaseUrl=https://your-bloom-ai-proxy.example.com
+aiBackendClientToken=replace_with_random_client_token
 ```
 
 ```bash
 AI_BACKEND_BASE_URL=https://your-bloom-ai-proxy.example.com
+AI_BACKEND_CLIENT_TOKEN=replace_with_random_client_token
 ```
 
-4. Build the Android release artifact.
-5. Verify Bloom Coach works with AI enabled and habit context disabled/enabled.
+5. Build the Android release artifact.
+6. Verify Bloom Coach works with AI enabled and habit context disabled/enabled.
 
 ## Android Release Build
 
@@ -48,6 +51,7 @@ Implemented:
 - Existing plaintext habit fields are re-encrypted on app startup.
 - Sensitive preference strings are encrypted with Android Keystore.
 - Existing plaintext preference values are re-encrypted on app startup.
+- JSON import is bounded and validated before local data is reset.
 
 Important limitation:
 
@@ -60,5 +64,6 @@ Important limitation:
 - Install the release APK or AAB on a real Android device.
 - Test first-run flow, habit CRUD, Pomodoro persistence, Bloom Coach, export, reset, and dark/light theme.
 - Inspect release artifact for secrets.
+- Exercise proxy token rejection and rate limiting in the deployed environment.
 - Run mobile security review aligned with OWASP MASVS.
 - Publish a user-facing privacy policy covering local data and optional AI processing.

@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit
 
 class RemoteBackendAiGateway(
     endpointBaseUrl: String,
+    private val clientToken: String = "",
     private val client: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(10, TimeUnit.SECONDS)
         .readTimeout(25, TimeUnit.SECONDS)
@@ -35,6 +36,11 @@ class RemoteBackendAiGateway(
         val request = Request.Builder()
             .url("${this@RemoteBackendAiGateway.baseUrl}/api/ai/coach")
             .addHeader("Content-Type", "application/json")
+            .apply {
+                if (clientToken.isNotBlank()) {
+                    addHeader("X-Bloom-Client-Token", clientToken)
+                }
+            }
             .post(payload.toString().toRequestBody(JSON_MEDIA_TYPE))
             .build()
 
