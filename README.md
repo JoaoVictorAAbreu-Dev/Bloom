@@ -13,6 +13,7 @@ Bloom is a native Android app for habits, routine planning, Pomodoro focus, pers
 - Release notes: [Bloom release page](https://docs-flax-pi.vercel.app/release.html)
 - Releases: [GitHub Releases](https://github.com/JoaoVictorAAbreu-Dev/Bloom/releases)
 - QR install guide: [docs/USER_GUIDE.md](docs/USER_GUIDE.md#installing-with-the-qr-code)
+- CI artifacts: every successful `master` build publishes debug APK, release APK, release AAB, and test reports in GitHub Actions. Release artifacts are named `signed` only when signing Secrets are configured.
 
 It follows an Organic Productivity design language: calm, premium, minimal, and warm, with pixel-art details reserved for illustrations, rewards, and empty states.
 
@@ -98,6 +99,28 @@ groqBaseUrl=https://api.groq.com/openai/v1
 ```
 
 If the key is missing, the app keeps working with local fallback guidance.
+
+## Release signing
+
+Production delivery should use a signed APK/AAB. The Android build reads signing material from local properties or CI Secrets:
+
+```properties
+releaseKeystoreBase64=base64_encoded_jks_or_keystore
+releaseKeystorePassword=replace_with_store_password
+releaseKeyAlias=bloom-release
+releaseKeyPassword=replace_with_key_password
+```
+
+GitHub Actions uses the equivalent Secrets:
+
+```text
+BLOOM_RELEASE_KEYSTORE_BASE64
+BLOOM_RELEASE_KEYSTORE_PASSWORD
+BLOOM_RELEASE_KEY_ALIAS
+BLOOM_RELEASE_KEY_PASSWORD
+```
+
+If these values are not configured, CI still builds `bloom-release-unsigned-apk` and `bloom-release-unsigned-aab` for validation. Configure the Secrets before treating APK/AAB artifacts as production-ready.
 
 ## Documentation
 

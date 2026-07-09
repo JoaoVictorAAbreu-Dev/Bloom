@@ -40,7 +40,61 @@ Expected command:
 .\gradlew.bat :app:assembleRelease
 ```
 
-CI also runs Android unit tests, debug build, release build, and proxy tests on pushes and pull requests to `master`.
+CI also runs Android unit tests, debug build, release APK build, release AAB build, proxy tests, and artifact upload on pushes and pull requests to `master`.
+
+## Release Signing
+
+Unsigned release artifacts are useful only for validation. A real install/distribution build must be signed.
+
+Generate a local upload key:
+
+```powershell
+keytool -genkeypair `
+  -v `
+  -keystore bloom-release.jks `
+  -storetype JKS `
+  -keyalg RSA `
+  -keysize 4096 `
+  -validity 10000 `
+  -alias bloom-release
+```
+
+Base64 encode it for CI:
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("bloom-release.jks")) | Set-Content bloom-release.base64.txt
+```
+
+On macOS/Linux:
+
+```bash
+base64 -w 0 bloom-release.jks > bloom-release.base64.txt
+```
+
+Configure these GitHub Secrets:
+
+```text
+BLOOM_RELEASE_KEYSTORE_BASE64
+BLOOM_RELEASE_KEYSTORE_PASSWORD
+BLOOM_RELEASE_KEY_ALIAS
+BLOOM_RELEASE_KEY_PASSWORD
+```
+
+Local `local.properties` equivalents:
+
+```properties
+releaseKeystoreBase64=base64_encoded_jks_or_keystore
+releaseKeystorePassword=replace_with_store_password
+releaseKeyAlias=bloom-release
+releaseKeyPassword=replace_with_key_password
+```
+
+Artifact naming:
+
+- With signing Secrets: `bloom-release-signed-apk` and `bloom-release-signed-aab`
+- Without signing Secrets: `bloom-release-unsigned-apk` and `bloom-release-unsigned-aab`
+
+The workflow verifies APK signing when signing Secrets are present.
 
 ## Local Data Protection
 
@@ -49,6 +103,7 @@ Implemented:
 - Android backups disabled.
 - Cleartext traffic disabled.
 - Release build removes the Groq key from `BuildConfig`.
+- Release signing can be driven by CI Secrets without committing keystores.
 - Habit free-text fields are encrypted with Android Keystore before persistence.
 - Existing plaintext habit fields are re-encrypted on app startup.
 - Sensitive preference strings are encrypted with Android Keystore.

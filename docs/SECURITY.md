@@ -25,6 +25,8 @@ Main risks:
 
 - Never commit real API keys, `.env` files, keystores, APKs, AABs, or signing material.
 - `local.properties` is ignored by Git.
+- `.env.example` documents required variables but must not contain real values.
+- Release signing material must live only in local secure storage or GitHub Actions Secrets.
 - Debug builds can read `groqApiKey` from `local.properties`.
 - Release builds intentionally set `GROQ_API_KEY` to an empty string.
 - A Groq key inside an APK must be considered extractable.
@@ -97,8 +99,16 @@ Release build settings:
 - `shrinkResources = true`
 - ProGuard/R8 rules are configured
 - Groq key is empty in release
+- Release APK/AAB signing is supported through Base64 keystore CI Secrets
 - cleartext traffic is disabled
 - backup is disabled
+
+Signing policy:
+
+- Do not reuse debug keys for production.
+- Do not commit `.jks`, `.keystore`, `.apk`, `.aab`, or base64 keystore files.
+- Rotate the upload key if a workstation, CI secret, or generated base64 file is exposed.
+- Treat unsigned release artifacts as validation-only, not production-ready.
 
 ## Permissions
 
@@ -115,6 +125,7 @@ No extra permissions should be added without a product reason.
 - Verify no secrets are present in Git history or APK artifacts.
 - Deploy `backend/ai-proxy` and point release builds to it with `aiBackendBaseUrl`.
 - Configure `BLOOM_AI_CLIENT_TOKEN` server-side and matching `AI_BACKEND_CLIENT_TOKEN` for release builds.
+- Configure release signing Secrets and verify the APK/AAB signature before distribution.
 - Add privacy policy copy for AI and local storage.
 - Run mobile security testing aligned with OWASP MASVS.
 - Test install, upgrade, Room migrations, and reset on a real device.

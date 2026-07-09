@@ -1,4 +1,5 @@
 import java.util.Properties
+import java.util.Base64
 
 plugins {
     id("com.android.application")
@@ -19,6 +20,17 @@ fun secretProperty(name: String, envName: String, defaultValue: String = ""): St
     return localProperties.getProperty(name) ?: System.getenv(envName) ?: defaultValue
 }
 
+val releaseKeystoreBase64 = secretProperty("releaseKeystoreBase64", "BLOOM_RELEASE_KEYSTORE_BASE64")
+val releaseKeystorePassword = secretProperty("releaseKeystorePassword", "BLOOM_RELEASE_KEYSTORE_PASSWORD")
+val releaseKeyAlias = secretProperty("releaseKeyAlias", "BLOOM_RELEASE_KEY_ALIAS")
+val releaseKeyPassword = secretProperty("releaseKeyPassword", "BLOOM_RELEASE_KEY_PASSWORD")
+val hasReleaseSigningConfig = listOf(
+    releaseKeystoreBase64,
+    releaseKeystorePassword,
+    releaseKeyAlias,
+    releaseKeyPassword,
+).all { it.isNotBlank() }
+
 android {
     namespace = "com.bloom.app"
     compileSdk = 36
@@ -30,6 +42,25 @@ android {
         versionCode = 1
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        if (hasReleaseSigningConfig) {
+            create("release") {
+                val keystoreFile = layout.buildDirectory.file("generated/signing/bloom-release.jks").get().asFile
+                keystoreFile.parentFile.mkdirs()
+                keystoreFile.writeBytes(Base64.getDecoder().decode(releaseKeystoreBase64))
+
+                storeFile = keystoreFile
+                storePassword = releaseKeystorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+                enableV1Signing = false
+                enableV2Signing = true
+                enableV3Signing = true
+                enableV4Signing = true
+            }
+        }
     }
 
     buildTypes {
@@ -81,6 +112,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            if (hasReleaseSigningConfig) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
