@@ -103,6 +103,13 @@ Release build settings:
 - cleartext traffic is disabled
 - backup is disabled
 
+Supply-chain controls:
+
+- Dependabot is configured for Gradle and GitHub Actions.
+- Pull requests run Dependency Review and fail on new moderate-or-higher vulnerability findings.
+- Dependency Review also blocks GPL/AGPL licenses from being introduced without explicit review.
+- CI uses read-only repository permissions by default.
+
 Signing policy:
 
 - Do not reuse debug keys for production.

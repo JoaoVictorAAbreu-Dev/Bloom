@@ -42,6 +42,8 @@ Expected command:
 
 CI also runs Android unit tests, debug build, release APK build, release AAB build, proxy tests, and artifact upload on pushes and pull requests to `master`.
 
+Pull requests also run Dependency Review when dependency manifests change. Dependabot opens weekly update PRs for Gradle dependencies and GitHub Actions.
+
 ## Release Signing
 
 Unsigned release artifacts are useful only for validation. A real install/distribution build must be signed.
