@@ -1,6 +1,9 @@
 package com.bloom.app.ui.navigation
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -229,6 +233,11 @@ private fun BloomNavigation(
                 val viewModel: com.bloom.app.ui.state.SettingsViewModel = viewModel(factory = settingsViewModelFactory(container))
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 val context = LocalContext.current
+                val notificationPermissionLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.RequestPermission(),
+                ) { granted ->
+                    viewModel.toggleNotifications(granted)
+                }
                 val importExportLauncher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.OpenDocument(),
                 ) { uri ->
@@ -259,7 +268,23 @@ private fun BloomNavigation(
                     onFocusMinutesChange = viewModel::updateFocusMinutes,
                     onShortBreakMinutesChange = viewModel::updateShortBreakMinutes,
                     onLongBreakMinutesChange = viewModel::updateLongBreakMinutes,
-                    onNotificationsToggle = viewModel::toggleNotifications,
+                    onNotificationsToggle = { enabled ->
+                        if (!enabled) {
+                            viewModel.toggleNotifications(false)
+                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val granted = ContextCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.POST_NOTIFICATIONS,
+                            ) == PackageManager.PERMISSION_GRANTED
+                            if (granted) {
+                                viewModel.toggleNotifications(true)
+                            } else {
+                                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                        } else {
+                            viewModel.toggleNotifications(true)
+                        }
+                    },
                     onAutoStartToggle = viewModel::toggleAutoStart,
                     onBloomCoachToggle = viewModel::toggleBloomCoach,
                     onHabitContextForAiToggle = viewModel::toggleHabitContextForAi,

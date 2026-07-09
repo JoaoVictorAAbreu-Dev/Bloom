@@ -84,6 +84,8 @@ Use Settings to:
 - import a saved JSON backup
 - reset local data
 
+On Android 13 or newer, turning notifications on from Settings asks for the Android notification permission before saving the preference as enabled.
+
 ## Bloom Coach
 
 Bloom Coach is the AI assistant inside the app.
