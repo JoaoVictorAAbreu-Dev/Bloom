@@ -58,6 +58,13 @@ Validated locally:
 
 - `.\gradlew.bat :app:assembleDebug`
 - `.\gradlew.bat testDebugUnitTest`
+- `.\gradlew.bat :app:assembleRelease`
+- `.\gradlew.bat -p backend/ai-proxy test`
+
+Release artifact:
+
+- `app/build/outputs/apk/release/app-release-unsigned.apk`
+- Local binary search found no obvious embedded Groq/OpenAI key patterns in the release APK.
 
 Environment notes:
 
@@ -86,11 +93,10 @@ Risks:
 
 ## Recommended Next Validation
 
-1. Run a release build with the same toolchain and verify the generated APK.
-2. Install the fresh APK on a real Android device.
-3. Test first run: splash -> onboarding -> local auth -> home.
-4. Test habit CRUD, completion animation, and Room migration from version 1 to 2.
-5. Test Pomodoro completion persistence and interrupted session persistence.
-6. Test Bloom Coach with no Groq key and with a valid Groq key.
-7. Test Bloom Coach through `backend/ai-proxy` over HTTPS.
-8. Add cloud sync backup/restore if the release scope still requires it.
+1. Install the fresh APK on a real Android device.
+2. Test first run: splash -> onboarding -> local auth -> home.
+3. Test habit CRUD, completion animation, and Room migration from version 1 to 2.
+4. Test Pomodoro completion persistence and interrupted session persistence.
+5. Test Bloom Coach with no Groq key and with a valid Groq key.
+6. Test Bloom Coach through `backend/ai-proxy` over HTTPS.
+7. Add cloud sync backup/restore if the release scope still requires it.

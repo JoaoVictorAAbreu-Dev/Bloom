@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Android
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: "tools platform-tools platforms;android-36 build-tools;36.0.0"
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Run Android unit tests
+        run: ./gradlew :app:testDebugUnitTest --no-daemon --no-parallel --console=plain
+
+      - name: Build debug APK
+        run: ./gradlew :app:assembleDebug --no-daemon --no-parallel --console=plain
+
+      - name: Build release APK
+        env:
+          AI_BACKEND_BASE_URL: ${{ secrets.AI_BACKEND_BASE_URL }}
+          AI_BACKEND_CLIENT_TOKEN: ${{ secrets.AI_BACKEND_CLIENT_TOKEN }}
+        run: ./gradlew :app:assembleRelease --no-daemon --no-parallel --console=plain
+
+  ai-proxy:
+    name: AI Proxy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
+
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+
+      - name: Run proxy tests
+        run: ./gradlew -p backend/ai-proxy test --no-daemon --no-parallel --console=plain

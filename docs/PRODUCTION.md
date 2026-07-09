@@ -40,6 +40,8 @@ Expected command:
 .\gradlew.bat :app:assembleRelease
 ```
 
+CI also runs Android unit tests, debug build, release build, and proxy tests on pushes and pull requests to `master`.
+
 ## Local Data Protection
 
 Implemented:
