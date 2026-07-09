@@ -27,4 +27,4 @@ else
   JAVA_CMD=java
 fi
 
-exec "$JAVA_CMD" $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS -Dorg.gradle.appname="$(basename "$0")" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
+exec "$JAVA_CMD" $DEFAULT_JVM_OPTS ${JAVA_OPTS:-} ${GRADLE_OPTS:-} -Dorg.gradle.appname="$(basename "$0")" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"
