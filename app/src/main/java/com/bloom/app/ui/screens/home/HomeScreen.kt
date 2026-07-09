@@ -25,6 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bloom.app.domain.model.Habit
@@ -90,7 +93,7 @@ fun HomeScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.NotificationsNone,
-                        contentDescription = "Notifications",
+                        contentDescription = null,
                     )
                 }
             }
@@ -207,7 +210,7 @@ fun HomeScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.PlayArrow,
-                                contentDescription = "Open focus",
+                                contentDescription = null,
                             )
                         }
                     }
@@ -325,6 +328,7 @@ fun HomeScreen(
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .padding(end = BloomSpacing.xs)
+                        .semantics { role = Role.Button }
                         .clickable { onOpenRoutine() },
                 )
             }

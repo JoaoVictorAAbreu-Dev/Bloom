@@ -78,7 +78,7 @@ fun BloomBottomBar(
             ) {
                 Icon(
                     imageVector = item.icon,
-                    contentDescription = item.label,
+                    contentDescription = null,
                     tint = if (selected) selectedColor else unselectedColor,
                 )
                 Text(

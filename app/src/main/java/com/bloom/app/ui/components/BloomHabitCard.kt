@@ -18,10 +18,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,10 +31,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.bloom.app.R
 import com.bloom.app.domain.model.Habit
 import com.bloom.app.ui.theme.BloomColors
 import com.bloom.app.ui.theme.BloomSpacing
@@ -68,6 +69,12 @@ fun BloomHabitCard(
             .graphicsLayer {
                 scaleX = cardScale
                 scaleY = cardScale
+            }
+            .semantics {
+                if (onClick != null) {
+                    role = Role.Button
+                    contentDescription = "Open ${habit.name}"
+                }
             }
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(BloomSpacing.md),
@@ -135,9 +142,7 @@ fun BloomHabitCard(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Check,
-                    contentDescription = stringResource(
-                        if (habit.completedToday) R.string.habit_pending else R.string.habit_complete,
-                    ),
+                    contentDescription = null,
                 )
             }
         }
@@ -150,14 +155,17 @@ private fun HabitChip(
     containerColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     labelColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
 ) {
-    AssistChip(
-        onClick = { },
-        label = { Text(text) },
-        colors = AssistChipDefaults.assistChipColors(
-            containerColor = containerColor,
-            labelColor = labelColor,
-        ),
-    )
+    Surface(
+        color = containerColor,
+        contentColor = labelColor,
+        shape = MaterialTheme.shapes.small,
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.padding(horizontal = BloomSpacing.sm, vertical = BloomSpacing.xs),
+        )
+    }
 }
 
 private fun Habit.iconLabel(): String = emoji.ifBlank {

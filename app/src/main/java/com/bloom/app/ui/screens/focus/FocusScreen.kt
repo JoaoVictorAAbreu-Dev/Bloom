@@ -194,7 +194,7 @@ fun FocusScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Stop,
-                        contentDescription = stringResource(R.string.focus_stop),
+                        contentDescription = null,
                         modifier = Modifier.padding(start = BloomSpacing.xs),
                     )
                 }
@@ -206,7 +206,7 @@ fun FocusScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.Pause,
-                            contentDescription = stringResource(R.string.focus_pause),
+                            contentDescription = null,
                             modifier = Modifier.padding(start = BloomSpacing.xs),
                         )
                     }
@@ -218,7 +218,7 @@ fun FocusScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.PlayArrow,
-                            contentDescription = stringResource(R.string.focus_resume),
+                            contentDescription = null,
                             modifier = Modifier.padding(start = BloomSpacing.xs),
                         )
                     }
@@ -230,7 +230,7 @@ fun FocusScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.PlayArrow,
-                            contentDescription = stringResource(R.string.focus_start),
+                            contentDescription = null,
                             modifier = Modifier.padding(start = BloomSpacing.xs),
                         )
                     }

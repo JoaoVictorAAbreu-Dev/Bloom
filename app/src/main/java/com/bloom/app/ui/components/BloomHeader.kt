@@ -58,7 +58,7 @@ fun BloomHeader(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.NotificationsNone,
-                    contentDescription = "Notifications",
+                    contentDescription = null,
                 )
             }
         }
