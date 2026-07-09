@@ -12,15 +12,11 @@ updates:
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
+      - dependency-name: "com.android.*"
+      - dependency-name: "androidx.*"
+      - dependency-name: "org.jetbrains.kotlin*"
+      - dependency-name: "org.jetbrains.kotlinx*"
     groups:
-      android-gradle:
-        patterns:
-          - "com.android.*"
-          - "androidx.*"
-      kotlin:
-        patterns:
-          - "org.jetbrains.kotlin*"
-          - "org.jetbrains.kotlinx*"
       test-dependencies:
         patterns:
           - "junit*"

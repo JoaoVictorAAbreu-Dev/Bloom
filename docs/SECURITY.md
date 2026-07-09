@@ -112,6 +112,7 @@ Supply-chain controls:
 - Dependency Review also blocks GPL/AGPL licenses from being introduced without explicit review.
 - CI uses read-only repository permissions by default.
 - Dependabot version updates ignore major upgrades automatically; major dependency migrations should be handled in dedicated branches.
+- Android Gradle Plugin, AndroidX, Kotlin, and KotlinX version migrations are manual because they can require coordinated Compose/compiler/AGP changes.
 
 Signing policy:
 
